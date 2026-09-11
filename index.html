@@ -311,7 +311,7 @@
     <div id="v-last-business" class="v-last-business" role="alert" hidden></div>
     <div class="v-race" aria-label="Business totals">
       <div><div class="v-race-title"><span>Your businesses</span><strong id="v-player-score">1 / 12</strong></div><div id="v-player-pips" class="v-pips" aria-hidden="true"></div></div>
-      <p class="v-goal"><strong>12 businesses wins</strong><span>Zero businesses loses</span></p>
+      <p class="v-goal"><strong>12 businesses wins</strong><span>No distributors loses</span></p>
       <div class="v-enemy"><div class="v-race-title"><span>Rival’s businesses</span><strong id="v-rival-score">1 / 12</strong></div><div id="v-rival-pips" class="v-pips" aria-hidden="true"></div></div>
     </div>
     <section id="v-winner" class="v-victory" aria-live="polite" hidden></section>
@@ -352,7 +352,7 @@
     </section>
     <footer class="v-footer">
       <details id="v-rules"><summary>Rules &amp; card actions</summary><div class="v-rules">
-        <div><h3>Start &amp; win</h3><p>Each player chooses one distributor to start active, then receives three cards in hand and no resources. Reach 12 active businesses to win. A player with zero active businesses loses immediately. Operators do not count as businesses.</p></div>
+        <div><h3>Start &amp; win</h3><p>Each player chooses one distributor to start active, then receives three cards in hand and no resources. Reach 12 active businesses to win. A player with no active distributors loses immediately, even if they still control legitimate businesses. Operators do not count as businesses.</p></div>
         <div><h3>Income &amp; crews</h3><p>Collect income at the start of each turn. Each active distributor produces one resource of its color. Each complete three-person crew grants one extra resource of your choice. Legit businesses and operators produce nothing.</p></div>
         <div><h3>Activate or cash</h3><p>Pay a card’s activation cost to put it in play. A distributor or operator costs one of its color. A legit business costs one matching resource plus one of any color. Cash an unactivated card for one resource of its color; a legit card can be cashed for any color. Cashed cards are discarded.</p></div>
         <div><h3>Business capacity</h3><p>You have room for three distributors, plus three more for each active legit business. You can control up to three legit businesses. They count toward victory and are immune to all operators.</p></div>
@@ -424,9 +424,9 @@ const pay=(p,cost,picks)=>resolveCost(p,cost,picks).forEach(color=>p.res[color]-
 function record(s,msg){s.logs.unshift({turn:s.turn,side:s.current,msg});s.logs=s.logs.slice(0,45);}
 function checkWin(s){
  if(s.winner!==null)return true;
- for(let loser=0;loser<2;loser++)if(bizCount(s.players[loser])===0){
+ for(let loser=0;loser<2;loser++)if(illegalCount(s.players[loser])===0){
   s.winner=1-loser;s.winReason='elimination';s.phase='over';
-  record(s,(loser===0?'You have':'The rival has')+' no active businesses. '+(s.winner===0?'You win.':'Rival wins.'));
+  record(s,(loser===0?'You have':'The rival has')+' no active distributors. '+(s.winner===0?'You win.':'Rival wins.'));
   return true;
  }
  for(let who=0;who<2;who++)if(bizCount(s.players[who])>=12){
@@ -716,7 +716,7 @@ function render(){
  el('v-log').innerHTML=state.logs.slice(0,30).map(l=>'<li><span class="v-secondary">Turn '+l.turn+' · '+(l.side===0?'You':'Rival')+'</span> '+escapeHTML(l.msg)+'</li>').join('')||'<li>No actions yet.</li>';
  el('v-catalog-title').textContent='Card gallery · 36 cards · '+state.deck.length+' in draw pile';
  el('v-winner').hidden=state.winner===null;
- el('v-winner').innerHTML=state.winner===null?'':'<h2>'+(state.winner===0?'The city is yours.':'The rival takes the city.')+'</h2><p>'+(state.winReason==='elimination'?(state.winner===0?'The rival has no active businesses.':'You have no active businesses.'):'12 active businesses reached.')+'</p>';
+ el('v-winner').innerHTML=state.winner===null?'':'<h2>'+(state.winner===0?'The city is yours.':'The rival takes the city.')+'</h2><p>'+(state.winReason==='elimination'?(state.winner===0?'The rival has no active distributors.':'You have no active distributors.'):'12 active businesses reached.')+'</p>';
  if(state.current===0&&state.phase==='bonus')panel={type:'bonus'};
  else if(state.current===0&&state.phase==='trim')panel={type:'trim'};
  renderPanel();renderCatalog();save();
@@ -764,7 +764,7 @@ function renderPanel(){
   const op=card(panel.opId),target=card(panel.targetId),ids=affectedCards(op,target),reason=operatorReason(op,target),cost=operatorCost(op,target);
   heading=abilityLabel(op);text=op.name+' · '+op.biz;
   const result=op.ability==='kill'?'Discard':op.ability==='buy'?(illegalCount(p)>=capacity(p)?'Your hand':'Your businesses'):'Rival’s hand';
-  body='<div class="v-payment-summary"><div><span>Activation already paid</span>'+costTokens(op.cost)+'</div><div class="v-pay-now"><strong>Pay now</strong>'+costTokens(cost)+'</div></div><div class="v-affected">'+ids.map((id,i)=>{const c=card(id);const destination=op.ability==='coerce'&&i>=Math.max(0,7-state.players[1].hand.length)?'Discard · hand full':result;return'<div class="v-affected-card" data-affected-id="'+id+'">'+portrait(c)+'<strong>'+escapeHTML(c.name)+'</strong><span>'+destination+'</span></div>';}).join('')+'</div><p>'+previewOutcome(op,target,ids)+'</p>'+(bizCount(state.players[1])-ids.length===0?'<p class="v-impact">The rival will have zero businesses. You win.</p>':'')+(op.ability==='buy'&&illegalCount(p)<capacity(p)&&bizCount(p)===11?'<p class="v-impact">This becomes your 12th business. You win.</p>':'')+'<p class="v-secondary">'+escapeHTML(op.name)+' is discarded after use.</p><div class="v-choice-row"><button type="button" class="v-button" data-action="operator" data-id="'+op.id+'">Change target</button><button type="button" class="v-button v-danger-button" data-action="operator-confirm"'+blockedAttr(reason)+'>'+escapeHTML('Pay '+costText(cost)+' & '+(op.ability==='kill'?'kill':op.ability==='coerce'?'bounce crew':'take distributor'))+'</button></div>'+(reason?'<p class="v-block-reason">'+escapeHTML(reason)+'</p>':'');
+  body='<div class="v-payment-summary"><div><span>Activation already paid</span>'+costTokens(op.cost)+'</div><div class="v-pay-now"><strong>Pay now</strong>'+costTokens(cost)+'</div></div><div class="v-affected">'+ids.map((id,i)=>{const c=card(id);const destination=op.ability==='coerce'&&i>=Math.max(0,7-state.players[1].hand.length)?'Discard · hand full':result;return'<div class="v-affected-card" data-affected-id="'+id+'">'+portrait(c)+'<strong>'+escapeHTML(c.name)+'</strong><span>'+destination+'</span></div>';}).join('')+'</div><p>'+previewOutcome(op,target,ids)+'</p>'+(illegalCount(state.players[1])-ids.length===0?'<p class="v-impact">The rival will have no distributors. You win.</p>':'')+(op.ability==='buy'&&illegalCount(p)<capacity(p)&&bizCount(p)===11?'<p class="v-impact">This becomes your 12th business. You win.</p>':'')+'<p class="v-secondary">'+escapeHTML(op.name)+' is discarded after use.</p><div class="v-choice-row"><button type="button" class="v-button" data-action="operator" data-id="'+op.id+'">Change target</button><button type="button" class="v-button v-danger-button" data-action="operator-confirm"'+blockedAttr(reason)+'>'+escapeHTML('Pay '+costText(cost)+' & '+(op.ability==='kill'?'kill':op.ability==='coerce'?'bounce crew':'take distributor'))+'</button></div>'+(reason?'<p class="v-block-reason">'+escapeHTML(reason)+'</p>':'');
  }
  if(panel.type==='crew'){
   const c=card(panel.id),crew=c.crew,count=membersOf(crew).filter(x=>p.active.includes(x.id)).length;
@@ -894,7 +894,7 @@ function renderLobby(){
  }
  const over=screen==='outcome',won=state.winner===0;
  const title=over?(won?'VICTORY':'EMPIRE LOST'):'City of Vice';
- const detail=over?(state.winReason==='elimination'?(won?'Your rival has no active businesses remaining.':'You have no active businesses remaining.'):(won?'The city is yours. You reached 12 active businesses.':'Your rival rules the city with 12 active businesses.')):'Build your empire. Complete crews. Take the city.';
+ const detail=over?(state.winReason==='elimination'?(won?'Your rival has no active distributors remaining.':'You have no active distributors remaining.'):(won?'The city is yours. You reached 12 active businesses.':'Your rival rules the city with 12 active businesses.')):'Build your empire. Complete crews. Take the city.';
  lobby.innerHTML='<img class="v-lobby-art" src="'+LOBBY_ART[over?(won?'win':'lose'):'menu']+'" alt="'+(over?(won?'A victorious crew celebrates above the city.':'The defeated crew waits outside a shuttered business as a car is repossessed.'):'A panoramic city at dusk with the docks, clubs, trailer park, suburbs, industrial yards, music venues, arts district and rural hills. Six legit businesses line the streets, with tiny figures hinting at the characters.')+'"><div class="v-lobby-copy"><h1>'+title+'</h1><p>'+detail+'</p><div class="v-lobby-actions"><button type="button" class="v-button v-primary" data-action="opening">'+(over?'Try again?':'New game')+'</button>'+(over?'<button type="button" class="v-button v-dark-button" data-action="main-menu">Main menu</button>':'<button type="button" class="v-button v-dark-button" data-action="show-rules">Rules</button>')+'</div></div>';
  return true;
 }
