@@ -1,0 +1,3 @@
+[submodule ".agents/vendors/codex-skills"]
+	path = .agents/vendors/codex-skills
+	url = https://github.com/philsaxton/codex-skills.git
