@@ -221,6 +221,14 @@
 #vice-smart :is(button,select):disabled,#vice-smart :is(button,select):disabled *{--v-surface-ink:#484f43!important;color:#484f43!important;-webkit-text-fill-color:#484f43!important;opacity:1}
 #vice-smart :is(button,select):disabled{background:#dbd7c9!important;border-color:#999d8e}
 
+/* Keep every action label readable when long resource names meet narrow cards. */
+#vice-smart button{min-width:0;max-width:100%;line-height:1.4;white-space:normal;overflow-wrap:break-word}
+#vice-smart .v-button{flex-wrap:wrap;height:auto}
+#vice-smart .v-button .v-token{max-width:100%}
+#vice-smart .v-card-actions .v-button,#vice-smart .v-catalog-nav .v-button{font-size:14px}
+#vice-smart button :is(span,strong,b){min-width:0}
+@media(max-width:500px){#vice-smart .v-header-actions .v-button,#vice-smart .v-catalog-nav .v-button{font-size:14px;padding:8px 10px}}
+
 #vice-smart [hidden]{display:none!important}
 #vice-smart .v-lobby-art{display:block;width:100%;height:auto;border-radius:8px 8px 0 0}
 #vice-smart .v-lobby-copy{padding:24px;background:#17271f;color:#f5efdc;text-align:center}
