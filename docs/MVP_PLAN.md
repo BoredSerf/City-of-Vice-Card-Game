@@ -25,6 +25,7 @@ The first supported product remains one local human against the existing heurist
 4. **The browser is the reference client.** Other clients should reuse the engine instead of reimplementing the rules.
 5. **Lightweight describes the shipped product.** Development-only build and test tools are acceptable. The browser build must not require a backend, account, API key, or runtime package download.
 6. **Standalone export is a goal, not an architectural veto.** It is retained while one command can generate and verify it. If it begins to block accessibility, security, performance, or platform work, the normal static build takes priority and abandoning the single-file artifact requires an explicit product decision.
+7. **Project-owned names use `snake_case`.** OCaml and TypeScript identifiers, serialized fields, commands, events, and MCP tools owned by this project use `snake_case`. Generated bindings and third-party interfaces may retain names required by their source systems, with translation confined to adapters.
 
 ## 3. Chosen MVP approach
 
@@ -125,16 +126,16 @@ Transient UI animation state, open dialogs, timeouts, and DOM references do not 
 
 The public engine accepts typed commands such as:
 
-- `startGame`
-- `collectIncome`
-- `chooseCrewBonus`
-- `trimResource`
-- `activateCard`
-- `cashCard`
-- `drawCard`
-- `tradeResources`
-- `useOperator`
-- `endTurn`
+- `start_game`
+- `collect_income`
+- `choose_crew_bonus`
+- `trim_resource`
+- `activate_card`
+- `cash_card`
+- `draw_card`
+- `trade_resources`
+- `use_operator`
+- `end_turn`
 
 Each command returns either a successful state transition with domain events or a typed rejection. Human-readable UI copy is derived outside the engine from rejection codes and event data.
 
@@ -322,7 +323,7 @@ After MVP acceptance:
 - **Executable:** evaluate a webview wrapper such as Tauri against signing, auto-update, accessibility, binary size, and team-language requirements. The engine and web client remain reusable.
 - **Steam:** package the desktop application for Steam using the selected executable wrapper, validate it through private Steam branches, and release it through an owner-controlled Steamworks partner account and SteamPipe depots.
 - **Mobile:** first validate the responsive web app as an installable PWA; evaluate Capacitor or the selected desktop wrapper's mobile support only when native distribution or APIs are required.
-- **LLM play:** prototype an adapter outside the core engine. Compare direct application integration with an MCP server based on privacy, deployment, latency, tool discoverability, and whether third-party clients are a real product requirement.
+- **ChatGPT/MCP playable client:** expose a remote MCP adapter so supported LLM desktop applications can host conversational play, and evaluate an optional embedded game UI for a full visual board inside clients that support it. Keep the integration vendor-neutral at the engine boundary and reusable by other MCP-capable clients.
 
 Cloudflare Pages and eventual Steam distribution are selected product targets. The desktop wrapper, mobile wrapper, optional Steamworks features, and LLM transport remain later decisions rather than preselected MVP dependencies.
 
@@ -379,7 +380,70 @@ Public release remains a human-controlled action. Automation may upload a candid
 - **STEAM-008 — Optional services:** Steam Cloud, achievements, overlay, rich presence, controllers, and LLM-backed play are advertised only when separately implemented and verified.
 - **STEAM-009 — Review readiness:** The owner-controlled submission has completed the applicable Steamworks store-page and build review gates before public release.
 
-## 14. Risks and stop conditions
+## 14. ChatGPT and MCP delivery track after MVP
+
+The game should be playable from a supported LLM desktop application, with ChatGPT as the initial client to investigate. This is a post-MVP product target with two progressively enhanced experiences:
+
+1. **Conversational play:** the client presents game state and narration in chat while calling MCP tools for legal game actions.
+2. **Embedded visual play:** where the client platform supports an interactive application UI, it presents the shared game board inside the conversation while MCP remains the command and state bridge.
+
+MCP alone exposes tools and data; it does not automatically embed the website. The visual experience therefore requires a client-supported application UI in addition to the MCP server. Conversational play must remain usable without that optional UI.
+
+### Architecture and trust boundary
+
+The MCP server is an untrusted adapter around the same authoritative OCaml engine used by the website. It exposes a deliberately small protocol such as:
+
+- `create_game`;
+- `join_game`;
+- `get_player_view`;
+- `get_legal_actions`;
+- `perform_action`;
+- `end_turn`; and
+- `resume_game`.
+
+Tool names and payloads are illustrative until the protocol is designed and versioned. Each state-changing request must identify the game, player, expected turn or state version, and an idempotency key. The engine validates every proposed command and returns typed events or rejections. Neither the LLM nor the MCP adapter may mutate state directly.
+
+Only the redacted view authorized for that participant may cross the MCP boundary. Hidden hands, deck order, private decisions, server credentials, and other players' private state must not appear in tool descriptions, responses, logs, prompts, embedded UI resources, or error details.
+
+A lightweight initial deployment may use a Cloudflare Worker for the remote MCP endpoint and an isolated, durable state holder per active game. The hosting design must be validated against current client authentication, transport, persistence, and interactive-UI requirements before implementation. Cloud hosting is not added to the base browser or Steam game's runtime requirements.
+
+### Initial product modes
+
+The shared protocol should be capable of supporting, without adding all modes at once:
+
+- a human playing against the existing heuristic rival through ChatGPT;
+- a human playing against an LLM-controlled rival;
+- an LLM acting as narrator, rules assistant, or coach without controlling either player;
+- two authenticated humans using separate clients; and
+- controlled LLM-versus-LLM simulations for testing.
+
+The first implemented mode must be selected before development. An LLM-controlled player continues to use the neutral `Player_policy` contract and receives no information unavailable to an equivalent human player.
+
+### Delivery sequence
+
+1. Verify the current ChatGPT application, MCP transport, authentication, embedded-UI, review, and distribution requirements.
+2. Define a versioned MCP protocol from the engine's player-view, legal-action, command, event, and rejection types.
+3. Add protocol contract tests proving that private state cannot cross the adapter boundary.
+4. Implement local conversational play with deterministic fixtures and reconnectable sessions.
+5. Deploy an authenticated remote MCP service to a private test environment with per-game state isolation, rate limits, structured audit logs, and cost controls.
+6. Connect ChatGPT and exercise full-game, invalid-action, duplicate-request, stale-turn, reconnect, timeout, and abandonment scenarios.
+7. Add the optional embedded visual board only after conversational play is reliable and the client UI mechanism is confirmed.
+8. Complete the applicable owner-controlled client registration, review, privacy disclosure, and publication process before offering the integration publicly.
+
+### ChatGPT/MCP acceptance criteria
+
+- **MCP-001 — Shared rules:** MCP play uses the same versioned OCaml engine and command validation as the verified website; no gameplay rules are reimplemented in prompts or server handlers.
+- **MCP-002 — Complete conversational game:** A player can create, play, resume, and finish a complete game through a supported ChatGPT desktop experience without using the standalone website.
+- **MCP-003 — Hidden-information safety:** Automated tests prove that each MCP response, resource, error, and structured log contains only the requesting participant's authorized view.
+- **MCP-004 — Legal-action enforcement:** Fabricated, malformed, stale, unauthorized, and out-of-turn actions are rejected without changing game state.
+- **MCP-005 — Reliable sessions:** Duplicate requests are idempotent, concurrent or stale requests cannot overwrite newer state, and an interrupted session can be resumed safely.
+- **MCP-006 — Client independence:** Core engine and protocol types contain no ChatGPT-, model-, prompt-, or provider-specific assumptions; client-specific behavior remains in adapters.
+- **MCP-007 — Optional UI:** If embedded visual play is shipped, it derives from the same authorized state and action protocol, remains keyboard operable, and does not become required for conversational play.
+- **MCP-008 — Operational controls:** Authentication, participant authorization, retention, deletion, rate limits, abuse handling, observability, model usage, and cost limits are documented and tested before public access.
+- **MCP-009 — Honest availability:** Documentation names the clients and account configurations actually verified and does not imply that arbitrary LLM applications can connect without setup.
+- **MCP-010 — Human-controlled publication:** Client registration, privacy representations, public listing, and production enablement require explicit approval from the game owner and the relevant service-account owner.
+
+## 15. Risks and stop conditions
 
 - **Unclear rules:** Stop the affected extraction when prototype behavior and intended rules conflict; obtain a product ruling before changing semantics.
 - **Hidden-information leakage:** Stop any external-player work if a player view cannot be proven to exclude private hand and deck data.
@@ -390,12 +454,16 @@ Public release remains a human-controlled action. Automation may upload a candid
 - **Deployment ownership:** Stop production deployment setup until the client identifies a GitHub repository and Cloudflare Pages project they are authorized to connect and supplies an approved secret-management path.
 - **Steam rights and authority:** Stop Steam onboarding or upload work if distribution rights, partner ownership, account permissions, platform commitments, or responsibility for fees and store representations are unresolved.
 - **Desktop divergence:** Stop desktop work if the wrapper requires a second gameplay implementation or platform-specific state semantics; preserve the shared engine and serialization contract.
+- **MCP information leakage:** Stop external play if participant authorization and redaction tests cannot prove that hidden or private game state stays inside the trusted engine and state service.
+- **LLM authority confusion:** Stop integration work if prompts or adapters are becoming a second rules implementation, or if a model can bypass engine validation or directly alter persisted state.
+- **Client capability drift:** Reconfirm current ChatGPT and MCP application requirements before implementation or publication; do not make the base game depend on an experimental or client-specific feature.
+- **Hosted-play operations:** Do not open the MCP service publicly until authentication, abuse limits, privacy disclosures, retention, deletion, monitoring, and spending controls have approved owners.
 - **Licensing:** Do not infer permission to relicense, add third-party assets, or publish under an open-source license.
 
-## 15. Verification and handoff
+## 16. Verification and handoff
 
 Implementation is complete only when every `MVP-*` criterion has an automated check or a recorded human verification with reproducible steps, and all checks pass from a clean checkout.
 
-Authoritative inputs for this plan are the repository's current `README.md`, the rules and implementation in `index.html`, the existing 36-card prototype behavior, the product owner's selection of Melange plus OCaml for the engine and TypeScript for the UI, Cloudflare Pages for website hosting, and the client's stated goal of Steam distribution. Technical direction was checked against the official Melange, Dune, Vite, Vitest, Cloudflare Pages, Tauri, Capacitor, and Steamworks documentation current when this plan was written; future implementers must select and lock supported versions during the applicable milestone.
+Authoritative inputs for this plan are the repository's current `README.md`, the rules and implementation in `index.html`, the existing 36-card prototype behavior, the product owner's selection of Melange plus OCaml for the engine and TypeScript for the UI, Cloudflare Pages for website hosting, and the client's stated goals of Steam distribution and play through an LLM desktop application such as ChatGPT. Technical direction was checked against the official Melange, Dune, Vite, Vitest, Cloudflare Pages, Tauri, Capacitor, Steamworks, and OpenAI developer documentation current when this plan was written; future implementers must select and lock supported versions during the applicable milestone.
 
 Continuation gate: implementation should begin only after the product owner accepts this scope and resolves any rule discrepancies discovered during Milestone 0. Semantic changes to this plan require renewed product approval; mechanical corrections do not.
