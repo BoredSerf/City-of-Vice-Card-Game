@@ -236,6 +236,9 @@
 #vice-smart .v-lobby-copy p{color:#d1d4c7;margin:8px auto 20px;max-width:650px}
 #vice-smart .v-lobby-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
 #vice-smart .v-lobby-actions button{min-width:150px;min-height:46px}
+#vice-smart .v-rules-page{padding:24px}
+#vice-smart .v-rules-page-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px}
+#vice-smart .v-rules-page-head h1{font-size:clamp(30px,5vw,48px)}
 #vice-smart .v-opening-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;padding:0 22px 24px}
 #vice-smart .v-opening-choice{--v-surface-ink:#273126;display:flex;flex-direction:column;padding:0;overflow:hidden;border:3px solid var(--v-card-color);border-radius:9px;background:#f5edda;color:#273126;cursor:pointer;text-align:left;font:inherit}
 #vice-smart .v-opening-choice .v-portrait{width:100%;border-radius:0}
@@ -870,20 +873,28 @@ function mainMenu(){
  if(aiTimer!==null)clearTimeout(aiTimer);
  aiTimer=null;panel=null;screen='menu';render();
 }
+function rulesScreen(){
+ if(aiTimer!==null)clearTimeout(aiTimer);
+ aiTimer=null;panel=null;screen='rules';render();
+}
 function renderLobby(){
  const lobby=el('v-lobby'),board=el('v-game-board');
  lobby.className=screen==='outcome'?'v-ending'+(state.winner===1?' is-defeat':''):'';
  if(screen==='game'&&state.winner!==null)screen='outcome';
  board.hidden=screen!=='game';lobby.hidden=screen==='game';
  if(screen==='game')return false;
+ if(screen==='rules'){
+  lobby.innerHTML='<div class="v-rules-page"><div class="v-rules-page-head"><h1>Rules</h1><button type="button" class="v-button v-dark-button" data-action="main-menu">Main menu</button></div><div class="v-rules">'+el('v-rules').querySelector('.v-rules').innerHTML+'</div></div>';
+  return true;
+ }
  if(screen==='choose'){
-  lobby.innerHTML='<div class="v-lobby-copy"><h1>Choose your first illegal business partner</h1><p>Choose one distributor to start active, free. The rival chooses from the remaining distributors, then each player receives three cards. Every starter produces one resource of its type per turn.</p><div class="v-lobby-actions"><button type="button" class="v-button v-dark-button" data-action="main-menu">Main menu</button></div></div><div class="v-opening-grid">'+CARDS.filter(c=>c.type==='illegal').map(c=>'<button type="button" class="v-opening-choice" style="'+colorStyle(c.color)+'" data-action="choose-opening" data-id="'+c.id+'" aria-label="Start with '+escapeHTML(c.name)+'">'+portrait(c)+'<span class="v-opening-caption"><strong>'+escapeHTML(c.name)+'</strong><span>'+escapeHTML(CREWS[c.crew]?.name||c.crew)+'</span><span>'+inlineToken(c.color,'+1 '+resourceName(c.color))+' per turn</span></span></button>').join('')+'</div>';
+  lobby.innerHTML='<div class="v-lobby-copy"><h1>Choose your first business partner</h1><div class="v-lobby-actions"><button type="button" class="v-button v-dark-button" data-action="main-menu">Main menu</button></div></div><div class="v-opening-grid">'+CARDS.filter(c=>c.type==='illegal').map(c=>'<button type="button" class="v-opening-choice" style="'+colorStyle(c.color)+'" data-action="choose-opening" data-id="'+c.id+'" aria-label="Start with '+escapeHTML(c.name)+'">'+portrait(c)+'<span class="v-opening-caption"><strong>'+escapeHTML(c.name)+'</strong><span>'+escapeHTML(CREWS[c.crew]?.name||c.crew)+'</span><span>'+inlineToken(c.color,'+1 '+resourceName(c.color))+' per turn</span></span></button>').join('')+'</div>';
   return true;
  }
  const over=screen==='outcome',won=state.winner===0;
  const title=over?(won?'VICTORY':'EMPIRE LOST'):'City of Vice';
  const detail=over?(state.winReason==='elimination'?(won?'Your rival has no active businesses remaining.':'You have no active businesses remaining.'):(won?'The city is yours. You reached 12 active businesses.':'Your rival rules the city with 12 active businesses.')):'Build your empire. Complete crews. Take the city.';
- lobby.innerHTML='<img class="v-lobby-art" src="'+LOBBY_ART[over?(won?'win':'lose'):'menu']+'" alt="'+(over?(won?'A victorious crew celebrates above the city.':'The defeated crew waits outside a shuttered business as a car is repossessed.'):'A panoramic city at dusk with the docks, clubs, trailer park, suburbs, industrial yards, music venues, arts district and rural hills. Six legit businesses line the streets, with tiny figures hinting at the characters.')+'"><div class="v-lobby-copy"><h1>'+title+'</h1><p>'+detail+'</p><div class="v-lobby-actions"><button type="button" class="v-button v-primary" data-action="opening">'+(over?'Try again?':'New game')+'</button>'+(over?'<button type="button" class="v-button v-dark-button" data-action="main-menu">Main menu</button>':'')+'</div></div>';
+ lobby.innerHTML='<img class="v-lobby-art" src="'+LOBBY_ART[over?(won?'win':'lose'):'menu']+'" alt="'+(over?(won?'A victorious crew celebrates above the city.':'The defeated crew waits outside a shuttered business as a car is repossessed.'):'A panoramic city at dusk with the docks, clubs, trailer park, suburbs, industrial yards, music venues, arts district and rural hills. Six legit businesses line the streets, with tiny figures hinting at the characters.')+'"><div class="v-lobby-copy"><h1>'+title+'</h1><p>'+detail+'</p><div class="v-lobby-actions"><button type="button" class="v-button v-primary" data-action="opening">'+(over?'Try again?':'New game')+'</button>'+(over?'<button type="button" class="v-button v-dark-button" data-action="main-menu">Main menu</button>':'<button type="button" class="v-button v-dark-button" data-action="show-rules">Rules</button>')+'</div></div>';
  return true;
 }
 
@@ -899,6 +910,7 @@ root.addEventListener('click',event=>{
  if(fxPlaying||endTransition||warningAwaiting)return;
  const action=button.dataset.action==='end'&&state.winner!==null?'restart':button.dataset.action,id=Number(button.dataset.id),color=button.dataset.color,p=player();
  if(action==='main-menu'){mainMenu();return;}
+ if(action==='show-rules'){rulesScreen();return;}
  if(action==='opening'){openingScreen();return;}
  if(action==='choose-opening'){
   if(screen!=='choose'||card(id)?.type!=='illegal')return;
