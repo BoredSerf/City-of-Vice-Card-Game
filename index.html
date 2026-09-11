@@ -62,6 +62,7 @@
 #vice-smart .v-resource strong{display:block;font-size:28px;line-height:1.3;font-variant-numeric:tabular-nums}
 #vice-smart .v-dot{display:inline-block;flex:0 0 11px;width:11px;height:11px;border-radius:50%;background:var(--v-card-color);border:1px solid #7e8578}
 #vice-smart .v-token{display:inline-flex;align-items:center;gap:5px;white-space:nowrap;font-size:13px}
+#vice-smart .v-token.v-token-inline{font-size:inherit}
 #vice-smart .v-tokens{display:inline-flex;align-items:center;gap:7px;flex-wrap:wrap}
 #vice-smart .v-toolbar{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px}
 #vice-smart .v-toolbar .v-action-cell{flex:0 1 250px}
@@ -551,6 +552,7 @@ const resourceName=color=>RESOURCE_NAMES[color]||color;
 const token=(color,value)=>'<span class="v-token">'+dot(color)+escapeHTML(value===undefined?resourceName(color):value)+'</span>';
 const costText=cost=>[...COLORS,'Any'].filter(c=>cost.includes(c)).map(c=>cost.filter(x=>x===c).length+' '+resourceName(c)).join(' + ');
 const costTokens=cost=>'<span class="v-tokens">'+[...COLORS,'Any'].filter(c=>cost.includes(c)).map(c=>token(c,cost.filter(x=>x===c).length+' '+resourceName(c))).join('')+'</span>';
+const inlineToken=(color,value)=>'<span class="v-token v-token-inline">'+dot(color)+escapeHTML(value===undefined?resourceName(color):value)+'</span>';
 const typeClass=c=>c.type==='legit'?'v-location-card':c.type==='operator'?'v-operator-card':'v-illegal-card';
 const typeLabel=c=>c.type==='legit'?'Legit business':c.type==='operator'?c.biz:'Distributor';
 const abilityLabel=op=>({kill:'Kill a distributor',coerce:'Bounce a crew',buy:'Take a distributor'}[op.ability]);
@@ -610,16 +612,16 @@ function publicLocation(id){
  return'Unknown';
 }
 function cardView(id,zone='hand',who=0){
- const c=card(id),mini=zone==='active',benefit=c.type==='illegal'?'+1 '+resourceName(c.color)+' / turn':c.type==='legit'?'+3 distributor slots':abilityLabel(c);
+ const c=card(id),mini=zone==='active',benefit=c.type==='illegal'?inlineToken(c.color,'+1 '+resourceName(c.color))+' / turn':c.type==='legit'?'+3 distributor slots':abilityLabel(c);
  let content='<div class="v-type-strip"><span>'+typeLabel(c)+'</span><span>'+token(c.color)+'</span></div>';
  content+='<button type="button" class="v-card-head" data-action="inspect" data-id="'+id+'" aria-label="Inspect '+escapeHTML(c.name)+'">';
- if(mini)content+=portrait(c)+'<span class="v-mini-info"><strong>'+escapeHTML(c.name)+'</strong><span>'+escapeHTML(benefit)+'</span></span>';
+ if(mini)content+=portrait(c)+'<span class="v-mini-info"><strong>'+escapeHTML(c.name)+'</strong><span>'+benefit+'</span></span>';
  else content+='<span class="v-namebar">'+escapeHTML(c.name)+'</span>'+portrait(c)+'<span class="v-biz">'+escapeHTML(c.biz)+'</span>';
  content+='</button>';
- if(!mini)content+='<div class="v-paper"><span class="v-benefit">'+escapeHTML(benefit)+'</span><span class="v-cost-line">Activate '+costTokens(c.cost)+'</span>'+(c.type==='operator'?'<span class="v-secondary">Then pay '+(c.ability==='buy'?'2 ×':'1 ×')+' target’s cost</span>':'')+'</div>';
+ if(!mini)content+='<div class="v-paper"><span class="v-benefit">'+benefit+'</span><span class="v-cost-line">Activate '+costTokens(c.cost)+'</span>'+(c.type==='operator'?'<span class="v-secondary">Then pay '+(c.ability==='buy'?'2 ×':'1 ×')+' target’s cost</span>':'')+'</div>';
  content+=connectionView(c,who);
  if(c.type==='legit')content+='<div class="v-protected">Protected from all operators</div>';
- if(zone==='hand')content+='<div class="v-card-actions">'+actionCell('activate',id,'Activate',activationReason(c),true)+actionCell('cash',id,'Cash · 1 '+(c.type==='legit'?'Any':c.color),cashReason())+'</div>';
+ if(zone==='hand')content+='<div class="v-card-actions">'+actionCell('activate',id,'Activate',activationReason(c),true)+actionCell('cash',id,'Cash · '+(c.type==='legit'?inlineToken('Any','1 Any'):inlineToken(c.color,'1 '+resourceName(c.color))),cashReason())+'</div>';
  if(zone==='operator')content+='<div class="v-card-actions v-single-action">'+actionCell('operator',id,'See Targets',gateReason(),true)+'<span class="v-action-help">'+escapeHTML(operatorAvailability(c))+'</span></div>';
  return '<article class="v-character '+typeClass(c)+(mini?' v-minicard':'')+'" data-card-id="'+id+'" data-owner="'+who+'" style="'+colorStyle(c.type==='operator'?'Operator':c.color)+'">'+content+'</article>';
 }
@@ -734,12 +736,12 @@ function renderPanel(){
   body=costTokens(fixed)+'<div class="v-choice-row">'+COLORS.map(c=>{const available=p.res[c]-fixed.filter(x=>x===c).length-panel.picks.filter(x=>x===c).length;return'<button type="button" class="v-button" data-action="generic-pick" data-color="'+c+'"'+blockedAttr(available<=0||panel.picks.length>=count)+'>'+token(c)+' · '+Math.max(0,available)+' available</button>';}).join('')+'</div><p>Chosen: '+(panel.picks.length?costText(panel.picks):'None')+'</p><div class="v-choice-row"><button type="button" class="v-button" data-action="generic-reset">Clear</button><button type="button" class="v-button v-primary" data-action="generic-confirm"'+blockedAttr(panel.picks.length!==count)+'>Pay &amp; activate</button></div>';
  }
  if(panel.type==='trade'){
-  heading='Trade resources';text='Give four of one color to receive one of another.';
-  body='<div class="v-choice-row"><label>Give 4 <select id="v-give">'+COLORS.map(c=>'<option value="'+c+'"'+(p.res[c]<4?' disabled':'')+(c===panel.from?' selected':'')+'>'+resourceName(c)+' ('+p.res[c]+')</option>').join('')+'</select></label><label>Receive 1 <select id="v-get">'+COLORS.map(c=>'<option value="'+c+'"'+(c===panel.to?' selected':'')+'>'+resourceName(c)+'</option>').join('')+'</select></label><button type="button" class="v-button v-primary" data-action="trade-confirm">Confirm trade</button></div>';
+  heading='Trade resources';text='Give four resources of one type to receive one of another.';
+  body='<p>Give:</p><div class="v-choice-row">'+COLORS.map(c=>'<button type="button" class="v-button'+(c===panel.from?' v-card-primary':'')+'" data-action="trade-from" data-color="'+c+'"'+blockedAttr(p.res[c]<4)+'>'+inlineToken(c,'4 '+resourceName(c))+' · '+p.res[c]+' held</button>').join('')+'</div><p>Receive:</p><div class="v-choice-row">'+COLORS.map(c=>'<button type="button" class="v-button'+(c===panel.to?' v-card-primary':'')+'" data-action="trade-to" data-color="'+c+'"'+blockedAttr(c===panel.from)+'>'+inlineToken(c,'1 '+resourceName(c))+'</button>').join('')+'</div><div class="v-choice-row"><button type="button" class="v-button v-primary" data-action="trade-confirm"'+blockedAttr(!panel.from||!panel.to||panel.from===panel.to)+'>Confirm trade</button></div>';
  }
  if(panel.type==='cash'){
-  const c=card(panel.id);heading='Cash '+c.name;text='Discard this unactivated card to gain one resource. '+(c.type==='legit'?'Choose any type.':'You receive 1 '+resourceName(c.color)+'.');
-  body='<div class="v-choice-row">'+(c.type==='legit'?COLORS:[c.color]).map(color=>'<button type="button" class="v-button v-primary" data-action="cash-confirm" data-id="'+c.id+'" data-color="'+color+'">Cash for 1 '+resourceName(color)+'</button>').join('')+'</div>';
+  const c=card(panel.id);heading='Cash '+c.name;text='Discard this unactivated card to gain one resource.'+(c.type==='legit'?' Choose any type.':'');
+  body=(c.type==='legit'?'':'<p>You receive '+inlineToken(c.color,'1 '+resourceName(c.color))+'.</p>')+'<div class="v-choice-row">'+(c.type==='legit'?COLORS:[c.color]).map(color=>'<button type="button" class="v-button v-primary" data-action="cash-confirm" data-id="'+c.id+'" data-color="'+color+'">Cash for '+inlineToken(color,'1 '+resourceName(color))+'</button>').join('')+'</div>';
  }
  if(panel.type==='operator'){
   const op=card(panel.id),targets=state.players[1].active.map(card).filter(c=>c.type==='illegal');
@@ -758,11 +760,11 @@ function renderPanel(){
   body=crewCards(crew)+'<p class="v-secondary">Unknown cards may be in the draw pile or the rival’s hidden hand.</p>';
  }
  if(panel.type==='inspect'){
-  const c=card(panel.id);heading=c.name;text=c.type==='illegal'?c.biz+' · Produces 1 '+resourceName(c.color)+' per turn while active.':c.type==='legit'?'Adds three distributor slots. Produces no resources. Counts toward victory and is protected from every operator.':'Maximum two active operators per player. Produces no resources and does not count toward victory. Discarded after use, freeing a slot.';
-  body='<div class="v-inspect-grid"><div class="v-inspect-art">'+portrait(c)+'</div><div><span class="v-secondary">Activation cost</span>'+costTokens(c.cost)+(c.type==='operator'?'<p>'+abilityLabel(c)+'. After activation, pay '+(c.ability==='buy'?'twice the target’s cost.':'the target’s cost.')+'</p>':'')+(c.type==='illegal'?'<button type="button" class="v-button" data-action="crew" data-id="'+c.id+'">'+CREW_SYMBOLS[c.crew]+' Inspect '+escapeHTML(c.crew)+'</button><p>'+publicLocation(c.id)+'</p>':'')+(p.hand.includes(c.id)?'<p class="v-block-reason">'+escapeHTML(activationReason(c)||'Ready to activate')+'</p><div class="v-choice-row"><button type="button" class="v-button v-primary" data-action="activate" data-id="'+c.id+'"'+blockedAttr(activationReason(c))+'>Activate</button><button type="button" class="v-button" data-action="cash" data-id="'+c.id+'"'+blockedAttr(cashReason())+'>Cash card</button></div>':'')+(c.type==='operator'&&p.active.includes(c.id)?'<button type="button" class="v-button v-danger-button" data-action="operator" data-id="'+c.id+'"'+blockedAttr(gateReason())+'>See Targets</button>':'')+'</div></div>';
+  const c=card(panel.id);heading=c.name;text=c.type==='illegal'?c.biz:c.type==='legit'?'Adds three distributor slots. Produces no resources. Counts toward victory and is protected from every operator.':'Maximum two active operators per player. Produces no resources and does not count toward victory. Discarded after use, freeing a slot.';
+  body=(c.type==='illegal'?'<p>Produces '+inlineToken(c.color,'1 '+resourceName(c.color))+' per turn while active.</p>':'')+'<div class="v-inspect-grid"><div class="v-inspect-art">'+portrait(c)+'</div><div><span class="v-secondary">Activation cost</span>'+costTokens(c.cost)+(c.type==='operator'?'<p>'+abilityLabel(c)+'. After activation, pay '+(c.ability==='buy'?'twice the target’s cost.':'the target’s cost.')+'</p>':'')+(c.type==='illegal'?'<button type="button" class="v-button" data-action="crew" data-id="'+c.id+'">'+CREW_SYMBOLS[c.crew]+' Inspect '+escapeHTML(c.crew)+'</button><p>'+publicLocation(c.id)+'</p>':'')+(p.hand.includes(c.id)?'<p class="v-block-reason">'+escapeHTML(activationReason(c)||'Ready to activate')+'</p><div class="v-choice-row"><button type="button" class="v-button v-primary" data-action="activate" data-id="'+c.id+'"'+blockedAttr(activationReason(c))+'>Activate</button><button type="button" class="v-button" data-action="cash" data-id="'+c.id+'"'+blockedAttr(cashReason())+'>Cash card</button></div>':'')+(c.type==='operator'&&p.active.includes(c.id)?'<button type="button" class="v-button v-danger-button" data-action="operator" data-id="'+c.id+'"'+blockedAttr(gateReason())+'>See Targets</button>':'')+'</div></div>';
  }
  if(panel.type==='bonus'){heading='Choose your crew bonus';text=safeBonusText();body='<div class="v-choice-row">'+COLORS.map(color=>'<button type="button" class="v-button" data-action="crew-bonus" data-color="'+color+'">'+token(color,'+1 '+resourceName(color))+'</button>').join('')+'</div>';}
- if(panel.type==='trim'){heading='Keep your best 10 resources';text='Discard '+(total(p.res)-10)+' excess resource'+(total(p.res)-10===1?'':'s')+' before taking actions.';body='<div class="v-choice-row">'+COLORS.map(color=>'<button type="button" class="v-button" data-action="trim" data-color="'+color+'"'+blockedAttr(!p.res[color])+'>Discard 1 '+resourceName(color)+' · '+p.res[color]+' held</button>').join('')+'</div>';}
+ if(panel.type==='trim'){heading='Keep your best 10 resources';text='Discard '+(total(p.res)-10)+' excess resource'+(total(p.res)-10===1?'':'s')+' before taking actions.';body='<div class="v-choice-row">'+COLORS.map(color=>'<button type="button" class="v-button" data-action="trim" data-color="'+color+'"'+blockedAttr(!p.res[color])+'>Discard '+inlineToken(color,'1 '+resourceName(color))+' · '+p.res[color]+' held</button>').join('')+'</div>';}
  if(panel.type==='new'){heading='Deal a new game?';text='Your current game will be replaced by a fresh deal.';body='<button type="button" class="v-button v-primary" data-action="restart">Deal new game</button>';}
  const forced=panel.type==='bonus'||panel.type==='trim';
  d.innerHTML='<div class="v-decision-head"><h2 id="v-decision-title">'+escapeHTML(heading)+'</h2>'+(!forced?'<button type="button" class="v-button v-close" data-action="close">Close</button>':'')+'</div>'+(text?'<p>'+escapeHTML(text)+'</p>':'')+body;
@@ -867,7 +869,7 @@ function renderLobby(){
  board.hidden=screen!=='game';lobby.hidden=screen==='game';
  if(screen==='game')return false;
  if(screen==='choose'){
-  lobby.innerHTML='<div class="v-lobby-copy"><h1>Choose your opening business</h1><p>Choose one distributor to start active, free. The rival chooses from the remaining distributors, then each player receives three cards. Every starter produces one resource of its type per turn.</p><div class="v-lobby-actions"><button type="button" class="v-button v-dark-button" data-action="main-menu">Main menu</button></div></div><div class="v-opening-grid">'+CARDS.filter(c=>c.type==='illegal').map(c=>'<button type="button" class="v-opening-choice" style="'+colorStyle(c.color)+'" data-action="choose-opening" data-id="'+c.id+'" aria-label="Start with '+escapeHTML(c.name)+'">'+portrait(c)+'<span class="v-opening-caption"><strong>'+escapeHTML(c.name)+'</strong><span>'+escapeHTML(CREWS[c.crew]?.name||c.crew)+'</span><span>+1 '+resourceName(c.color)+' per turn</span></span></button>').join('')+'</div>';
+  lobby.innerHTML='<div class="v-lobby-copy"><h1>Choose your opening business</h1><p>Choose one distributor to start active, free. The rival chooses from the remaining distributors, then each player receives three cards. Every starter produces one resource of its type per turn.</p><div class="v-lobby-actions"><button type="button" class="v-button v-dark-button" data-action="main-menu">Main menu</button></div></div><div class="v-opening-grid">'+CARDS.filter(c=>c.type==='illegal').map(c=>'<button type="button" class="v-opening-choice" style="'+colorStyle(c.color)+'" data-action="choose-opening" data-id="'+c.id+'" aria-label="Start with '+escapeHTML(c.name)+'">'+portrait(c)+'<span class="v-opening-caption"><strong>'+escapeHTML(c.name)+'</strong><span>'+escapeHTML(CREWS[c.crew]?.name||c.crew)+'</span><span>'+inlineToken(c.color,'+1 '+resourceName(c.color))+' per turn</span></span></button>').join('')+'</div>';
   return true;
  }
  const over=screen==='outcome',won=state.winner===0;
@@ -929,7 +931,9 @@ root.addEventListener('click',event=>{
  if(action==='pay-plus'&&panel?.type==='draw'){if(panel.picks[color]<p.res[color]&&total(panel.picks)<p.drawPrice)panel.picks[color]++;renderPanel();return;}
  if(action==='draw-confirm'&&panel?.type==='draw'){after(drawCard(state,0,COLORS.flatMap(c=>Array(panel.picks[c]).fill(c))));return;}
  if(action==='trade'){const from=COLORS.find(c=>p.res[c]>=4);if(!from){after(tradeReason());return;}showPanel({type:'trade',from,to:COLORS.find(c=>c!==from)});return;}
- if(action==='trade-confirm'){after(tradeResources(state,0,el('v-give').value,el('v-get').value));return;}
+ if(action==='trade-from'&&panel?.type==='trade'){panel.from=color;if(panel.to===color)panel.to=COLORS.find(c=>c!==color);renderPanel();return;}
+ if(action==='trade-to'&&panel?.type==='trade'&&color!==panel.from){panel.to=color;renderPanel();return;}
+ if(action==='trade-confirm'&&panel?.type==='trade'){after(tradeResources(state,0,panel.from,panel.to));return;}
  if(action==='operator'){if(card(id)?.type==='operator'&&p.active.includes(id))showPanel({type:'operator',id});return;}
  if(action==='target'&&panel?.type==='operator'){showPanel({type:'preview',opId:panel.id,targetId:id});return;}
  if(action==='operator-confirm'&&panel?.type==='preview'){
