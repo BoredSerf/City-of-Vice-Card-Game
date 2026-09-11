@@ -894,7 +894,7 @@ function renderLobby(){
  }
  const over=screen==='outcome',won=state.winner===0;
  const title=over?(won?'VICTORY':'EMPIRE LOST'):'City of Vice';
- const detail=over?(state.winReason==='elimination'?(won?'Your rival has no active distributors remaining.':'You have no active distributors remaining.'):(won?'The city is yours. You reached 12 active businesses.':'Your rival rules the city with 12 active businesses.')):'Build your empire. Complete crews. Take the city.';
+ const detail=over?(state.winReason==='elimination'?(won?'Your rival has no active distributors remaining.':'You have no active distributors remaining.'):(won?'The city is yours. You reached 12 active businesses.':'Your rival rules the city with 12 active businesses.')):'Make deals. Crush rivals. Seize the city.';
  lobby.innerHTML='<img class="v-lobby-art" src="'+LOBBY_ART[over?(won?'win':'lose'):'menu']+'" alt="'+(over?(won?'A victorious crew celebrates above the city.':'The defeated crew waits outside a shuttered business as a car is repossessed.'):'A panoramic city at dusk with the docks, clubs, trailer park, suburbs, industrial yards, music venues, arts district and rural hills. Six legit businesses line the streets, with tiny figures hinting at the characters.')+'"><div class="v-lobby-copy"><h1>'+title+'</h1><p>'+detail+'</p><div class="v-lobby-actions"><button type="button" class="v-button v-primary" data-action="opening">'+(over?'Try again':'New game')+'</button>'+(over?'<button type="button" class="v-button v-dark-button" data-action="main-menu">Main menu</button>':'<button type="button" class="v-button v-dark-button" data-action="show-rules">Rules</button>')+'</div></div>';
  return true;
 }
