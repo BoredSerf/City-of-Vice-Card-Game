@@ -1,6 +1,10 @@
 # City of Vice application MVP plan
 
-Status: Draft for product approval
+Status: Accepted
+
+Approved by: Product owner
+
+Approval record: PR #12
 
 Scope: Convert the existing browser prototype into a tested, modular web application without changing the base game's intended rules.
 

@@ -15,23 +15,27 @@ The slice register below is the only place where slice status and priority are
 recorded. Slice contracts deliberately contain no status lines or progress
 checkboxes. Checkpoint commits should not rewrite completed steps into this file;
 implementation notes, evidence, owners, and review discussion belong in the work
-item or pull request.
+item or pull request. One roadmap coordinator is the sole editor of the register;
+slice branches do not edit it.
 
 To operate the roadmap:
 
-1. Select the lowest-numbered `ready` slice at the highest priority. Parallel work
-   is allowed only when dependencies are complete and the assignments do not edit
-   the same contracts, interfaces, or files.
-2. Assign one coordinator and one implementation owner outside this document. The
-   coordinator changes the slice's single Status cell to `in_progress`.
+1. The roadmap coordinator selects the lowest-numbered `ready` slice at the highest
+   priority. Parallel work is allowed only when dependencies are complete and the
+   assignments do not edit the same contracts, interfaces, or files.
+2. Assign one slice coordinator and one implementation owner outside this document.
+   The roadmap coordinator changes the slice's single Status cell to
+   `in_progress` in a status-only update.
 3. Keep the slice within its stated outcome, scope, and acceptance checks. A
    checkpoint commit is not evidence that a slice is complete.
-4. Change the Status cell to `review` when the implementation and its verification
-   evidence are ready for a reviewer. The reviewer must inspect the current files
-   and run or examine the applicable checks, not rely only on a handoff summary.
-5. Change the same cell to `done` only after acceptance and integration. Then move
-   newly unblocked slices from `planned` to `ready` by editing only their Status
-   cells.
+4. The slice coordinator reports when implementation and verification evidence are
+   ready. The roadmap coordinator changes the Status cell to `review`. The reviewer
+   must inspect the current files and run or examine the applicable checks, not
+   rely only on a handoff summary.
+5. After acceptance and integration, the roadmap coordinator makes a small
+   post-merge status update that changes the same cell to `done` and moves newly
+   unblocked slices from `planned` to `ready`. Slice implementation pull requests
+   therefore never need to predict their own merge.
 6. Use `blocked` when a listed stop condition or unresolved dependency prevents
    safe progress. Record the reason and required decision in the work item, leaving
    this roadmap concise. Return the cell to `ready` or `in_progress` after the
@@ -39,6 +43,11 @@ To operate the roadmap:
 
 Allowed statuses are `planned`, `ready`, `in_progress`, `review`, `blocked`, and
 `done`.
+
+The S01 rule-decision register is a second readiness gate. S01 may finish with a
+decision unresolved only when the register maps it to the affected commands and
+slices. A mapped slice cannot enter `ready` until that decision is recorded as
+resolved; unaffected slices may continue when their ordinary dependencies permit.
 
 Priorities express product urgency, not dependency order:
 
@@ -62,13 +71,13 @@ must not silently broaden the accepted MVP.
 | S04 | Implement turn economy, payments, drawing, and resource limits | S03 | P0 | planned |
 | S05 | Implement card effects, operators, invariants, and victory | S04 | P0 | planned |
 | S06 | Put the heuristic rival behind the neutral player boundary | S05 | P0 | planned |
-| S07 | Publish and verify the Melange-to-TypeScript facade | S02, S06 | P0 | planned |
+| S07 | Stabilize and verify the Melange-to-TypeScript facade | S02, S06 | P0 | planned |
 | S08 | Add the application controller and safe local persistence | S07 | P0 | planned |
 | S09 | Deliver the complete playable browser flow | S08 | P0 | planned |
 | S10 | Reach user-facing parity with the prototype | S09 | P0 | planned |
 | S11 | Verify browser accessibility, responsiveness, and resume flows | S10 | P0 | planned |
 | S12 | Produce equivalent static-site and standalone artifacts | S11 | P0 | planned |
-| S13 | Complete the integration gate and authorized Cloudflare deployment | S12 | P0 | planned |
+| S13 | Deploy verified artifacts to Cloudflare Pages | S12 | P0 | planned |
 | S14 | Harden and document the MVP release | S13 | P0 | planned |
 | S15 | Retire the live legacy implementation and close MVP acceptance | S14 | P0 | planned |
 
@@ -82,6 +91,8 @@ A slice is `done` only when all of the following are true:
   behavior and no-mutation checks where applicable;
 - applicable formatting, compilation, type, test, and build checks pass from the
   documented developer workflow;
+- after S02, every new test or build command is added to the required integration
+  gate before the slice that introduced it can be `done`;
 - generated and source artifacts have not become parallel hand-edited
   implementations;
 - the change has been reviewed against the current slice contract and the MVP
@@ -100,19 +111,32 @@ an implementation detail to resolve by assumption.
 guesswork.
 
 **Deliver:** Preserve the current prototype as the parity reference; extract a
-machine-readable inventory of all 36 cards; inventory rules, edge cases, and AI
-decisions; establish seeded representative fixtures; and record every conflict
-between displayed rules, current behavior, and intended behavior for product
-decision.
+machine-readable inventory of all 36 cards; and create a machine-readable
+characterization corpus covering the rules, edge cases, and AI decisions named in
+the MVP plan. Give every scenario a stable identifier, explicit initial state and
+deck order or seed, ordered inputs or actions, expected state changes and visible
+outcomes, and provenance as prototype behavior, written rule, or approved
+correction. Provide a validation command or harness independent of the new engine
+where practical. Mark cases that cannot execute against the prototype as approved
+golden scenarios rather than legacy tests.
 
-**Accept when:** The inventory accounts for every card exactly once; the rule
-inventory covers the characterization cases named in the MVP plan; fixtures can be
-reproduced from explicit data; and every discovered conflict is either resolved by
-the product owner or clearly blocks only its affected downstream work.
+Also maintain a rule-decision register for conflicts between displayed rules,
+current behavior, and intended behavior. Each unresolved entry identifies the
+affected characterization scenarios, engine commands, and downstream slices, plus
+the product decision required.
 
-**Verify:** Review the inventory against `index.html`, exercise the reference flows,
-and reproduce the fixtures. This slice establishes evidence for MVP-002 and
-MVP-003; it does not change game behavior.
+**Accept when:** The inventory accounts for every card exactly once; the corpus
+covers every characterization area named in the MVP plan and can be reproduced
+from explicit data; expected outcomes and provenance are reviewable without the
+replacement engine; and every discovered conflict is either resolved by the
+product owner or mapped precisely enough to prevent only its affected slices from
+entering `ready`.
+
+**Verify:** Review the inventory against `index.html`; run the independent
+validation command or harness against the prototype where practical; and review
+approved golden scenarios against their cited rules or decisions. S03 through S06
+must consume these same scenario identifiers and expected outcomes. This slice
+establishes evidence for MVP-002 and MVP-003; it does not change game behavior.
 
 ### S02 — Reproducible project foundation
 
@@ -121,16 +145,20 @@ dependencies, run both toolchains, test, and build.
 
 **Deliver:** Add the approved OCaml, Dune, Melange, TypeScript, Vite, Vitest, and
 real-browser foundations; establish the required domain and adapter boundaries;
-add formatting, type-check, test, and build entry points; and start the verification
-workflow. Keep the shipped website backend-free and free of runtime package
+add formatting, type-check, test, and build entry points; and establish required
+branch or integration checks for every check then available. Make the workflow
+incremental so each later slice can add its new test or build command to the same
+required gate. Keep the shipped website backend-free and free of runtime package
 downloads.
 
 **Accept when:** Dependency versions are locked; empty or minimal OCaml and browser
 targets compile; a generated Melange ES module is consumable by TypeScript; the
-thin application shell builds; and the initial checks run locally and in CI.
+thin application shell builds; the initial checks run locally and in CI; and a
+failing available check prevents integration through the configured required gate.
 
-**Verify:** Follow the documented bootstrap from a clean checkout and run every
-initial check. This is the foundation for MVP-001, MVP-006A, MVP-009, and MVP-012.
+**Verify:** Follow the documented bootstrap from a clean checkout, run every
+initial check, and demonstrate that a failing required check blocks integration.
+This is the foundation for MVP-001, MVP-006A, MVP-009, and MVP-012.
 
 ### S03 — Deterministic state and game setup
 
@@ -146,8 +174,10 @@ events; all 36 cards occupy exactly one valid location; invalid setup commands
 leave serialized state unchanged; and opening constraints match the approved
 baseline.
 
-**Verify:** Native OCaml unit, scenario, serialization, and invariant tests cover
-successful and rejected setup paths. Serves MVP-001 through MVP-005.
+**Verify:** Native OCaml unit, scenario, serialization, and invariant tests consume
+the applicable S01 characterization scenarios and cover successful and rejected
+setup paths. Update and run a lightweight TypeScript-shaped facade fixture for the
+state and setup types introduced here. Serves MVP-001 through MVP-005.
 
 ### S04 — Turn economy and resource rules
 
@@ -163,9 +193,10 @@ resource and hand limits are enforced; reshuffling and payments are deterministi
 mandatory decisions prevent illegal progression; and rejection never mutates
 state.
 
-**Verify:** Characterization and engine tests assert resulting state and emitted
-events, plus invariant checks after every step in seeded scenarios. Serves MVP-002
-through MVP-005.
+**Verify:** Characterization and engine tests consume the applicable S01 scenarios
+and assert resulting state and emitted events, plus invariant checks after every
+step. Update and run the lightweight facade fixtures for new commands, events, and
+rejections. Serves MVP-002 through MVP-005.
 
 ### S05 — Card effects, operators, and victory
 
@@ -181,8 +212,10 @@ assertion; twelve-business and elimination victories emit the correct outcome;
 all limits and protected targets are enforced; and deterministic full-game
 simulations preserve invariants after every command.
 
-**Verify:** Native unit and scenario tests plus many seeded full-game simulations.
-Serves MVP-001 through MVP-005.
+**Verify:** Native unit and scenario tests consume the applicable S01 scenarios,
+then run many seeded full-game simulations. Update and run the lightweight facade
+fixtures for all new card, operator, and outcome types. Serves MVP-001 through
+MVP-005.
 
 ### S06 — Neutral player policy and heuristic rival
 
@@ -197,24 +230,25 @@ the approved baseline; seeded decisions are reproducible; the rival cannot obser
 the opponent's hidden hand or deck order; and malformed or stale proposals cannot
 bypass engine validation.
 
-**Verify:** Policy tests compare redacted views, legal actions, chosen commands, and
-resulting events for representative fixtures. Satisfies MVP-006 and contributes to
-MVP-001 through MVP-003.
+**Verify:** Policy tests consume the applicable S01 scenarios and compare redacted
+views, legal actions, chosen commands, and resulting events. Update and run the
+lightweight facade fixtures for player views and policy results. Satisfies MVP-006
+and contributes to MVP-001 through MVP-003.
 
-### S07 — Stable JavaScript facade
+### S07 — Stabilize the JavaScript facade
 
 **Outcome:** TypeScript consumes a deliberately JavaScript-shaped engine contract,
 not Melange runtime internals.
 
-**Deliver:** Add the thin Melange adapter and maintained TypeScript declaration for
-commands, player views, legal actions, events, rejections, serialization, and the
-heuristic policy. Export only primitives, arrays, plain records, or documented
-serialized JSON.
+**Deliver:** Stabilize the thin Melange adapter and maintained TypeScript declaration
+evolved through S03–S06 for commands, player views, legal actions, events,
+rejections, serialization, and the heuristic policy. Export only primitives,
+arrays, plain records, or documented serialized JSON.
 
-**Accept when:** Development and production module builds satisfy the same contract;
-malformed external data is rejected safely; hidden state is absent from player
-views; and TypeScript contains no dependency on undocumented OCaml runtime
-representations.
+**Accept when:** The fixtures evolved with every engine contract slice; development
+and production module builds satisfy the same complete contract; malformed
+external data is rejected safely; hidden state is absent from player views; and
+TypeScript contains no dependency on undocumented OCaml runtime representations.
 
 **Verify:** TypeScript contract tests exercise each exported operation against the
 generated development and production modules. Satisfies MVP-006A and reinforces
@@ -309,20 +343,22 @@ decision required by the MVP plan.
 **Verify:** Production builds plus the same real-browser smoke suite against both
 served outputs. Satisfies MVP-009 and MVP-010.
 
-### S13 — Integration gate and Cloudflare deployment
+### S13 — Verified Cloudflare deployment
 
 **Outcome:** Only a fully verified artifact from an approved production revision is
 deployed to Cloudflare Pages.
 
-**Deliver:** Complete CI coverage for formatting, OCaml compilation and tests,
-Melange generation, TypeScript checking and contracts, browser smoke tests, and
-both builds. Add the owner-authorized workflow that uploads the already-built
-`dist/` artifact and performs a post-deployment smoke check.
+**Deliver:** Audit that the required integration gate accumulated formatting,
+OCaml compilation and tests, Melange generation, TypeScript checking and contracts,
+browser smoke tests, and both builds as those checks were introduced. Add artifact
+identity verification and the owner-authorized workflow that uploads the
+already-built `dist/` artifact and performs a post-deployment smoke check.
 
-**Accept when:** Every required check blocks integration on failure; deployment
-does not rebuild on Cloudflare; the deployed artifact is the verified CI artifact;
-credentials remain in repository secrets with least privilege; and an authorized
-production deployment passes against its resulting URL.
+**Accept when:** The accumulated required checks already block integration on
+failure; deployment does not rebuild on Cloudflare; the deployed artifact is the
+verified CI artifact; credentials remain in repository secrets with least
+privilege; and an authorized production deployment passes against its resulting
+URL.
 
 **Verify:** Exercise a failing gate, a successful clean run, artifact identity, and
 the production smoke check. Production setup stops until the authorized repository,
