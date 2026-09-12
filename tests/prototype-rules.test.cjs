@@ -72,3 +72,13 @@ test('the forced legit cash decision renders the normal illustrated card treatme
   assert.match(html, /function forcedLegitCardView\(id\)[\s\S]*portrait\(c\)[\s\S]*class="v-protected"/);
   assert.ok(html.includes('aria-label="Cash \'+escapeHTML(c.name)+\' for 1 '));
 });
+
+test('elimination outcomes use violent titles and artwork treatment', () => {
+  const html = fs.readFileSync(new URL('../index.html', `file://${__filename}`), 'utf8');
+
+  assert.ok(html.includes("won?'Violent Victory':'Violent Defeat'"));
+  assert.ok(html.includes("state.winReason==='elimination'?' is-violent':''"));
+  assert.match(html, /\.v-ending\.is-violent \.v-ending-art:before/);
+  assert.match(html, /victorious crew surveys a scarred city/);
+  assert.match(html, /defeated crew mourns outside its ruined empire/);
+});
