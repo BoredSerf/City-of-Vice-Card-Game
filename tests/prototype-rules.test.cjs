@@ -73,10 +73,11 @@ test('the forced legit cash decision renders the normal illustrated card treatme
   assert.ok(html.includes('aria-label="Cash \'+escapeHTML(c.name)+\' for 1 '));
 });
 
-test('elimination outcomes use hostile takeover titles with the standard outcome artwork', () => {
+test('elimination outcomes use concise results with the standard outcome artwork', () => {
   const html = fs.readFileSync(new URL('../index.html', `file://${__filename}`), 'utf8');
 
-  assert.ok(html.includes("won?'Victory: Hostile Takeover (you got lucky)':'Defeat: Hostile Takeover (bad luck)'"));
+  assert.ok(html.includes("won?'Flawless Victory':'Defeat (tough luck)'"));
+  assert.doesNotMatch(html, /Hostile Takeover|you got lucky|bad luck/);
   assert.ok(html.includes("LOBBY_ART[over?(won?'win':'lose'):'menu']"));
   assert.doesNotMatch(html, /is-violent|violentCrewArt|VIOLENT END/);
 });
