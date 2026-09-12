@@ -12,26 +12,22 @@ game engine, a Melange JavaScript boundary, and a TypeScript browser interface.
 | [`README.md`](README.md) | Current product overview and instructions for the playable prototype. |
 | [`docs/MVP_PLAN.md`](docs/MVP_PLAN.md) | Authoritative MVP scope, architecture, acceptance criteria, non-goals, and future delivery tracks. |
 | [`IMPLEMENTATION.md`](IMPLEMENTATION.md) | Numbered development slices, dependencies, priorities, status, and backlog process. |
+| [`CONTRIBUTING.md`](CONTRIBUTING.md) | Human and agent workflow for prototype changes, baselines, deltas, and review. |
 | [`index.html`](index.html) | Existing playable prototype and behavioral parity reference. |
 
 Read the documents above before changing the application. Follow the active slice
 in `IMPLEMENTATION.md`, and route any rule conflict or material scope change to the
 project owner rather than resolving it by assumption.
 
-## When the product owner requests a change
+## When someone requests a product change
 
-For a request that changes game rules, behavior, or `index.html`, first inspect the
-slice register and the prototype baseline policy in `IMPLEMENTATION.md`. Explain in
-plain language whether the request affects rules, presentation, or both, and
-recommend the lowest-numbered ready slice at the highest priority.
+Follow `CONTRIBUTING.md` for any request that changes rules, behavior,
+presentation, copy, or `index.html`. Explain two things in plain language: the next
+ready roadmap slice overall, and the slice or backlog destination applicable to
+the request. These may be different.
 
-If the request would extend the prototype beyond the snapshot used by the modular
-application, warn that changing `index.html` alone creates a migration delta. State
-which baseline, characterization scenarios, and slices are affected when known,
-then recommend the disciplined path: implement through the applicable modular
-slice when ready, record an accepted delta and update characterization before a
-rule change, or place non-urgent work in the feature backlog.
-
-Do not silently move the baseline or leave an approved change only in the
-prototype. Let the product owner choose the path, then record that decision in the
-prototype change ledger or backlog as required by `IMPLEMENTATION.md`.
+If the request would move the prototype beyond the snapshot used by the modular
+application, warn that changing `index.html` alone creates migration work. Recommend
+the applicable modular slice, a recorded delta, or backlog intake. Do not silently
+move a baseline, leave an approved change only in the prototype, or infer product
+authority from the request alone.
