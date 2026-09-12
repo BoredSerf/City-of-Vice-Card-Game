@@ -79,6 +79,10 @@ test('elimination outcomes use violent titles and artwork treatment', () => {
   assert.ok(html.includes("won?'Violent Victory':'Violent Defeat'"));
   assert.ok(html.includes("state.winReason==='elimination'?' is-violent':''"));
   assert.match(html, /\.v-ending\.is-violent \.v-ending-art:before/);
-  assert.match(html, /victorious crew surveys a scarred city/);
-  assert.match(html, /defeated crew mourns outside its ruined empire/);
+  assert.match(html, /function violentCrewArt\(won\)/);
+  assert.match(html, /TOUGH · UNSTABLE · VICTORIOUS/);
+  assert.match(html, /THE CREW IS DEAD/);
+  assert.match(html, /class="v-blood"/);
+  assert.match(html, /class="v-bruise"/);
+  assert.match(html, /violent\?violentCrewArt\(won\)/);
 });
