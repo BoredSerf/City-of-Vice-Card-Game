@@ -277,7 +277,12 @@
 #vice-smart .v-last-business{padding:15px 18px;background:#efd07d;color:#273126!important;border-radius:7px;margin-bottom:16px;font-weight:bold;font-size:17px;--v-surface-ink:#273126}
 #vice-smart .v-last-business.is-rival{background:#8e302c;color:#fff4df!important;--v-surface-ink:#fff4df}
 #vice-smart .v-ending{overflow:hidden;background:#0d1712}
+#vice-smart .v-ending-art{position:relative;overflow:hidden}
 #vice-smart .v-ending .v-lobby-art{animation:v-final-art 5s ease-out both;transform-origin:center}
+#vice-smart .v-ending.is-violent .v-ending-art:before{content:"";position:absolute;z-index:1;inset:0;pointer-events:none;background:radial-gradient(circle at 17% 24%,transparent 0 3px,#efe4c8 4px 5px,transparent 6px),radial-gradient(circle at 82% 38%,transparent 0 2px,#efe4c8 3px 4px,transparent 5px),linear-gradient(115deg,transparent 0 46%,#eee2c822 46.2% 46.5%,transparent 46.7%),linear-gradient(65deg,transparent 0 62%,#eee2c822 62.2% 62.5%,transparent 62.7%),linear-gradient(0deg,#39110eb8,transparent 58%);box-shadow:inset 0 0 90px #160504}
+#vice-smart .v-ending.is-violent .v-ending-art:after{content:"VIOLENT END";position:absolute;z-index:2;right:-38px;bottom:30px;padding:8px 48px;background:#861d19;color:#fff4df;border-block:2px solid #e5ba6e;transform:rotate(-9deg);font:900 17px/1 Georgia,serif;letter-spacing:.14em;box-shadow:0 3px 12px #080000aa}
+#vice-smart .v-ending.is-violent.is-defeat .v-ending-art:before{background:radial-gradient(circle at 20% 30%,transparent 0 3px,#d9c7ae 4px 5px,transparent 6px),linear-gradient(72deg,transparent 0 39%,#eee2c82b 39.2% 39.5%,transparent 39.7%),linear-gradient(112deg,transparent 0 56%,#eee2c82b 56.2% 56.5%,transparent 56.7%),linear-gradient(0deg,#210000e6,transparent 72%);box-shadow:inset 0 0 120px #080000}
+#vice-smart .v-ending.is-violent .v-lobby-art{filter:saturate(.72) contrast(1.16)}
 #vice-smart .v-ending .v-lobby-copy{position:relative;background:linear-gradient(#263d2a,#101b14);border-top:3px solid #efd07d;padding:32px 16px 38px}
 #vice-smart .v-ending h1{font-size:clamp(42px,9vw,88px);letter-spacing:.04em;color:#efd07d;animation:v-final-title 2.8s ease-out both}
 #vice-smart .v-ending.is-defeat .v-lobby-copy{background:linear-gradient(#422421,#171414);border-color:#c86857}
@@ -903,7 +908,7 @@ function rulesScreen(){
 }
 function renderLobby(){
  const lobby=el('v-lobby'),board=el('v-game-board');
- lobby.className=screen==='outcome'?'v-ending'+(state.winner===1?' is-defeat':''):'';
+ lobby.className=screen==='outcome'?'v-ending'+(state.winner===1?' is-defeat':'')+(state.winReason==='elimination'?' is-violent':''):'';
  if(screen==='game'&&state.winner!==null)screen='outcome';
  board.hidden=screen!=='game';lobby.hidden=screen==='game';
  if(screen==='game')return false;
@@ -916,9 +921,11 @@ function renderLobby(){
   return true;
  }
  const over=screen==='outcome',won=state.winner===0;
- const title=over?(won?'VICTORY':'EMPIRE LOST'):'City of Vice';
+ const violent=over&&state.winReason==='elimination';
+ const title=over?(violent?(won?'Violent Victory':'Violent Defeat'):(won?'VICTORY':'EMPIRE LOST')):'City of Vice';
  const detail=over?(state.winReason==='elimination'?(won?'Your rival has no active distributors remaining.':'You have no active distributors remaining.'):(won?'The city is yours. You reached 12 active businesses.':'Your rival rules the city with 12 active businesses.')):'Make deals. Crush rivals. Seize the city.';
- lobby.innerHTML='<img class="v-lobby-art" src="'+LOBBY_ART[over?(won?'win':'lose'):'menu']+'" alt="'+(over?(won?'A victorious crew celebrates above the city.':'The defeated crew waits outside a shuttered business as a car is repossessed.'):'A panoramic city at dusk with the docks, clubs, trailer park, suburbs, industrial yards, music venues, arts district and rural hills. Six legit businesses line the streets, with tiny figures hinting at the characters.')+'"><div class="v-lobby-copy"><h1>'+title+'</h1><p>'+detail+'</p><div class="v-lobby-actions"><button type="button" class="v-button v-primary" data-action="opening">'+(over?(won?'Play again':'Try again'):'New game')+'</button>'+(over?'<button type="button" class="v-button v-dark-button" data-action="main-menu">Main menu</button>':'<button type="button" class="v-button v-dark-button" data-action="show-rules">Rules</button>')+'</div></div>';
+ const artAlt=over?(violent?(won?'The victorious crew surveys a scarred city after violently wiping out the rival’s distributors.':'The defeated crew mourns outside its ruined empire after its last distributor falls.'):(won?'A victorious crew celebrates above the city.':'The defeated crew waits outside a shuttered business as a car is repossessed.')):'A panoramic city at dusk with the docks, clubs, trailer park, suburbs, industrial yards, music venues, arts district and rural hills. Six legit businesses line the streets, with tiny figures hinting at the characters.';
+ lobby.innerHTML='<div class="v-ending-art"><img class="v-lobby-art" src="'+LOBBY_ART[over?(won?'win':'lose'):'menu']+'" alt="'+artAlt+'"></div><div class="v-lobby-copy"><h1>'+title+'</h1><p>'+detail+'</p><div class="v-lobby-actions"><button type="button" class="v-button v-primary" data-action="opening">'+(over?(won?'Play again':'Try again'):'New game')+'</button>'+(over?'<button type="button" class="v-button v-dark-button" data-action="main-menu">Main menu</button>':'<button type="button" class="v-button v-dark-button" data-action="show-rules">Rules</button>')+'</div></div>';
  return true;
 }
 
