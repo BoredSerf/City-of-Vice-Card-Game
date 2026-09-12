@@ -73,10 +73,10 @@ test('the forced legit cash decision renders the normal illustrated card treatme
   assert.ok(html.includes('aria-label="Cash \'+escapeHTML(c.name)+\' for 1 '));
 });
 
-test('elimination outcomes use violent titles and artwork treatment', () => {
+test('elimination outcomes use hostile takeover titles and violent artwork treatment', () => {
   const html = fs.readFileSync(new URL('../index.html', `file://${__filename}`), 'utf8');
 
-  assert.ok(html.includes("won?'Violent Victory':'Violent Defeat'"));
+  assert.ok(html.includes("won?'Victory: Hostile Takeover (you got lucky)':'Defeat: Hostile Takeover (bad luck)'"));
   assert.ok(html.includes("state.winReason==='elimination'?' is-violent':''"));
   assert.match(html, /\.v-ending\.is-violent \.v-ending-art:before/);
   assert.match(html, /function violentCrewArt\(won\)/);
