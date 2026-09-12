@@ -63,3 +63,12 @@ test('drawing a non-legit card does not create a forced decision', () => {
   assert.equal(state.phase, 'play');
   assert.equal(state.pendingLegitCash, undefined);
 });
+
+test('the forced legit cash decision renders the normal illustrated card treatment', () => {
+  const html = fs.readFileSync(new URL('../index.html', `file://${__filename}`), 'utf8');
+
+  assert.match(html, /class="v-forced-legit-grid"/);
+  assert.match(html, /choices\.map\(forcedLegitCardView\)/);
+  assert.match(html, /function forcedLegitCardView\(id\)[\s\S]*portrait\(c\)[\s\S]*class="v-protected"/);
+  assert.ok(html.includes('aria-label="Cash \'+escapeHTML(c.name)+\' for 1 '));
+});
