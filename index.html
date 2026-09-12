@@ -938,7 +938,7 @@ function renderLobby(){
  }
  const over=screen==='outcome',won=state.winner===0;
  const violent=over&&state.winReason==='elimination';
- const title=over?(violent?(won?'Violent Victory':'Violent Defeat'):(won?'VICTORY':'EMPIRE LOST')):'City of Vice';
+ const title=over?(violent?(won?'Victory: Hostile Takeover (you got lucky)':'Defeat: Hostile Takeover (bad luck)'):(won?'VICTORY':'EMPIRE LOST')):'City of Vice';
  const detail=over?(state.winReason==='elimination'?(won?'Your rival has no active distributors remaining.':'You have no active distributors remaining.'):(won?'The city is yours. You reached 12 active businesses.':'Your rival rules the city with 12 active businesses.')):'Make deals. Crush rivals. Seize the city.';
  const artAlt=over?(won?'A victorious crew celebrates above the city.':'The defeated crew waits outside a shuttered business as a car is repossessed.'):'A panoramic city at dusk with the docks, clubs, trailer park, suburbs, industrial yards, music venues, arts district and rural hills. Six legit businesses line the streets, with tiny figures hinting at the characters.';
  const art=violent?violentCrewArt(won):'<img class="v-lobby-art" src="'+LOBBY_ART[over?(won?'win':'lose'):'menu']+'" alt="'+artAlt+'">';
