@@ -116,3 +116,15 @@ test('the menu exposes resume and achievement controls backed by separate saves'
   assert.ok(html.includes("const ACHIEVEMENT_KEY='city-of-vice-achievements-v1'"));
   assert.match(html, /loadAchievements\(\);loadSaved\(\);render\(\);/);
 });
+
+test('operator results use quick, distinct eliminate, bounce, and acquire effects', () => {
+  const html = fs.readFileSync(new URL('../index.html', `file://${__filename}`), 'utf8');
+
+  assert.match(html, /\.v-fx-kill \.v-fx-image\{animation:v-eliminate 1\.15s/);
+  assert.match(html, /\.v-fx-coerce \.v-fx-image\{animation:v-bounce 1\.15s/);
+  assert.match(html, /\.v-fx-buy \.v-fx-image\{animation:v-acquire 1\.15s/);
+  assert.ok(html.includes("'Hitman · Eliminate'"));
+  assert.ok(html.includes("'Ruffian · Bounce crew'"));
+  assert.ok(html.includes("'Fixer · Acquire'"));
+  assert.match(html, /reduced\?100:1450\+fx\.targets\.length\*80/);
+});
