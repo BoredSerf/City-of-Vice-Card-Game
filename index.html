@@ -172,6 +172,16 @@
 #vice-smart .v-location-state{font-size:13px;color:#4b533d}
 #vice-smart .v-victory{background:var(--v-gold);color:#272f22;border-radius:8px;padding:20px;margin-bottom:18px}
 #vice-smart .v-victory p{margin-top:5px}
+#vice-smart .v-achievements-page{max-width:900px;margin:0 auto;padding:32px 24px}
+#vice-smart .v-achievements-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:10px}
+#vice-smart .v-achievements-intro{color:var(--v-muted);margin-bottom:20px}
+#vice-smart .v-achievement-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+#vice-smart .v-achievement{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:center;padding:14px;background:#263b2f;border:1px solid #667467;border-radius:8px}
+#vice-smart .v-achievement.is-earned{background:#344d35;border-color:var(--v-gold)}
+#vice-smart .v-achievement-icon{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:#17271f;color:#aeb7aa;font-size:22px}
+#vice-smart .v-achievement.is-earned .v-achievement-icon{background:var(--v-gold);color:#272d20}
+#vice-smart .v-achievement strong,#vice-smart .v-achievement span{display:block}
+#vice-smart .v-achievement p{color:var(--v-muted);font-size:13px;margin-top:3px}
 #vice-smart .v-empty{font-size:14px;color:var(--v-muted);grid-column:1/-1;padding:12px 0}
 #vice-smart .v-footer{margin-top:28px;border-top:1px solid #5c705e}
 #vice-smart .v-footer>details{border-bottom:1px solid #435e4a}
@@ -188,7 +198,7 @@
 #vice-smart .v-log li{margin:8px 0}
 @media(max-width:1000px){#vice-smart .v-grid{grid-template-columns:repeat(3,minmax(0,1fr))}#vice-smart .v-targets{grid-template-columns:repeat(2,minmax(0,1fr))}#vice-smart .v-mini-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#vice-smart .v-roster{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:740px){#vice-smart .v-header{padding:16px;gap:12px}#vice-smart h1{font-size:29px}#vice-smart .v-main{padding:16px}#vice-smart .v-grid,#vice-smart .v-roster,#vice-smart .v-forced-legit-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#vice-smart .v-turn-guide{align-items:stretch;gap:14px;flex-direction:column}#vice-smart .v-end{width:100%}#vice-smart .v-resources{grid-template-columns:repeat(3,minmax(0,1fr))}#vice-smart .v-payment{grid-template-columns:repeat(3,minmax(0,1fr))}#vice-smart .v-race{grid-template-columns:1fr 1fr;gap:12px}#vice-smart .v-goal{grid-column:1/-1;grid-row:2;display:flex;gap:12px;justify-content:center}#vice-smart .v-header-actions{max-width:230px}#vice-smart .v-turn{width:100%;text-align:right}#vice-smart .v-recap summary{flex-wrap:wrap;gap:5px 10px}#vice-smart .v-recap summary::after{margin-left:auto}}
-@media(max-width:500px){#vice-smart{border:0;border-radius:0}#vice-smart .v-header{align-items:flex-start}#vice-smart h1{font-size:27px}#vice-smart .v-eyebrow{font-size:12px;letter-spacing:.5px}#vice-smart .v-header-actions{max-width:140px;gap:5px}#vice-smart .v-header-actions .v-button{padding:6px 8px;font-size:12px}#vice-smart .v-race-title{font-size:13px;gap:5px}#vice-smart .v-race-title strong{font-size:19px}#vice-smart .v-main{padding:14px 12px}#vice-smart .v-turn-guide{padding:14px}#vice-smart .v-guide-copy h2{font-size:21px}#vice-smart .v-grid,#vice-smart .v-mini-grid{gap:9px}#vice-smart .v-card-actions{flex-direction:column}#vice-smart .v-card-actions .v-action-cell{width:100%}#vice-smart .v-namebar{font-size:16px;min-height:59px;padding:8px}#vice-smart .v-type-strip{font-size:12px;flex-wrap:wrap}#vice-smart .v-mini-grid{grid-template-columns:1fr}#vice-smart .v-targets{grid-template-columns:1fr}#vice-smart .v-decision{padding:14px 12px}#vice-smart .v-crew-members{grid-template-columns:1fr}#vice-smart .v-crew-member{flex-direction:row;align-items:center}#vice-smart .v-crew-member .v-portrait{width:85px}#vice-smart .v-inspect-grid{grid-template-columns:1fr;gap:14px}#vice-smart .v-inspect-art{width:180px;max-width:100%;margin:auto}#vice-smart .v-rules{grid-template-columns:1fr}#vice-smart .v-toolbar .v-action-cell{flex:1 1 140px}#vice-smart .v-catalog-nav .v-button{font-size:12px;padding:8px}#vice-smart .v-crew-title{overflow-wrap:anywhere}#vice-smart .v-affected-card{width:calc(50% - 6px)}}
+@media(max-width:500px){#vice-smart{border:0;border-radius:0}#vice-smart .v-header{align-items:flex-start}#vice-smart h1{font-size:27px}#vice-smart .v-eyebrow{font-size:12px;letter-spacing:.5px}#vice-smart .v-header-actions{max-width:140px;gap:5px}#vice-smart .v-header-actions .v-button{padding:6px 8px;font-size:12px}#vice-smart .v-race-title{font-size:13px;gap:5px}#vice-smart .v-race-title strong{font-size:19px}#vice-smart .v-main{padding:14px 12px}#vice-smart .v-turn-guide{padding:14px}#vice-smart .v-guide-copy h2{font-size:21px}#vice-smart .v-grid,#vice-smart .v-mini-grid{gap:9px}#vice-smart .v-card-actions{flex-direction:column}#vice-smart .v-card-actions .v-action-cell{width:100%}#vice-smart .v-namebar{font-size:16px;min-height:59px;padding:8px}#vice-smart .v-type-strip{font-size:12px;flex-wrap:wrap}#vice-smart .v-mini-grid{grid-template-columns:1fr}#vice-smart .v-targets{grid-template-columns:1fr}#vice-smart .v-decision{padding:14px 12px}#vice-smart .v-crew-members{grid-template-columns:1fr}#vice-smart .v-crew-member{flex-direction:row;align-items:center}#vice-smart .v-crew-member .v-portrait{width:85px}#vice-smart .v-inspect-grid{grid-template-columns:1fr;gap:14px}#vice-smart .v-inspect-art{width:180px;max-width:100%;margin:auto}#vice-smart .v-rules{grid-template-columns:1fr}#vice-smart .v-achievement-grid{grid-template-columns:1fr}#vice-smart .v-achievements-page{padding:24px 14px}#vice-smart .v-toolbar .v-action-cell{flex:1 1 140px}#vice-smart .v-catalog-nav .v-button{font-size:12px;padding:8px}#vice-smart .v-crew-title{overflow-wrap:anywhere}#vice-smart .v-affected-card{width:calc(50% - 6px)}}
 @media(max-width:500px){#vice-smart .v-forced-legit-grid{grid-template-columns:1fr}}
 @media(max-width:359px){#vice-smart .v-grid,#vice-smart .v-roster{grid-template-columns:1fr}#vice-smart .v-payment{grid-template-columns:repeat(2,minmax(0,1fr))}#vice-smart .v-header{flex-direction:column}#vice-smart .v-header-actions{max-width:none;justify-content:flex-start}#vice-smart .v-turn{width:auto;text-align:left}#vice-smart .v-goal{flex-wrap:wrap;gap:2px 10px}}
 
@@ -445,6 +455,15 @@ function checkWin(s){
  }
  return false;
 }
+function earnedVictoryAchievements(s,winStreak){
+ if(s.winner!==0)return[];
+ const earned=[];
+ if(s.winReason==='elimination')earned.push('brutal');
+ if(winStreak>=10)earned.push('streak-10');
+ CREWS.forEach(([name])=>{if(complete(s.players[0],name))earned.push('crew-'+name);});
+ COLORS.forEach(color=>{const all=CARDS.filter(c=>c.type!=='operator'&&c.color===color);if(all.every(c=>s.players[0].active.includes(c.id)))earned.push('monopoly-'+color);});
+ return earned;
+}
 const legalTurn=(s,who)=>s.phase==='play'&&s.winner===null&&s.current===who&&total(s.players[who].res)<=10;
 function returnToHand(s,who,id){const p=s.players[who];if(p.hand.length<7){p.hand.push(id);return true;}s.discard.push(id);p.suspended=p.suspended.filter(x=>x!==id);record(s,card(id).name+' is discarded: hand limit of 7.');return false;}
 function enforceOperatorLimit(s){
@@ -550,7 +569,7 @@ function actAI(s){
 }
 function runAI(s){startTurn(s,1);let guard=0;while(guard++<100&&s.winner===null&&actAI(s)){}if(s.winner===null){s.turn++;startTurn(s,0);}}
 // A pure rules interface lets the saved prototype be regression-checked without a browser.
-const engine={CARDS,COLORS,CREWS,newState,total,bizCount,illegalCount,legitCount,legitPossessionCount,capacity,complete,income,afford,operatorCost,startTurn,drawCard,activateCard,cashCard,cashPendingLegit,tradeResources,useOperator,actAI,runAI,checkWin,enforceCapacity,resolveCost,crewBonus,claimCrewBonus,operatorCount,OPERATOR_LIMIT,enforceOperatorLimit};
+const engine={CARDS,COLORS,CREWS,newState,total,bizCount,illegalCount,legitCount,legitPossessionCount,capacity,complete,income,afford,operatorCost,startTurn,drawCard,activateCard,cashCard,cashPendingLegit,tradeResources,useOperator,actAI,runAI,checkWin,earnedVictoryAchievements,enforceCapacity,resolveCost,crewBonus,claimCrewBonus,operatorCount,OPERATOR_LIMIT,enforceOperatorLimit};
 if(typeof module!=='undefined'&&module.exports){module.exports=engine;return;}
 function portrait(c){
  if(c.id===34)return '<div class="v-portrait" aria-hidden="true" style="background-image:var(--vice-leon);background-size:cover;background-position:center"></div>';
@@ -564,6 +583,27 @@ function portrait(c){
 const CREW_SYMBOLS={'The Docks':'✦','Club Circuit':'♦','Trailer Park':'⚒','The Burbs':'♠','Pipeline':'⚙','Night Shift':'☾','Arts District':'♣','Hill Country':'▲'};
 let state=newState(),panel=null,notice='Collect your income to begin.',isError=false,catalogPage=0,aiTimer=null;
 const STORAGE_KEY='city-of-vice-current-v6';
+const ACHIEVEMENT_KEY='city-of-vice-achievements-v1';
+const ACHIEVEMENTS=[
+ {id:'brutal',name:'Brutal Victory',description:'Win by eliminating every rival distributor.',icon:'☠'},
+ {id:'streak-10',name:'Untouchable',description:'Win 10 games in a row.',icon:'★'},
+ ...CREWS.map(([name])=>({id:'crew-'+name,name:name+' Crew',description:'Win with all three members of '+name+' active.',icon:'♣'})),
+ ...COLORS.map(color=>({id:'monopoly-'+color,name:color+' Monopoly',description:'Win with every '+resourceName(color)+' business active, including its legit business.',icon:'◆'}))
+];
+let achievements={earned:[],winStreak:0};
+function loadAchievements(){
+ try{const saved=JSON.parse(localStorage.getItem(ACHIEVEMENT_KEY));if(Array.isArray(saved?.earned)&&Number.isInteger(saved.winStreak)&&saved.winStreak>=0)achievements={earned:saved.earned.filter(id=>ACHIEVEMENTS.some(a=>a.id===id)),winStreak:saved.winStreak};}catch(e){}
+}
+function saveAchievements(){try{localStorage.setItem(ACHIEVEMENT_KEY,JSON.stringify(achievements));}catch(e){}}
+function recordAchievements(){
+ if(state.winner===null||state.achievementsRecorded)return;
+ state.achievementsRecorded=true;
+ if(state.winner!==0){achievements.winStreak=0;saveAchievements();return;}
+ achievements.winStreak++;
+ const unlocked=earnedVictoryAchievements(state,achievements.winStreak),previous=new Set(achievements.earned);
+ achievements.earned=[...new Set([...achievements.earned,...unlocked])];saveAchievements();
+ state.newAchievements=unlocked.filter(id=>!previous.has(id));
+}
 COLOR_VALUES.Operator='#a62e29';
 const el=id=>root.querySelector('#'+id);
 const player=()=>state.players[0];
@@ -892,6 +932,7 @@ function playOperatorFX(fx){
 let screen='menu';
 function openingScreen(){
  if(aiTimer!==null)clearTimeout(aiTimer);
+ try{localStorage.removeItem(STORAGE_KEY);}catch(e){}
  aiTimer=null;panel=null;screen='choose';render();
 }
 function mainMenu(){
@@ -902,6 +943,11 @@ function rulesScreen(){
  if(aiTimer!==null)clearTimeout(aiTimer);
  aiTimer=null;panel=null;screen='rules';render();
 }
+function achievementsScreen(){
+ if(aiTimer!==null)clearTimeout(aiTimer);
+ aiTimer=null;panel=null;screen='achievements';render();
+}
+function hasSavedGame(){try{const saved=JSON.parse(localStorage.getItem(STORAGE_KEY));return saved?.version===6&&saved.winner===null;}catch(e){return false;}}
 function renderLobby(){
  const lobby=el('v-lobby'),board=el('v-game-board');
  lobby.className=screen==='outcome'?'v-ending'+(state.winner===1?' is-defeat':''):'';
@@ -912,17 +958,23 @@ function renderLobby(){
   lobby.innerHTML='<div class="v-rules-page"><div class="v-rules-page-head"><h1>Rules</h1><button type="button" class="v-button v-dark-button" data-action="main-menu">Main menu</button></div><div class="v-rules">'+el('v-rules').querySelector('.v-rules').innerHTML+'</div></div>';
   return true;
  }
+ if(screen==='achievements'){
+  const earned=new Set(achievements.earned),count=earned.size;
+  lobby.innerHTML='<div class="v-achievements-page"><div class="v-achievements-head"><h1>Achievements</h1><button type="button" class="v-button v-dark-button" data-action="main-menu">Main menu</button></div><p class="v-achievements-intro">'+count+' of '+ACHIEVEMENTS.length+' earned · Current win streak: '+achievements.winStreak+' / 10</p><div class="v-achievement-grid">'+ACHIEVEMENTS.map(a=>'<article class="v-achievement'+(earned.has(a.id)?' is-earned':'')+'"><span class="v-achievement-icon" aria-hidden="true">'+(earned.has(a.id)?a.icon:'?')+'</span><div><strong>'+escapeHTML(a.name)+'</strong><span class="v-secondary">'+(earned.has(a.id)?'Earned':'Locked')+'</span><p>'+escapeHTML(a.description)+'</p></div></article>').join('')+'</div></div>';
+  return true;
+ }
  if(screen==='choose'){
   lobby.innerHTML='<div class="v-lobby-copy"><h1>Choose your first business partner</h1><div class="v-lobby-actions"><button type="button" class="v-button v-dark-button" data-action="main-menu">Main menu</button></div></div><div class="v-opening-grid">'+CARDS.filter(c=>c.type==='illegal').map(c=>'<button type="button" class="v-opening-choice" style="'+colorStyle(c.color)+'" data-action="choose-opening" data-id="'+c.id+'" aria-label="Start with '+escapeHTML(c.name)+'">'+portrait(c)+'<span class="v-opening-caption"><strong>'+escapeHTML(c.name)+'</strong><span>'+escapeHTML(CREWS[c.crew]?.name||c.crew)+'</span><span>'+inlineToken(c.color,'+1 '+resourceName(c.color))+' per turn</span></span></button>').join('')+'</div>';
   return true;
  }
- const over=screen==='outcome',won=state.winner===0;
+ const over=screen==='outcome',won=state.winner===0;if(over)recordAchievements();
  const violent=over&&state.winReason==='elimination';
  const title=over?(violent?(won?'Brutal Victory':'Brutal Defeat'):(won?'VICTORY':'EMPIRE LOST')):'City of Vice';
  const detail=over?(state.winReason==='elimination'?(won?'Your rival has no active distributors remaining.':'You have no active distributors remaining.'):(won?'The city is yours. You reached 12 active businesses.':'Your rival rules the city with 12 active businesses.')):'Make deals. Crush rivals. Seize the city.';
  const artAlt=over?(won?'A victorious crew celebrates above the city.':'The defeated crew waits outside a shuttered business as a car is repossessed.'):'A panoramic city at dusk with the docks, clubs, trailer park, suburbs, industrial yards, music venues, arts district and rural hills. Six legit businesses line the streets, with tiny figures hinting at the characters.';
  const art='<img class="v-lobby-art" src="'+LOBBY_ART[over?(won?'win':'lose'):'menu']+'" alt="'+artAlt+'">';
- lobby.innerHTML='<div class="v-ending-art">'+art+'</div><div class="v-lobby-copy"><h1>'+title+'</h1><p>'+detail+'</p><div class="v-lobby-actions"><button type="button" class="v-button v-primary" data-action="opening">'+(over?(won?'Play again':'Try again'):'New game')+'</button>'+(over?'<button type="button" class="v-button v-dark-button" data-action="main-menu">Main menu</button>':'<button type="button" class="v-button v-dark-button" data-action="show-rules">Rules</button>')+'</div></div>';
+ const unlocks=over&&state.newAchievements?.length?'<p>Achievement'+(state.newAchievements.length===1?'':'s')+' unlocked: '+state.newAchievements.map(id=>ACHIEVEMENTS.find(a=>a.id===id)?.name).filter(Boolean).map(escapeHTML).join(', ')+'</p>':'';
+ lobby.innerHTML='<div class="v-ending-art">'+art+'</div><div class="v-lobby-copy"><h1>'+title+'</h1><p>'+detail+'</p>'+unlocks+'<div class="v-lobby-actions"><button type="button" class="v-button v-primary" data-action="opening">'+(over?(won?'Play again':'Try again'):'New game')+'</button>'+(!over&&hasSavedGame()?'<button type="button" class="v-button v-dark-button" data-action="resume">Resume game</button>':'')+(over?'<button type="button" class="v-button v-dark-button" data-action="main-menu">Main menu</button>':'<button type="button" class="v-button v-dark-button" data-action="show-rules">Rules</button><button type="button" class="v-button v-dark-button" data-action="show-achievements">Achievements</button>')+'</div></div>';
  return true;
 }
 
@@ -939,6 +991,8 @@ root.addEventListener('click',event=>{
  const action=button.dataset.action==='end'&&state.winner!==null?'restart':button.dataset.action,id=Number(button.dataset.id),color=button.dataset.color,p=player();
  if(action==='main-menu'){mainMenu();return;}
  if(action==='show-rules'){rulesScreen();return;}
+ if(action==='show-achievements'){achievementsScreen();return;}
+ if(action==='resume'){if(hasSavedGame()){screen='game';tell('Your game has been restored.');if(state.current===1)beginAI(true);else render();}return;}
  if(action==='opening'){openingScreen();return;}
  if(action==='choose-opening'){
   if(screen!=='choose'||card(id)?.type!=='illegal')return;
@@ -990,7 +1044,7 @@ root.addEventListener('click',event=>{
   if(reason){after(reason);return;}after(useOperator(state,0,opId,targetId));return;
  }
 });
-render();
+loadAchievements();loadSaved();render();
 })();
 </script>
 
