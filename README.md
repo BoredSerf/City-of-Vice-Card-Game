@@ -16,8 +16,8 @@ GitHub Pages publishes a website; do not publish this repository if you want to 
 
 Open `index.html` in a modern browser, or serve it through GitHub Pages. On iPad, use the published Pages link in Safari rather than the Files preview.
 
-Choose **New game**, then an opening distributor. Rules are available inside the game. This is the base game, not the expansion. Includes the latest strategic AI changes, operator results with OK confirmation, 11-business warning, and illustrated end screens.
+Choose **New game**, then an opening distributor. Rules and achievements are available from the main menu. This is the base game, not the expansion. Includes the latest strategic AI changes, operator results with OK confirmation, 11-business warning, illustrated end screens, persistent achievements, and local game resume.
 
 All game code, styling, and artwork are embedded in `index.html`. No installation, build command, external asset downloads, API keys, or backend required. Edit that file to change the prototype.
 
-This is a playtesting prototype; balance and AI still need playtesting. Reloading returns to the main menu; there is no resume button. No open-source license is assigned by this package.
+This is a playtesting prototype; balance and AI still need playtesting. Reloading returns to the main menu, where an unfinished saved game can be resumed. Starting a new game replaces that saved game, while earned achievements and the win streak remain stored in the browser. No open-source license is assigned by this package.

@@ -81,3 +81,38 @@ test('elimination outcomes use concise results with the standard outcome artwork
   assert.ok(html.includes("LOBBY_ART[over?(won?'win':'lose'):'menu']"));
   assert.doesNotMatch(html, /is-violent|violentCrewArt|VIOLENT END/);
 });
+
+test('victory achievements cover brutal wins, streaks, crews, and color monopolies', () => {
+  const state = engine.newState(() => 0.5);
+  state.winner = 0;
+  state.winReason = 'elimination';
+  const crew = engine.CREWS[0][0];
+  const crew_ids = engine.CARDS.filter((card) => card.type === 'illegal' && card.crew === crew).map((card) => card.id);
+  const color = engine.COLORS[0];
+  const color_ids = engine.CARDS.filter((card) => card.type !== 'operator' && card.color === color).map((card) => card.id);
+  state.players[0].active = [...new Set([...crew_ids, ...color_ids])];
+
+  const earned = engine.earnedVictoryAchievements(state, 10);
+  assert.ok(earned.includes('brutal'));
+  assert.ok(earned.includes('streak-10'));
+  assert.ok(earned.includes(`crew-${crew}`));
+  assert.ok(earned.includes(`monopoly-${color}`));
+});
+
+test('defeats never earn victory achievements', () => {
+  const state = engine.newState(() => 0.5);
+  state.winner = 1;
+  state.winReason = 'elimination';
+  state.players[0].active = engine.CARDS.map((card) => card.id);
+
+  assert.deepEqual(engine.earnedVictoryAchievements(state, 10), []);
+});
+
+test('the menu exposes resume and achievement controls backed by separate saves', () => {
+  const html = fs.readFileSync(new URL('../index.html', `file://${__filename}`), 'utf8');
+
+  assert.ok(html.includes('data-action="resume">Resume game'));
+  assert.ok(html.includes('data-action="show-achievements">Achievements'));
+  assert.ok(html.includes("const ACHIEVEMENT_KEY='city-of-vice-achievements-v1'"));
+  assert.match(html, /loadAchievements\(\);loadSaved\(\);render\(\);/);
+});
