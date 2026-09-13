@@ -275,14 +275,17 @@
 #vice-smart .v-fx-target>span{font-size:11px;color:#d1d4c7}
 #vice-smart .v-fx-image{position:relative;overflow:hidden;border-radius:5px;border:1px solid #74816a}
 #vice-smart .v-fx-image .v-portrait{width:100%;aspect-ratio:3/4}
-#vice-smart .v-fx-stamp{position:absolute;bottom:0;left:0;width:100%;padding:5px 0;background:#28392b;color:#fff4df;font-size:10px;animation:v-label 3.6s both}
-#vice-smart .v-fx-kill .v-fx-image{animation:v-hit 3.6s both}
-#vice-smart .v-fx-coerce .v-fx-image{animation:v-bounce 3.6s both;animation-delay:var(--delay)}
-#vice-smart .v-fx-buy .v-fx-image{animation:v-take 3.6s both}
-@keyframes v-label{0%,35%{opacity:0}65%,100%{opacity:1}}
-@keyframes v-hit{0%,25%{filter:none;opacity:1}100%{filter:grayscale(1);opacity:.45}}
-@keyframes v-bounce{0%,30%{transform:translateY(0);opacity:1}100%{transform:translateY(12px);opacity:.4}}
-@keyframes v-take{0%,25%{transform:translateX(8px);border-color:#74816a}100%{transform:translateX(0);border-color:#efd07d;box-shadow:0 0 8px #efd07d55}}
+#vice-smart .v-fx-stamp{position:absolute;bottom:0;left:0;width:100%;padding:5px 0;background:#28392b;color:#fff4df;font-size:10px;letter-spacing:.08em;animation:v-label 1.15s ease-out both;animation-delay:var(--delay)}
+#vice-smart .v-fx-kill .v-fx-image{animation:v-eliminate 1.15s ease-out both;animation-delay:var(--delay)}
+#vice-smart .v-fx-kill .v-fx-stamp{background:#8c2824}
+#vice-smart .v-fx-coerce .v-fx-image{animation:v-bounce 1.15s ease-out both;animation-delay:var(--delay)}
+#vice-smart .v-fx-coerce .v-fx-stamp{background:#9a641f}
+#vice-smart .v-fx-buy .v-fx-image{animation:v-acquire 1.15s ease-out both;animation-delay:var(--delay)}
+#vice-smart .v-fx-buy .v-fx-stamp{background:#315c3b;color:#fff4df}
+@keyframes v-label{0%,48%{opacity:0;transform:translateY(100%)}70%,100%{opacity:1;transform:translateY(0)}}
+@keyframes v-eliminate{0%,20%{filter:none;opacity:1;transform:translateX(0)}30%{transform:translateX(-5px)}40%{transform:translateX(5px);filter:sepia(1) saturate(4)}50%{transform:translateX(0)}100%{filter:grayscale(1);opacity:.42}}
+@keyframes v-bounce{0%,20%{transform:translateY(0) rotate(0);opacity:1}48%{transform:translateY(-10px) rotate(-3deg)}72%{transform:translateY(3px) rotate(2deg)}100%{transform:translateY(10px) rotate(0);opacity:.52}}
+@keyframes v-acquire{0%,20%{transform:translateX(12px) scale(.96);border-color:#74816a;box-shadow:none}65%{transform:translateX(-2px) scale(1.03);border-color:#efd07d;box-shadow:0 0 12px #efd07d88}100%{transform:translateX(0) scale(1);border-color:#efd07d;box-shadow:0 0 8px #efd07d66}}
 #vice-smart .v-fx-still *{animation:none!important}
 #vice-smart .v-last-business{padding:15px 18px;background:#efd07d;color:#273126!important;border-radius:7px;margin-bottom:16px;font-weight:bold;font-size:17px;--v-surface-ink:#273126}
 #vice-smart .v-last-business.is-rival{background:#8e302c;color:#fff4df!important;--v-surface-ink:#fff4df}
@@ -915,10 +918,10 @@ function fadeToOutcome(){
 function playOperatorFX(fx){
  fxPlaying=true;fxAwaitingOK=false;
  const op=card(fx.opId),kind=op.ability,box=el('v-operator-fx');
- const title=kind==='kill'?'Hitman · Eliminate':kind==='coerce'?'Ruffian · Bounce crew':'Fixer · Take over';
+ const title=kind==='kill'?'Hitman · Eliminate':kind==='coerce'?'Ruffian · Bounce crew':'Fixer · Acquire';
  const reduced=typeof matchMedia==='function'&&matchMedia('(prefers-reduced-motion: reduce)').matches;
  box.className='v-fx v-fx-'+kind+(reduced?' v-fx-still':'');
- box.innerHTML='<p class="v-fx-owner">'+(fx.who===0?'Your operator':'Rival operator')+'</p><h2>'+title+'</h2><div class="v-fx-operator">'+portrait(op)+'<strong>'+escapeHTML(op.name)+'</strong></div><div class="v-fx-targets">'+fx.targets.map((id,i)=>'<div class="v-fx-target" style="--delay:'+i*110+'ms"><div class="v-fx-image">'+portrait(card(id))+'<span class="v-fx-stamp">'+(kind==='kill'?'ELIMINATED':kind==='coerce'?'BOUNCED':'ACQUIRED')+'</span></div><strong>'+escapeHTML(card(id).name)+'</strong><span>'+escapeHTML(fx.destinations[i])+'</span></div>').join('')+'</div><p class="v-fx-note">'+escapeHTML(op.name)+' is discarded after use.</p>';
+ box.innerHTML='<p class="v-fx-owner">'+(fx.who===0?'Your operator':'Rival operator')+'</p><h2>'+title+'</h2><div class="v-fx-operator">'+portrait(op)+'<strong>'+escapeHTML(op.name)+'</strong></div><div class="v-fx-targets">'+fx.targets.map((id,i)=>'<div class="v-fx-target" style="--delay:'+i*70+'ms"><div class="v-fx-image">'+portrait(card(id))+'<span class="v-fx-stamp">'+(kind==='kill'?'ELIMINATED':kind==='coerce'?'BOUNCED':'ACQUIRED')+'</span></div><strong>'+escapeHTML(card(id).name)+'</strong><span>'+escapeHTML(fx.destinations[i])+'</span></div>').join('')+'</div><p class="v-fx-note">'+escapeHTML(op.name)+' is discarded after use.</p>';
  box.innerHTML+='<button type="button" id="v-fx-ok" class="v-button v-primary" data-action="operator-ok" disabled>OK</button>';
  const actor=root.querySelector('[data-card-id="'+fx.opId+'"][data-owner="'+fx.who+'"]');
  if(actor)actor.after(box);else (fx.who===0?el('v-operators-section'):root.querySelector('.v-rival-section')).appendChild(box);
@@ -926,7 +929,7 @@ function playOperatorFX(fx){
  el('v-game-board').hidden=false;el('v-lobby').hidden=true;box.hidden=false;
  box.scrollIntoView({behavior:'smooth',block:'nearest'});
  const game=state;
- setTimeout(()=>{if(state!==game)return;fxAwaitingOK=true;el('v-fx-ok').disabled=false;el('v-fx-ok').focus({preventScroll:true});},reduced?1200:4600+fx.targets.length*240);
+ setTimeout(()=>{if(state!==game)return;fxAwaitingOK=true;el('v-fx-ok').disabled=false;el('v-fx-ok').focus({preventScroll:true});},reduced?100:1450+fx.targets.length*80);
 }
 
 let screen='menu';
