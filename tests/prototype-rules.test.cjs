@@ -128,3 +128,11 @@ test('operator results use quick, distinct eliminate, bounce, and acquire effect
   assert.ok(html.includes("'Fixer · Acquire'"));
   assert.match(html, /reduced\?100:1450\+fx\.targets\.length\*80/);
 });
+
+test('business totals stay visible at the top while the board scrolls', () => {
+  const html = fs.readFileSync(new URL('../index.html', `file://${__filename}`), 'utf8');
+
+  assert.match(html, /#vice-smart\{[^}]*overflow:clip/);
+  assert.match(html, /\.v-race\{position:sticky;top:0;z-index:10;/);
+  assert.match(html, /\.v-race\{[^}]*background:#17271ff2;[^}]*backdrop-filter:blur\(6px\)/);
+});
