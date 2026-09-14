@@ -393,7 +393,7 @@
     <section class="v-turn-guide" aria-label="Your next step">
       <div class="v-guide-copy"><div id="v-steps" class="v-steps" aria-label="Turn steps"></div><h2 id="v-guide-title">Collect your income</h2><p id="v-guide-help">Your business earns one resource.</p></div>
       <div class="v-turn-actions">
-        <div class="v-action-cell"><button type="button" id="v-draw" class="v-button" data-action="draw" aria-describedby="v-draw-help">Draw · 1 Any</button><span id="v-draw-help" class="v-action-help"></span></div>
+        <div class="v-action-cell"><button type="button" id="v-draw" class="v-button" data-action="draw" aria-describedby="v-draw-help">Draw 1 (Cost 1)</button><span id="v-draw-help" class="v-action-help"></span></div>
         <button type="button" class="v-button v-primary v-end" id="v-end" data-action="end">Collect income · 1</button>
       </div>
     </section>
@@ -817,7 +817,7 @@ function render(){
  el('v-resource-total').textContent=total(p.res)+' / 10';
  el('v-next-income').textContent='Each turn: '+total(inc)+' resources'+(crewBonus(p)?' + '+crewBonus(p)+' Any':'');
  el('v-resources').innerHTML=COLORS.map(c=>'<div class="v-resource" style="'+colorStyle(c)+'"><span class="v-resource-title">'+dot(c)+resourceName(c)+'</span><strong>'+p.res[c]+'</strong><span class="v-secondary">+'+inc[c]+' / turn</span></div>').join('');
- setAction('v-draw','Draw · '+p.drawPrice+' Any',drawReason());setAction('v-trade','Trade 4 for 1',tradeReason());
+ setAction('v-draw','Draw 1 (Cost '+p.drawPrice+')',drawReason());setAction('v-trade','Trade 4 for 1',tradeReason());
  el('v-new-game').hidden=state.winner!==null;
  el('v-end').textContent=state.winner!==null?'Play Again':state.current===1?'Rival is playing…':state.phase==='ready'?'Collect income · '+total(inc):state.phase==='bonus'?'Choose crew bonus':state.phase==='trim'?'Keep 10 resources':'End turn';
  el('v-end').disabled=state.current===1&&state.winner===null;
