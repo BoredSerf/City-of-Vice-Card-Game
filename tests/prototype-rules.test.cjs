@@ -137,13 +137,17 @@ test('business totals stay visible at the top while the board scrolls', () => {
   assert.match(html, /\.v-race\{[^}]*background:#17271ff2;[^}]*backdrop-filter:blur\(6px\)/);
 });
 
-test('the player resource bank stays at the bottom at every screen width', () => {
+test('the player resource bank is a compact, subtle bottom bar at every screen width', () => {
   const html = fs.readFileSync(new URL('../index.html', `file://${__filename}`), 'utf8');
 
   assert.match(html, /<div class="v-player-content">[\s\S]*<aside class="v-bank v-player-bank" aria-label="Your resources">/);
   assert.match(html, /\.v-player-layout\{display:flex;flex-direction:column;gap:24px\}/);
-  assert.match(html, /\.v-player-bank\{position:fixed;bottom:0;left:50%;transform:translateX\(-50%\);z-index:11;/);
+  assert.match(html, /\.v-player-bank\{position:fixed;bottom:0;left:50%;transform:translateX\(-50%\);z-index:11;display:grid;/);
+  assert.match(html, /\.v-player-bank \.v-resource\{padding:3px 5px;background:#21352a;border-top-width:1px\}/);
+  assert.match(html, /\.v-player-bank \.v-resource strong\{font-size:18px;line-height:1\.15\}/);
+  assert.match(html, /\.v-player-bank \.v-resource \.v-secondary\{display:none\}/);
   assert.match(html, /@media\(max-width:740px\)\{\s*#vice-smart \.v-player-layout\{display:flex;gap:16px\}/);
-  assert.match(html, /#vice-smart \.v-player-bank\{position:fixed;bottom:0;width:100%;padding:10px\}/);
-  assert.match(html, /@media\(max-width:420px\)\{[\s\S]*#vice-smart \.v-player-bank \.v-resources\{grid-template-columns:repeat\(3,minmax\(0,1fr\)\)\}/);
+  assert.match(html, /#vice-smart \.v-player-bank\{position:fixed;bottom:0;grid-template-columns:minmax\(0,1fr\) auto;width:100%;padding:6px 8px\}/);
+  assert.match(html, /#vice-smart \.v-player-bank \.v-resources\{grid-template-columns:repeat\(6,minmax\(0,1fr\)\);gap:3px\}/);
+  assert.match(html, /@media\(max-width:420px\)\{[\s\S]*#vice-smart \.v-player-bank\{grid-template-columns:1fr\}/);
 });
