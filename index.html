@@ -56,13 +56,6 @@
 #vice-smart .v-end{min-width:190px;flex-shrink:0;padding:13px 17px}
 #vice-smart .v-button:disabled,#vice-smart .v-stepper button:disabled{background:#dbd7c9;color:#56564d;border-color:#aaa99a;opacity:1}
 #vice-smart .v-section-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px 16px;flex-wrap:wrap;margin-bottom:12px}
-#vice-smart .v-player-layout{display:grid;grid-template-columns:minmax(190px,230px) minmax(0,1fr);gap:24px;align-items:start}
-#vice-smart .v-player-sidebar{position:sticky;top:96px;min-width:0}
-#vice-smart .v-player-sidebar .v-resources{grid-template-columns:1fr}
-#vice-smart .v-player-sidebar .v-toolbar{flex-direction:column;gap:10px}
-#vice-smart .v-player-sidebar .v-toolbar .v-action-cell{flex:0 1 auto}
-#vice-smart .v-player-content{min-width:0}
-#vice-smart .v-player-content>.v-section:first-of-type{margin-top:0}
 #vice-smart .v-resources{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
 #vice-smart .v-resource{background:var(--v-panel);padding:10px 12px;border-top:3px solid var(--v-card-color);border-radius:4px;min-width:0}
 #vice-smart .v-resource-title{display:flex;align-items:center;gap:5px;font-size:14px}
@@ -204,7 +197,7 @@
 #vice-smart .v-log{padding:0 0 14px 23px;font-size:14px}
 #vice-smart .v-log li{margin:8px 0}
 @media(max-width:1000px){#vice-smart .v-grid{grid-template-columns:repeat(3,minmax(0,1fr))}#vice-smart .v-targets{grid-template-columns:repeat(2,minmax(0,1fr))}#vice-smart .v-mini-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#vice-smart .v-roster{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(max-width:740px){#vice-smart .v-header{padding:16px;gap:12px}#vice-smart h1{font-size:29px}#vice-smart .v-main{padding:16px}#vice-smart .v-player-layout{display:block}#vice-smart .v-player-sidebar{position:static}#vice-smart .v-player-sidebar .v-resources{grid-template-columns:repeat(3,minmax(0,1fr))}#vice-smart .v-player-sidebar .v-toolbar{flex-direction:row}#vice-smart .v-player-sidebar .v-toolbar .v-action-cell{flex:1 1 140px}#vice-smart .v-grid,#vice-smart .v-roster,#vice-smart .v-forced-legit-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#vice-smart .v-turn-guide{align-items:stretch;gap:14px;flex-direction:column}#vice-smart .v-end{width:100%}#vice-smart .v-resources{grid-template-columns:repeat(3,minmax(0,1fr))}#vice-smart .v-payment{grid-template-columns:repeat(3,minmax(0,1fr))}#vice-smart .v-race{grid-template-columns:1fr 1fr;gap:12px;margin-left:-16px;margin-right:-16px;padding-left:16px;padding-right:16px}#vice-smart .v-goal{grid-column:1/-1;grid-row:2;display:flex;gap:12px;justify-content:center}#vice-smart .v-header-actions{max-width:230px}#vice-smart .v-turn{width:100%;text-align:right}#vice-smart .v-recap summary{flex-wrap:wrap;gap:5px 10px}#vice-smart .v-recap summary::after{margin-left:auto}}
+@media(max-width:740px){#vice-smart .v-header{padding:16px;gap:12px}#vice-smart h1{font-size:29px}#vice-smart .v-main{padding:16px}#vice-smart .v-grid,#vice-smart .v-roster,#vice-smart .v-forced-legit-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#vice-smart .v-turn-guide{align-items:stretch;gap:14px;flex-direction:column}#vice-smart .v-end{width:100%}#vice-smart .v-resources{grid-template-columns:repeat(3,minmax(0,1fr))}#vice-smart .v-payment{grid-template-columns:repeat(3,minmax(0,1fr))}#vice-smart .v-race{grid-template-columns:1fr 1fr;gap:12px;margin-left:-16px;margin-right:-16px;padding-left:16px;padding-right:16px}#vice-smart .v-goal{grid-column:1/-1;grid-row:2;display:flex;gap:12px;justify-content:center}#vice-smart .v-header-actions{max-width:230px}#vice-smart .v-turn{width:100%;text-align:right}#vice-smart .v-recap summary{flex-wrap:wrap;gap:5px 10px}#vice-smart .v-recap summary::after{margin-left:auto}}
 @media(max-width:500px){#vice-smart{border:0;border-radius:0}#vice-smart .v-header{align-items:flex-start}#vice-smart h1{font-size:27px}#vice-smart .v-eyebrow{font-size:12px;letter-spacing:.5px}#vice-smart .v-header-actions{max-width:140px;gap:5px}#vice-smart .v-header-actions .v-button{padding:6px 8px;font-size:12px}#vice-smart .v-race-title{font-size:13px;gap:5px}#vice-smart .v-race-title strong{font-size:19px}#vice-smart .v-main{padding:14px 12px}#vice-smart .v-race{margin-left:-12px;margin-right:-12px;padding-left:12px;padding-right:12px}#vice-smart .v-turn-guide{padding:14px}#vice-smart .v-guide-copy h2{font-size:21px}#vice-smart .v-grid,#vice-smart .v-mini-grid{gap:9px}#vice-smart .v-card-actions{flex-direction:column}#vice-smart .v-card-actions .v-action-cell{width:100%}#vice-smart .v-namebar{font-size:16px;min-height:59px;padding:8px}#vice-smart .v-type-strip{font-size:12px;flex-wrap:wrap}#vice-smart .v-mini-grid{grid-template-columns:1fr}#vice-smart .v-targets{grid-template-columns:1fr}#vice-smart .v-decision{padding:14px 12px}#vice-smart .v-crew-members{grid-template-columns:1fr}#vice-smart .v-crew-member{flex-direction:row;align-items:center}#vice-smart .v-crew-member .v-portrait{width:85px}#vice-smart .v-inspect-grid{grid-template-columns:1fr;gap:14px}#vice-smart .v-inspect-art{width:180px;max-width:100%;margin:auto}#vice-smart .v-rules{grid-template-columns:1fr}#vice-smart .v-achievement-grid{grid-template-columns:1fr}#vice-smart .v-achievements-page{padding:24px 14px}#vice-smart .v-toolbar .v-action-cell{flex:1 1 140px}#vice-smart .v-catalog-nav .v-button{font-size:12px;padding:8px}#vice-smart .v-crew-title{overflow-wrap:anywhere}#vice-smart .v-affected-card{width:calc(50% - 6px)}}
 @media(max-width:500px){#vice-smart .v-forced-legit-grid{grid-template-columns:1fr}}
 @media(max-width:359px){#vice-smart .v-grid,#vice-smart .v-roster{grid-template-columns:1fr}#vice-smart .v-payment{grid-template-columns:repeat(2,minmax(0,1fr))}#vice-smart .v-header{flex-direction:column}#vice-smart .v-header-actions{max-width:none;justify-content:flex-start}#vice-smart .v-turn{width:auto;text-align:left}#vice-smart .v-goal{flex-wrap:wrap;gap:2px 10px}}
@@ -350,8 +343,7 @@
       <div class="v-guide-copy"><div id="v-steps" class="v-steps" aria-label="Turn steps"></div><h2 id="v-guide-title">Collect your income</h2><p id="v-guide-help">Your business earns one resource.</p></div>
       <button type="button" class="v-button v-primary v-end" id="v-end" data-action="end">Collect income · 1</button>
     </section>
-    <div class="v-player-layout">
-    <aside class="v-bank v-player-sidebar" aria-label="Your resources">
+    <section class="v-bank" aria-label="Your resources">
       <div class="v-section-head"><h2>Resources <span id="v-resource-total" class="v-count">0 / 10</span></h2><span id="v-next-income" class="v-secondary"></span></div>
       <div id="v-resources" class="v-resources"></div>
       <div class="v-toolbar">
@@ -359,8 +351,7 @@
         <div class="v-action-cell"><button type="button" id="v-trade" class="v-button" data-action="trade" aria-describedby="v-trade-help">Trade 4 for 1</button><span id="v-trade-help" class="v-action-help"></span></div>
       </div>
       <div id="v-message" class="v-message" role="status" aria-live="polite"></div>
-    </aside>
-    <div class="v-player-content">
+    </section>
     <section id="v-recap" class="v-recap" aria-label="Rival turn recap" hidden>
       <details><summary><span id="v-recap-title">Rival’s last turn</span><span id="v-recap-count" class="v-secondary"></span></summary><ol id="v-recap-list"></ol></details>
       <p id="v-recap-latest" aria-live="polite"></p>
@@ -379,8 +370,6 @@
     <section id="v-operators-section" class="v-section" aria-label="Your activated operators" hidden>
       <div class="v-section-head"><h2>Your operators <span id="v-operator-count" class="v-count">0 / 2 active</span></h2><span class="v-secondary">Activation paid · single use</span></div><div id="v-operators" class="v-grid"></div>
     </section>
-    </div>
-    </div>
     <footer class="v-footer">
       <details id="v-rules"><summary>Rules &amp; card actions</summary><div class="v-rules">
         <div><h3>Start &amp; win</h3><p>Each player chooses one distributor to start active, then receives three cards in hand and no resources. Reach 12 active businesses to win. A player with no active distributors loses immediately, even if they still control legitimate businesses. Operators do not count as businesses.</p></div>
