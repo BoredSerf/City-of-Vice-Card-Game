@@ -323,6 +323,28 @@
 #vice-smart .v-big-alert h1{font-size:clamp(32px,6vw,60px);color:#efd07d;max-width:800px;margin:0 auto 24px}
 #vice-smart .v-big-alert p{font-size:28px;margin-bottom:28px}
 #vice-smart .v-big-alert button{min-width:160px;min-height:52px;font-size:20px}
+
+/* Resources remain the player's left-hand rail at every gameplay width. */
+@media(max-width:740px){
+#vice-smart .v-player-layout{display:grid;grid-template-columns:minmax(96px,116px) minmax(0,1fr);gap:12px;align-items:start}
+#vice-smart .v-player-sidebar{position:sticky;top:84px}
+#vice-smart .v-player-sidebar .v-resources{grid-template-columns:1fr;gap:6px}
+#vice-smart .v-player-sidebar .v-resource{padding:7px 8px}
+#vice-smart .v-player-sidebar .v-resource-title{font-size:12px;gap:4px;overflow-wrap:anywhere}
+#vice-smart .v-player-sidebar .v-resource strong{font-size:23px}
+#vice-smart .v-player-sidebar .v-toolbar{flex-direction:column;gap:8px}
+#vice-smart .v-player-sidebar .v-toolbar .v-action-cell{flex:0 1 auto}
+#vice-smart .v-player-sidebar .v-section-head{display:block}
+#vice-smart .v-player-sidebar .v-section-head h2{font-size:17px}
+#vice-smart .v-player-sidebar #v-next-income{display:none}
+}
+@media(max-width:420px){
+#vice-smart .v-player-layout{grid-template-columns:92px minmax(0,1fr);gap:9px}
+#vice-smart .v-player-sidebar .v-resource{padding:6px}
+#vice-smart .v-player-sidebar .v-resource-title{font-size:11px}
+#vice-smart .v-player-sidebar .v-resource .v-secondary{font-size:11px}
+#vice-smart .v-player-sidebar .v-toolbar .v-button{padding:8px 5px;font-size:12px}
+}
 </style>
 
 <main id="vice-smart" aria-label="City of Vice card game">

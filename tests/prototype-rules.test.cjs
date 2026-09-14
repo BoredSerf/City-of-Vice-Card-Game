@@ -137,12 +137,13 @@ test('business totals stay visible at the top while the board scrolls', () => {
   assert.match(html, /\.v-race\{[^}]*background:#17271ff2;[^}]*backdrop-filter:blur\(6px\)/);
 });
 
-test('the player resource bank stays in a left sidebar on wide screens', () => {
+test('the player resource bank stays in a left sidebar at every screen width', () => {
   const html = fs.readFileSync(new URL('../index.html', `file://${__filename}`), 'utf8');
 
   assert.match(html, /<div class="v-player-layout">\s*<aside class="v-bank v-player-sidebar" aria-label="Your resources">/);
   assert.match(html, /\.v-player-layout\{display:grid;grid-template-columns:minmax\(190px,230px\) minmax\(0,1fr\)/);
   assert.match(html, /\.v-player-sidebar\{position:sticky;top:96px;/);
-  assert.ok(html.includes('@media(max-width:740px){#vice-smart .v-header'));
-  assert.ok(html.includes('#vice-smart .v-player-layout{display:block}'));
+  assert.match(html, /@media\(max-width:740px\)\{\s*#vice-smart \.v-player-layout\{display:grid;grid-template-columns:minmax\(96px,116px\) minmax\(0,1fr\)/);
+  assert.match(html, /@media\(max-width:420px\)\{\s*#vice-smart \.v-player-layout\{grid-template-columns:92px minmax\(0,1fr\)/);
+  assert.match(html, /#vice-smart \.v-player-sidebar\{position:sticky;top:84px\}/);
 });
