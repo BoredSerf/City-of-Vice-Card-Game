@@ -6,6 +6,8 @@ Approved by: Product owner
 
 Approval record: PR #12
 
+Later semantic amendments require their own product-owner decision record.
+
 Scope: Convert the existing browser prototype into a tested, modular web application without changing the base game's intended rules.
 
 ## 1. Outcome
@@ -14,7 +16,8 @@ The MVP will turn the single-file prototype into a maintainable application with
 
 - a deterministic, platform-neutral game engine;
 - an automated rules and browser test harness;
-- a modular browser interface with feature parity to the current prototype;
+- a modular browser interface with feature parity to an exact, approved prototype
+  reference established before refactoring and finalized before parity review;
 - a normal static website build;
 - a generated, self-contained HTML export when that can be maintained without distorting the application architecture; and
 - stable player and persistence boundaries that can later support desktop, mobile, networked, and LLM-controlled players.
@@ -30,6 +33,11 @@ The first supported product remains one local human against the existing heurist
 5. **Lightweight describes the shipped product.** Development-only build and test tools are acceptable. The browser build must not require a backend, account, API key, or runtime package download.
 6. **Standalone export is a goal, not an architectural veto.** It is retained while one command can generate and verify it. If it begins to block accessibility, security, performance, or platform work, the normal static build takes priority and abandoning the single-file artifact requires an explicit product decision.
 7. **Project-owned names use `snake_case`.** OCaml and TypeScript identifiers, serialized fields, commands, events, and MCP tools owned by this project use `snake_case`. Generated bindings and third-party interfaces may retain names required by their source systems, with translation confined to adapters.
+8. **Parity uses an explicit prototype snapshot.** Before replacement-engine work
+   begins, record the exact Git commit used for characterization. Continued
+   prototype development does not move that reference implicitly. Authorized
+   changes are recorded and incorporated deliberately, and final parity is verified
+   against one exact approved commit.
 
 ## 3. Chosen MVP approach
 
@@ -193,7 +201,11 @@ No cloud synchronization or user accounts are included.
 
 ### Characterization tests
 
-Before changing rules, capture the current prototype's intended behavior as tests. Use seeded deck order and explicit state fixtures rather than timing or random outcomes. Cover:
+Before replacement-engine work begins, select an exact prototype commit and capture
+its intended behavior as tests. Use seeded deck order and explicit state fixtures
+rather than timing or random outcomes. Later prototype changes do not alter these
+expectations until the product owner or an explicitly delegated product maintainer
+accepts the change and the affected characterization scenarios are updated. Cover:
 
 - opening distributor constraints and initial deal;
 - income, complete-crew bonuses, and ten-resource trimming;
@@ -237,12 +249,17 @@ CI runs OCaml formatting and compilation, OCaml engine tests, Melange compilatio
 
 ### Milestone 0 — Baseline and rule inventory
 
-- Preserve the current `index.html` as the comparison build until parity is accepted.
+- Select and record the exact Git commit whose `index.html` and prototype tests form
+  the initial comparison baseline before replacement-engine work begins.
+- Keep later prototype changes in a reviewed change ledger; do not move the baseline
+  implicitly as `main` advances.
 - Extract a machine-readable card inventory and enumerate current rules and edge cases.
 - Record any contradiction between embedded rules, current behavior, and desired behavior.
 - Establish seeded fixtures for representative games.
 
-Exit condition: the intended base-game rules are sufficiently resolved to write objective characterization tests.
+Exit condition: the baseline commit is reproducible, later prototype changes are
+accounted for, and the intended base-game rules are sufficiently resolved to write
+objective characterization tests.
 
 ### Milestone 1 — Tooling and test harness
 
@@ -260,7 +277,8 @@ Exit condition: the extracted OCaml engine reproduces approved prototype behavio
 - Route the OCaml heuristic AI through `Player_policy` and the Melange facade.
 - Add the controller, persistence adapter, and browser UI modules.
 - Extract embedded artwork into source assets.
-- Reproduce the current menu, board, dialogs, card gallery, rules, recap, animations, warnings, and outcomes.
+- Lock one exact approved prototype commit for final parity and reproduce its menu,
+  board, dialogs, card gallery, rules, recap, animations, warnings, and outcomes.
 - Add browser critical-path and responsive/accessibility checks.
 
 Exit condition: the modular website has approved functional parity and no production dependency on the legacy script.
@@ -288,13 +306,17 @@ Exit condition: the approved browser MVP is releasable and its unsupported capab
 ## 10. MVP acceptance criteria
 
 - **MVP-001 — Pure OCaml engine:** Engine, card, rule, and heuristic-AI modules compile and pass tests as an OCaml library without Melange, DOM, storage, timers, or network APIs.
-- **MVP-002 — Rule parity:** Approved characterization scenarios produce the same outcomes as the prototype, except for explicitly approved corrections.
+- **MVP-002 — Rule parity:** Approved characterization scenarios produce the same
+  outcomes as the recorded prototype baseline and accepted rule changes, except for
+  explicitly approved corrections.
 - **MVP-003 — Determinism:** A recorded seed plus command sequence reproduces the same initial deal, state transitions, events, and winner.
 - **MVP-004 — State integrity:** Tests assert all card-location, limit, phase, resource, and victory invariants after every step of seeded simulations.
 - **MVP-005 — Rejection safety:** Every invalid public command returns a typed rejection and leaves serialized state unchanged.
 - **MVP-006 — Neutral players:** Human input and the OCaml heuristic AI both submit commands through the same engine boundary; the AI has no access to hidden opponent or deck information through `Player_policy`.
 - **MVP-006A — Typed Melange boundary:** The production Melange ES modules satisfy the maintained TypeScript declaration and boundary tests; TypeScript code does not depend on undocumented OCaml runtime representations.
-- **MVP-007 — Web parity:** The modular browser client supports every base-game action and user-facing state available in the current prototype.
+- **MVP-007 — Web parity:** The modular browser client supports every base-game
+  action and user-facing state in the exact prototype commit approved for final
+  parity.
 - **MVP-008 — Resume:** Reloading the website restores a valid in-progress local game, while invalid or unsupported saves fail safely.
 - **MVP-009 — Static website:** A clean checkout can install locked development dependencies and produce a backend-free static site.
 - **MVP-009A — Cloudflare deployment:** An authorized production-branch run deploys the exact verified `dist/` artifact to Cloudflare Pages without placing deployment credentials in source or build output; a post-deployment smoke check passes against the resulting URL.
@@ -302,7 +324,9 @@ Exit condition: the approved browser MVP is releasable and its unsupported capab
 - **MVP-011 — Responsive access:** Critical gameplay remains operable by keyboard and at representative phone, tablet, and desktop sizes, with reduced-motion preferences honored.
 - **MVP-012 — CI gate:** Type checking, tests, and both distribution builds run automatically and block integration on failure.
 - **MVP-013 — Documentation:** The README explains development, tests, architecture, website output, standalone output, known limitations, and the absence or presence of a license.
-- **MVP-014 — Legacy retirement:** The original monolithic implementation is removed as live source only after the modular build passes approved parity verification.
+- **MVP-014 — Legacy retirement:** The original monolithic implementation is
+  removed as live source only after the modular build passes verification against
+  the exact approved final parity commit.
 
 ## 11. Explicit non-goals
 
@@ -454,6 +478,10 @@ The first implemented mode must be selected before development. An LLM-controlle
 - **Standalone build pressure:** Escalate for a product decision when single-file generation requires parallel source paths, unsafe HTML rewriting, substantial performance loss, or blocks required platform behavior.
 - **Visual parity ambiguity:** Use named critical flows and reference screenshots; do not require incidental pixel identity across browsers.
 - **Generated-artifact drift:** CI must regenerate builds from source. Generated output must not become an independently edited implementation.
+- **Prototype drift:** Do not use an unspecified latest `index.html` as a parity
+  target. Record the initial and final prototype commit SHAs, route intervening
+  changes through the authorized contribution workflow, and stop affected work if
+  an accepted rule change has not updated its characterization scenarios.
 - **Dual-toolchain friction:** OCaml/Melange and TypeScript dependencies are locked independently, with one documented bootstrap and verification path. If routine development requires manually copying generated code or reconciling two authoritative type definitions, stop and simplify the boundary before adding features.
 - **Deployment ownership:** Stop production deployment setup until the client identifies a GitHub repository and Cloudflare Pages project they are authorized to connect and supplies an approved secret-management path.
 - **Steam rights and authority:** Stop Steam onboarding or upload work if distribution rights, partner ownership, account permissions, platform commitments, or responsibility for fees and store representations are unresolved.
@@ -468,6 +496,15 @@ The first implemented mode must be selected before development. An LLM-controlle
 
 Implementation is complete only when every `MVP-*` criterion has an automated check or a recorded human verification with reproducible steps, and all checks pass from a clean checkout.
 
-Authoritative inputs for this plan are the repository's current `README.md`, the rules and implementation in `index.html`, the existing 36-card prototype behavior, the product owner's selection of Melange plus OCaml for the engine and TypeScript for the UI, Cloudflare Pages for website hosting, and the client's stated goals of Steam distribution and play through an LLM desktop application such as ChatGPT. Technical direction was checked against the official Melange, Dune, Vite, Vitest, Cloudflare Pages, Tauri, Capacitor, Steamworks, and OpenAI developer documentation current when this plan was written; future implementers must select and lock supported versions during the applicable milestone.
+Authoritative inputs for this plan are the repository's current `README.md`, the
+rules and implementation in the exact prototype commits approved during S01 and
+S10, the existing 36-card prototype behavior, the product owner's selection of
+Melange plus OCaml for the engine and TypeScript for the UI, Cloudflare Pages for
+website hosting, and the client's stated goals of Steam distribution and play
+through an LLM desktop application such as ChatGPT. Technical direction was checked
+against the official Melange, Dune, Vite, Vitest, Cloudflare Pages, Tauri,
+Capacitor, Steamworks, and OpenAI developer documentation current when this plan
+was written; future implementers must select and lock supported versions during
+the applicable milestone.
 
 Continuation gate: implementation should begin only after the product owner accepts this scope and resolves any rule discrepancies discovered during Milestone 0. Semantic changes to this plan require renewed product approval; mechanical corrections do not.

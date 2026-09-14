@@ -49,6 +49,28 @@ decision unresolved only when the register maps it to the affected commands and
 slices. A mapped slice cannot enter `ready` until that decision is recorded as
 resolved; unaffected slices may continue when their ordinary dependencies permit.
 
+### Prototype baseline and change intake
+
+Follow the change procedure and authority rules in `CONTRIBUTING.md`. S01 locks an
+exact `prototype_baseline` commit before S03 begins and creates the prototype change
+ledger at `docs/PROTOTYPE_CHANGES.md`. Ordinary merges and rebases never move the
+baseline. Before S03, the product owner or an explicitly delegated product
+maintainer may approve a newer commit only after the characterization corpus is
+regenerated, reverified, and affected readiness is recalculated.
+
+After S03 begins, every merged prototype change enters the ledger regardless of
+priority or disposition. An accepted change may amend an affected slice still in
+`in_progress` or `review`, with refreshed criteria and review. A `done` slice never
+reopens: create a new slice with the next available `S##` identifier and add it as a
+dependency of each affected consumer that is not done. Block any affected consumer
+already in progress until the delta slice is complete.
+
+At S10, the product owner or explicitly authorized product maintainer locks one
+exact `final_parity_ref` commit containing the approved prototype state. The ledger
+provides traceability and is not a reconstruction recipe. Prototype changes after
+the cutoff still enter the ledger and backlog; P0 changes follow the same intake,
+slice, and verification rules as every other accepted change.
+
 Priorities express product urgency, not dependency order:
 
 - `P0` — required to release the accepted MVP or fix a release-blocking defect.
@@ -110,32 +132,37 @@ an implementation detail to resolve by assumption.
 **Outcome:** The prototype's intended rules can be implemented and tested without
 guesswork.
 
-**Deliver:** Preserve the current prototype as the parity reference; extract a
-machine-readable inventory of all 36 cards; and create a machine-readable
-characterization corpus covering the rules, edge cases, and AI decisions named in
-the MVP plan. Give every scenario a stable identifier, explicit initial state and
-deck order or seed, ordered inputs or actions, expected state changes and visible
-outcomes, and provenance as prototype behavior, written rule, or approved
-correction. Provide a validation command or harness independent of the new engine
-where practical. Mark cases that cannot execute against the prototype as approved
-golden scenarios rather than legacy tests.
+**Deliver:** Lock the initial `prototype_baseline` to an exact Git commit and record
+its SHA in the characterization corpus manifest. Preserve that revision as the
+parity reference; extract a machine-readable inventory of all 36 cards; and create
+a machine-readable characterization corpus covering the rules, edge cases, and AI
+decisions named in the MVP plan. Give every scenario a stable identifier, explicit
+initial state and deck order or seed, ordered inputs or actions, expected state
+changes and visible outcomes, and provenance as prototype behavior, written rule,
+or approved correction. Provide a validation command or harness independent of
+the new engine where practical. Mark cases that cannot execute against the
+prototype as approved golden scenarios rather than legacy tests.
 
 Also maintain a rule-decision register for conflicts between displayed rules,
 current behavior, and intended behavior. Each unresolved entry identifies the
 affected characterization scenarios, engine commands, and downstream slices, plus
-the product decision required.
+the product decision required. Create `docs/PROTOTYPE_CHANGES.md` using the fields
+and authority rules in `CONTRIBUTING.md`.
 
 **Accept when:** The inventory accounts for every card exactly once; the corpus
 covers every characterization area named in the MVP plan and can be reproduced
 from explicit data; expected outcomes and provenance are reviewable without the
 replacement engine; and every discovered conflict is either resolved by the
 product owner or mapped precisely enough to prevent only its affected slices from
-entering `ready`.
+entering `ready`. The recorded baseline SHA resolves to the verified prototype and
+tests, every prototype change already merged after the baseline has a complete
+ledger entry, and S03 cannot enter `ready` until these conditions hold.
 
-**Verify:** Review the inventory against `index.html`; run the independent
-validation command or harness against the prototype where practical; and review
-approved golden scenarios against their cited rules or decisions. S03 through S06
-must consume these same scenario identifiers and expected outcomes. This slice
+**Verify:** Materialize the recorded baseline SHA in a clean checkout, review its
+inventory against `index.html`, run the independent validation command or harness
+against that revision where practical, and review approved golden scenarios
+against their cited rules or decisions. S03 through S06 must consume these same
+scenario identifiers and expected outcomes plus any accepted deltas. This slice
 establishes evidence for MVP-002 and MVP-003; it does not change game behavior.
 
 ### S02 — Reproducible project foundation
@@ -294,18 +321,25 @@ outcome. Establishes the playable core of MVP-007.
 **Outcome:** The modular client contains every approved user-facing state and aid
 from the reference prototype.
 
-**Deliver:** Extract and integrate artwork; complete dialogs, card gallery, rules,
-warnings, operator results, recaps, animations, and illustrated end screens; and
-preserve the approved gameplay copy and interaction semantics without requiring
-pixel identity.
+**Deliver:** Have the product owner or explicitly authorized product maintainer lock
+one exact `final_parity_ref` commit containing the approved prototype state.
+Reconcile every prototype change through that cutoff in the change ledger, then
+extract and integrate artwork; complete dialogs, card gallery, rules, warnings,
+operator results, recaps, animations, and illustrated end screens; and preserve
+the approved gameplay copy and interaction semantics without requiring pixel
+identity.
 
-**Accept when:** The named reference flows and screen states have no missing
-gameplay information or action; artwork is source-managed rather than duplicated
-as hand-edited generated output; and a product parity review accepts documented
-intentional differences.
+**Accept when:** Every ledger entry through the cutoff has an authorized
+disposition; every accepted MVP delta is represented in the modular application
+and applicable characterization scenarios; the named reference flows and screen
+states have no missing gameplay information or action; artwork is source-managed
+rather than duplicated as hand-edited generated output; and a product parity
+review accepts documented intentional differences.
 
-**Verify:** Compare named flows and reference screenshots at representative states,
-then run the full browser path. Completes MVP-007 and prepares MVP-014.
+**Verify:** Materialize the exact `final_parity_ref` commit in a clean checkout,
+compare named flows and reference screenshots at representative states, then run
+the full browser path. Confirm that all post-cutoff changes have ledger and backlog
+records, including any accepted at P0. Completes MVP-007 and prepares MVP-014.
 
 ### S11 — Browser quality and persistence verification
 
@@ -388,15 +422,19 @@ exit condition.
 **Outcome:** The modular application is the sole live implementation, with the
 accepted prototype preserved in Git history.
 
-**Deliver:** After parity acceptance, remove the monolithic implementation as live
-source without maintaining a second rules or UI path; run the complete acceptance
-suite from a clean checkout; and record the release revision and any retained
+**Deliver:** After parity acceptance, confirm that every accepted prototype change
+through `final_parity_ref` is present in the modular application, then remove the
+monolithic implementation as live source without maintaining a second rules or UI
+path. Run the complete acceptance suite from a clean checkout and record the
+`prototype_baseline`, `final_parity_ref`, release revision, and any retained
 limitations in the release work item.
 
-**Accept when:** No production or test path depends on the legacy script; all
-MVP-001 through MVP-014 criteria have an automated check or reproducible human
-verification and pass; both distribution artifacts are reproducible; and the
-approved website revision is reachable at the production URL.
+**Accept when:** No accepted delta is missing or unverified; every post-cutoff
+prototype change has a ledger entry, disposition, priority, and owning backlog item
+or slice; no production or test path depends on the legacy script; all MVP-001
+through MVP-014 criteria have an automated check or reproducible human verification
+and pass; both distribution artifacts are reproducible; and the approved website
+revision is reachable at the production URL.
 
 **Verify:** Run the full CI and distribution verification, confirm the production
 smoke result, and obtain final product acceptance of the exact reviewed revision.
@@ -450,6 +488,9 @@ reason in the linked work item rather than expanding this table.
 - Defects that prevent an existing acceptance criterion from passing are not new
   features. Link them to the owning slice and assign P0 only when they block the
   accepted MVP release.
+- Prototype changes merged after the S10 parity cutoff enter this backlog with a
+  link to their change-ledger entry. P0 is a priority only and does not bypass
+  intake, disposition, slice ownership, or verification.
 
 | Request | Summary | Source | Priority | Disposition |
 | --- | --- | --- | --- | --- |
