@@ -324,29 +324,42 @@
 #vice-smart .v-big-alert p{font-size:28px;margin-bottom:28px}
 #vice-smart .v-big-alert button{min-width:160px;min-height:52px;font-size:20px}
 
-/* Keep the human player's resources at the bottom of the board at every gameplay width. */
-#vice-smart .v-main{padding-bottom:230px}
+/* Keep the human player's resources in a compact, quiet bar at the bottom of the board. */
+#vice-smart .v-main{padding-bottom:128px}
 #vice-smart .v-player-layout{display:flex;flex-direction:column;gap:24px}
-#vice-smart .v-player-bank{position:fixed;bottom:0;left:50%;transform:translateX(-50%);z-index:11;width:min(calc(100% - 48px),1132px);padding:14px;background:#17271ff2;border-top:1px solid #5f7060;box-shadow:0 -6px 14px #101b16b8;backdrop-filter:blur(6px)}
-#vice-smart .v-player-bank .v-section-head{margin-bottom:8px}
-#vice-smart .v-player-bank .v-toolbar{margin-top:10px}
-#vice-smart .v-player-bank .v-message{margin-top:10px}
+#vice-smart .v-player-bank{position:fixed;bottom:0;left:50%;transform:translateX(-50%);z-index:11;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:6px 12px;width:min(calc(100% - 48px),1132px);padding:7px 10px;background:#17271ff7;border-top:1px solid #46594a;box-shadow:0 -2px 8px #101b1680;backdrop-filter:blur(6px)}
+#vice-smart .v-player-bank .v-section-head{margin:0;display:block}
+#vice-smart .v-player-bank .v-section-head h2{font-size:14px;color:var(--v-muted)}
+#vice-smart .v-player-bank .v-count{font-size:12px;margin-left:3px}
+#vice-smart .v-player-bank #v-next-income{display:none}
+#vice-smart .v-player-bank .v-resources{gap:4px}
+#vice-smart .v-player-bank .v-resource{padding:3px 5px;background:#21352a;border-top-width:1px}
+#vice-smart .v-player-bank .v-resource-title{font-size:10px;gap:3px;color:var(--v-muted)}
+#vice-smart .v-player-bank .v-resource-title .v-dot{width:8px;height:8px;flex-basis:8px}
+#vice-smart .v-player-bank .v-resource strong{font-size:18px;line-height:1.15}
+#vice-smart .v-player-bank .v-resource .v-secondary{display:none}
+#vice-smart .v-player-bank .v-toolbar{margin:0;gap:6px;flex-wrap:nowrap}
+#vice-smart .v-player-bank .v-toolbar .v-action-cell{flex:0 1 118px}
+#vice-smart .v-player-bank .v-toolbar .v-button{min-height:36px;padding:5px 8px;font-size:12px}
+#vice-smart .v-player-bank .v-action-help{display:none}
+#vice-smart .v-player-bank .v-message{grid-column:1/-1;margin:0;padding:3px 7px;border-left-width:2px;font-size:12px;line-height:1.3}
 @media(max-width:740px){
 #vice-smart .v-player-layout{display:flex;gap:16px}
-#vice-smart .v-main{padding-bottom:220px}
-#vice-smart .v-player-bank{position:fixed;bottom:0;width:100%;padding:10px}
-#vice-smart .v-player-bank .v-resources{grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
-#vice-smart .v-player-bank .v-resource{padding:7px 6px}
-#vice-smart .v-player-bank .v-resource-title{font-size:11px;gap:4px;overflow-wrap:anywhere}
-#vice-smart .v-player-bank .v-resource strong{font-size:22px}
-#vice-smart .v-player-bank .v-resource .v-secondary{font-size:11px}
-#vice-smart .v-player-bank .v-toolbar{flex-direction:row;gap:8px}
-#vice-smart .v-player-bank .v-toolbar .v-action-cell{flex:1 1 140px}
-#vice-smart .v-player-bank #v-next-income{display:none}
+#vice-smart .v-main{padding-bottom:142px}
+#vice-smart .v-player-bank{position:fixed;bottom:0;grid-template-columns:minmax(0,1fr) auto;width:100%;padding:6px 8px}
+#vice-smart .v-player-bank .v-section-head{display:none}
+#vice-smart .v-player-bank .v-resources{grid-template-columns:repeat(6,minmax(0,1fr));gap:3px}
+#vice-smart .v-player-bank .v-resource{padding:3px}
+#vice-smart .v-player-bank .v-resource-title{font-size:9px;gap:2px;overflow-wrap:anywhere}
+#vice-smart .v-player-bank .v-resource strong{font-size:17px}
+#vice-smart .v-player-bank .v-toolbar{flex-direction:row;gap:4px}
+#vice-smart .v-player-bank .v-toolbar .v-action-cell{flex:0 1 92px}
+#vice-smart .v-player-bank .v-toolbar .v-button{padding:4px;font-size:11px}
 }
 @media(max-width:420px){
-#vice-smart .v-main{padding-bottom:315px}
-#vice-smart .v-player-bank .v-resources{grid-template-columns:repeat(3,minmax(0,1fr))}
+#vice-smart .v-main{padding-bottom:178px}
+#vice-smart .v-player-bank{grid-template-columns:1fr}
+#vice-smart .v-player-bank .v-toolbar .v-action-cell{flex:1 1 0}
 }
 </style>
 
