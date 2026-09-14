@@ -324,26 +324,29 @@
 #vice-smart .v-big-alert p{font-size:28px;margin-bottom:28px}
 #vice-smart .v-big-alert button{min-width:160px;min-height:52px;font-size:20px}
 
-/* Resources remain the player's left-hand rail at every gameplay width. */
+/* Keep the human player's resources at the bottom of the board at every gameplay width. */
+#vice-smart .v-main{padding-bottom:230px}
+#vice-smart .v-player-layout{display:flex;flex-direction:column;gap:24px}
+#vice-smart .v-player-bank{position:fixed;bottom:0;left:50%;transform:translateX(-50%);z-index:11;width:min(calc(100% - 48px),1132px);padding:14px;background:#17271ff2;border-top:1px solid #5f7060;box-shadow:0 -6px 14px #101b16b8;backdrop-filter:blur(6px)}
+#vice-smart .v-player-bank .v-section-head{margin-bottom:8px}
+#vice-smart .v-player-bank .v-toolbar{margin-top:10px}
+#vice-smart .v-player-bank .v-message{margin-top:10px}
 @media(max-width:740px){
-#vice-smart .v-player-layout{display:grid;grid-template-columns:minmax(96px,116px) minmax(0,1fr);gap:12px;align-items:start}
-#vice-smart .v-player-sidebar{position:sticky;top:84px}
-#vice-smart .v-player-sidebar .v-resources{grid-template-columns:1fr;gap:6px}
-#vice-smart .v-player-sidebar .v-resource{padding:7px 8px}
-#vice-smart .v-player-sidebar .v-resource-title{font-size:12px;gap:4px;overflow-wrap:anywhere}
-#vice-smart .v-player-sidebar .v-resource strong{font-size:23px}
-#vice-smart .v-player-sidebar .v-toolbar{flex-direction:column;gap:8px}
-#vice-smart .v-player-sidebar .v-toolbar .v-action-cell{flex:0 1 auto}
-#vice-smart .v-player-sidebar .v-section-head{display:block}
-#vice-smart .v-player-sidebar .v-section-head h2{font-size:17px}
-#vice-smart .v-player-sidebar #v-next-income{display:none}
+#vice-smart .v-player-layout{display:flex;gap:16px}
+#vice-smart .v-main{padding-bottom:220px}
+#vice-smart .v-player-bank{position:fixed;bottom:0;width:100%;padding:10px}
+#vice-smart .v-player-bank .v-resources{grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+#vice-smart .v-player-bank .v-resource{padding:7px 6px}
+#vice-smart .v-player-bank .v-resource-title{font-size:11px;gap:4px;overflow-wrap:anywhere}
+#vice-smart .v-player-bank .v-resource strong{font-size:22px}
+#vice-smart .v-player-bank .v-resource .v-secondary{font-size:11px}
+#vice-smart .v-player-bank .v-toolbar{flex-direction:row;gap:8px}
+#vice-smart .v-player-bank .v-toolbar .v-action-cell{flex:1 1 140px}
+#vice-smart .v-player-bank #v-next-income{display:none}
 }
 @media(max-width:420px){
-#vice-smart .v-player-layout{grid-template-columns:92px minmax(0,1fr);gap:9px}
-#vice-smart .v-player-sidebar .v-resource{padding:6px}
-#vice-smart .v-player-sidebar .v-resource-title{font-size:11px}
-#vice-smart .v-player-sidebar .v-resource .v-secondary{font-size:11px}
-#vice-smart .v-player-sidebar .v-toolbar .v-button{padding:8px 5px;font-size:12px}
+#vice-smart .v-main{padding-bottom:315px}
+#vice-smart .v-player-bank .v-resources{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
 </style>
 
@@ -373,15 +376,6 @@
       <button type="button" class="v-button v-primary v-end" id="v-end" data-action="end">Collect income · 1</button>
     </section>
     <div class="v-player-layout">
-    <aside class="v-bank v-player-sidebar" aria-label="Your resources">
-      <div class="v-section-head"><h2>Resources <span id="v-resource-total" class="v-count">0 / 10</span></h2><span id="v-next-income" class="v-secondary"></span></div>
-      <div id="v-resources" class="v-resources"></div>
-      <div class="v-toolbar">
-        <div class="v-action-cell"><button type="button" id="v-draw" class="v-button" data-action="draw" aria-describedby="v-draw-help">Draw · 1 Any</button><span id="v-draw-help" class="v-action-help"></span></div>
-        <div class="v-action-cell"><button type="button" id="v-trade" class="v-button" data-action="trade" aria-describedby="v-trade-help">Trade 4 for 1</button><span id="v-trade-help" class="v-action-help"></span></div>
-      </div>
-      <div id="v-message" class="v-message" role="status" aria-live="polite"></div>
-    </aside>
     <div class="v-player-content">
     <section id="v-recap" class="v-recap" aria-label="Rival turn recap" hidden>
       <details><summary><span id="v-recap-title">Rival’s last turn</span><span id="v-recap-count" class="v-secondary"></span></summary><ol id="v-recap-list"></ol></details>
@@ -402,6 +396,15 @@
       <div class="v-section-head"><h2>Your operators <span id="v-operator-count" class="v-count">0 / 2 active</span></h2><span class="v-secondary">Activation paid · single use</span></div><div id="v-operators" class="v-grid"></div>
     </section>
     </div>
+    <aside class="v-bank v-player-bank" aria-label="Your resources">
+      <div class="v-section-head"><h2>Resources <span id="v-resource-total" class="v-count">0 / 10</span></h2><span id="v-next-income" class="v-secondary"></span></div>
+      <div id="v-resources" class="v-resources"></div>
+      <div class="v-toolbar">
+        <div class="v-action-cell"><button type="button" id="v-draw" class="v-button" data-action="draw" aria-describedby="v-draw-help">Draw · 1 Any</button><span id="v-draw-help" class="v-action-help"></span></div>
+        <div class="v-action-cell"><button type="button" id="v-trade" class="v-button" data-action="trade" aria-describedby="v-trade-help">Trade 4 for 1</button><span id="v-trade-help" class="v-action-help"></span></div>
+      </div>
+      <div id="v-message" class="v-message" role="status" aria-live="polite"></div>
+    </aside>
     </div>
     <footer class="v-footer">
       <details id="v-rules"><summary>Rules &amp; card actions</summary><div class="v-rules">
