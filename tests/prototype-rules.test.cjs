@@ -151,3 +151,14 @@ test('the player resource bank is a compact, subtle bottom bar at every screen w
   assert.match(html, /#vice-smart \.v-player-bank \.v-resources\{grid-template-columns:repeat\(6,minmax\(0,1fr\)\);gap:3px\}/);
   assert.match(html, /@media\(max-width:420px\)\{[\s\S]*#vice-smart \.v-player-bank\{grid-template-columns:1fr\}/);
 });
+
+test('the draw action sits beside the turn action', () => {
+  const html = fs.readFileSync(new URL('../index.html', `file://${__filename}`), 'utf8');
+
+  assert.match(
+    html,
+    /<div class="v-turn-actions">\s*<div class="v-action-cell"><button[^>]*id="v-draw"[\s\S]*?<button[^>]*id="v-end"/,
+  );
+  assert.doesNotMatch(html, /<div class="v-toolbar">\s*<div class="v-action-cell"><button[^>]*id="v-draw"/);
+  assert.match(html, /\.v-turn-actions\{display:flex;align-items:flex-start;gap:8px;flex-shrink:0\}/);
+});
