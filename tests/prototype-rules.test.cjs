@@ -166,6 +166,8 @@ test('the draw action sits beside the turn action', () => {
 test('the draw action clearly distinguishes affordable and unavailable states', () => {
   const html = fs.readFileSync(new URL('../index.html', `file://${__filename}`), 'utf8');
 
+  assert.ok(html.includes('>Draw 1 (Cost 1)</button>'));
+  assert.ok(html.includes("setAction('v-draw','Draw 1 (Cost '+p.drawPrice+')'"));
   assert.match(html, /#v-draw:not\(:disabled\)\{background:linear-gradient\(180deg,#fff3a8 0%,#f4c94f 100%\);[^}]*box-shadow:[^}]+\}/);
   assert.match(html, /#v-draw:hover:not\(:disabled\)\{background:linear-gradient\(180deg,#fff9cf 0%,#ffda63 100%\);/);
   assert.match(html, /#v-draw:disabled\{background:#777d78;color:#d2d5d2;border-color:#949a95;box-shadow:none;text-shadow:none\}/);
