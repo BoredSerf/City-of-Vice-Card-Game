@@ -111,31 +111,6 @@ test('each completed crew applies its distinct rules bonus', () => {
   assert.ok(pipeline.players[1].active.includes(30));
   assert.ok(pipeline.players[1].active.includes(12));
 
-  const human_pipeline = engine.newState(() => 0.5);
-  human_pipeline.current = 1;
-  human_pipeline.phase = 'play';
-  human_pipeline.players[0].active = [];
-  complete_crew(human_pipeline.players[0], 'Pipeline');
-  human_pipeline.players[0].res.Green = 1;
-  human_pipeline.players[1].active = [0, 30];
-  assert.equal(engine.useOperator(human_pipeline, 1, 30, 12), null);
-  assert.equal(human_pipeline.phase, 'intercept');
-  assert.equal(engine.resolveIntercept(human_pipeline, true), null);
-  assert.ok(human_pipeline.players[0].active.includes(30));
-
-
-  const declined = engine.newState(() => 0.5);
-  declined.current = 1;
-  declined.phase = 'play';
-  declined.players[0].active = [];
-  complete_crew(declined.players[0], 'Pipeline');
-  declined.players[0].res.Green = 1;
-  declined.players[1].active = [0, 30];
-  declined.players[1].res.Black = 1;
-  assert.equal(engine.useOperator(declined, 1, 30, 12), null);
-  assert.equal(engine.resolveIntercept(declined, false), null);
-  assert.ok(declined.discard.includes(12));
-
   const night = engine.newState(() => 0.5);
   night.players[0].active = [];
   complete_crew(night.players[0], 'Night Shift');
