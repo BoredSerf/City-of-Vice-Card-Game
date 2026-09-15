@@ -799,6 +799,7 @@ function loadSaved(){
   if(locations.length!==36||new Set(locations).size!==36||!locations.every(id=>Number.isInteger(id)&&card(id)))return;
   if(!s.players.every((p,who)=>p.hand.length<=7&&legitPossessionCount(p)<=(s.phase==='legit_cash'&&s.current===who?4:3)&&COLORS.every(c=>Number.isInteger(p.res[c])&&p.res[c]>=0)))return;
   if(s.phase==='legit_cash'&&(!s.pendingLegitCash||s.pendingLegitCash.who!==s.current||card(s.pendingLegitCash.drawnId)?.type!=='legit'||!s.players[s.current].hand.includes(s.pendingLegitCash.drawnId)))return;
+  if(s.phase==='intercept'&&(!s.pendingIntercept||s.pendingIntercept.who!==0||s.current!==1||card(s.pendingIntercept.opId)?.type!=='operator'||!s.players[1].active.includes(s.pendingIntercept.opId)))return;
   state=s;state.rng=Math.random;state.logs=Array.isArray(s.logs)?s.logs:[];
   if(state.aiRecap&&!Array.isArray(state.aiRecap.events))delete state.aiRecap;
   const adjusted=enforceOperatorLimit(state);
@@ -852,7 +853,7 @@ function render(){
  el('v-catalog-title').textContent='Card gallery · 36 cards · '+state.deck.length+' in draw pile';
  el('v-winner').hidden=state.winner===null;
  el('v-winner').innerHTML=state.winner===null?'':'<h2>'+(state.winner===0?'The city is yours.':'The rival takes the city.')+'</h2><p>'+(state.winReason==='elimination'?(state.winner===0?'The rival has no active distributors.':'You have no active distributors.'):'12 active businesses reached.')+'</p>';
- if(state.current===0&&state.phase==='bonus')panel={type:'bonus'};
+ if(state.phase==='intercept'&&state.pendingIntercept?.who===0)panel={type:'intercept'};
  else if(state.current===0&&state.phase==='trim')panel={type:'trim'};
  else if(state.current===0&&state.phase==='legit_cash')panel={type:'legit_cash'};
  renderPanel();renderCatalog();save();
@@ -874,6 +875,9 @@ function renderPanel(){
  d.hidden=!panel;
  if(!panel){d.innerHTML='';return;}
  const p=player();let heading='',text='',body='';
+ if(panel.type==='intercept'){
+  const pending=state.pendingIntercept,op=card(pending.opId);heading='Intercept '+op.name+'?';text='Pipeline lets you cancel this attack by paying the operator’s activation cost. The operator becomes active on your side.';body='<div class="v-payment-summary">'+costTokens(op.cost)+'</div><div class="v-choice-row"><button type="button" class="v-button" data-action="intercept-decline">Let the attack happen</button><button type="button" class="v-button v-primary" data-action="intercept-accept">Pay &amp; intercept</button></div>';
+ }
  if(panel.type==='draw'){
   heading='Pay for your draw';text='Spend '+p.drawPrice+' resource'+(p.drawPrice===1?'':'s')+'. The next draw this turn costs '+(p.drawPrice+1)+'.';
   body='<div class="v-payment">'+COLORS.map(c=>'<div class="v-pay-option"><span>'+token(c)+' · '+p.res[c]+' held</span><div class="v-stepper"><button type="button" data-action="pay-minus" data-color="'+c+'" aria-label="Spend one less '+resourceName(c)+'"'+blockedAttr(!panel.picks[c])+'>&minus;</button><b>'+panel.picks[c]+'</b><button type="button" data-action="pay-plus" data-color="'+c+'" aria-label="Spend one more '+resourceName(c)+'"'+blockedAttr(panel.picks[c]>=p.res[c]||total(panel.picks)>=p.drawPrice)+'>+</button></div></div>').join('')+'</div><button type="button" class="v-button v-primary" data-action="draw-confirm"'+blockedAttr(total(panel.picks)!==p.drawPrice)+'>Spend '+total(panel.picks)+' &amp; draw</button>';
@@ -946,7 +950,8 @@ function beginAI(resume=false){
  function step(){
   if(state!==game)return;
   if(fxPlaying||endTransition||warningAwaiting){aiTimer=setTimeout(step,100);return;}
-  if(state.winner===null&&count++<100&&collectAIEvents(()=>actAI(state))){render();aiTimer=setTimeout(step,140);return;}
+  if(state.winner===null&&count++<100&&collectAIEvents(()=>actAI(state))){render();if(state.phase==='intercept'){aiTimer=null;return;}aiTimer=setTimeout(step,140);return;}
+  if(state.phase==='intercept'){aiTimer=null;render();return;}
   aiTimer=null;
   if(state.winner===null){state.turn++;state.current=0;state.phase='ready';tell('Your turn. Collect your income to begin.');}
   else tell(state.logs[0]?.msg||'Game over.');

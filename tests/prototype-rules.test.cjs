@@ -246,3 +246,32 @@ test('the draw action clearly distinguishes affordable and unavailable states', 
   assert.match(html, /#v-draw:hover:not\(:disabled\)\{background:linear-gradient\(180deg,#fff9cf 0%,#ffda63 100%\);/);
   assert.match(html, /#v-draw:disabled\{background:#777d78;color:#d2d5d2;border-color:#949a95;box-shadow:none;text-shadow:none\}/);
 });
+
+test('the complete browser script initializes without a runtime exception', () => {
+  const html = fs.readFileSync(new URL('../index.html', `file://${__filename}`), 'utf8');
+  const source = html.match(/<script>\s*([\s\S]*?)\s*<\/script>/)[1];
+  const target = {hidden: false, innerHTML: '', textContent: '', className: '', disabled: false, dataset: {}, style: {}};
+  let element;
+  element = new Proxy(target, {
+    get(object, property) {
+      if (property in object) return object[property];
+      if (property === 'querySelector') return () => element;
+      if (property === 'querySelectorAll') return () => [];
+      if (property === 'closest') return () => null;
+      if (['insertBefore', 'appendChild', 'before', 'after', 'addEventListener', 'setAttribute', 'scrollIntoView'].includes(property)) return () => {};
+      return undefined;
+    },
+  });
+  target.parentElement = element;
+  const document_stub = {getElementById: () => element, createElement: () => element};
+  const prior_storage = global.localStorage;
+  const prior_match_media = global.matchMedia;
+  global.localStorage = {getItem: () => null, setItem: () => {}};
+  global.matchMedia = () => ({matches: true, addEventListener: () => {}});
+  try {
+    Function('document', source)(document_stub);
+  } finally {
+    global.localStorage = prior_storage;
+    global.matchMedia = prior_match_media;
+  }
+});
