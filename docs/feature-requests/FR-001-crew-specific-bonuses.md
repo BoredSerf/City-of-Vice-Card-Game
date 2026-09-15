@@ -47,9 +47,11 @@ interaction), S10 (parity), and S11 (browser and resume verification). If an
 affected slice is already done at acceptance time, the change requires a new delta
 slice rather than reopening that slice.
 
-No `index.html` change is included in this intake. Changing only the prototype
-would create migration work once S01 locks `prototype_baseline`; after that lock,
-the change also requires an entry in `docs/PROTOTYPE_CHANGES.md` before merge.
+The follow-up change implements these bonuses in `index.html` in the crew order
+already used by the prototype: The Docks, Club Circuit, Trailer Park, The Burbs,
+Pipeline, Night Shift, Arts District, and Hill Country. S01 must capture this
+prototype behavior when it locks `prototype_baseline`; otherwise the modular
+application would need a separately accepted delta and migration work.
 
 ## Decisions required before acceptance
 
