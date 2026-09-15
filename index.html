@@ -275,6 +275,8 @@
 #vice-smart .v-opening-caption{padding:10px;display:flex;flex-direction:column;gap:5px}
 #vice-smart .v-opening-caption strong{font-size:15px}
 #vice-smart .v-opening-caption span{font-size:12px}
+#vice-smart .v-opening-caption .v-opening-bonus{margin-top:4px;padding-top:7px;border-top:1px solid #b0a589;line-height:1.35}
+#vice-smart .v-opening-caption .v-opening-bonus strong{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.35px;color:#24492d}
 #vice-smart .v-opening-choice:hover{outline:3px solid #efd07d;outline-offset:2px}
 @media(max-width:650px){#vice-smart .v-opening-grid{grid-template-columns:repeat(2,minmax(0,1fr));padding:0 12px 18px;gap:10px}#vice-smart .v-lobby-copy{padding:20px 14px}}
 
@@ -572,8 +574,10 @@ function operatorCost(op,target){return op.ability==='buy'?[...target.cost,...ta
 const abilityCostText=op=>op.ability==='buy'?'2 × target’s cost':'1 × target’s cost';
 function useOperator(s,who,opId,targetId,picks){if(!legalTurn(s,who))return'Finish the current step first.';const p=s.players[who],other=s.players[1-who],op=card(opId),target=card(targetId);if(!op||op.type!=='operator'||!p.active.includes(opId))return'Activate this operator first.';if(!target||target.type!=='illegal'||!other.active.includes(targetId))return'Operators can only target active rival distributors. Legit businesses are protected.';if(op.ability==='coerce'&&target.type!=='illegal')return'Ruffians target a distributor crew.';if(op.ability==='kill'&&target.type!=='illegal')return'Hitmen target distributors, not locations.';if(op.ability==='buy'&&target.type==='legit'&&legitCount(p)>=3)return'You may control at most 3 legitimate businesses.';if(op.ability==='buy'&&target.type==='illegal'&&illegalCount(p)>=capacity(p)&&p.hand.length>=7)return'Your hand is full and there is no active capacity.';if(hasCrewBonus(other,'Pipeline')&&operatorCount(other)<operatorLimit(other)&&afford(other,op.cost)){pay(other,op.cost);p.active.splice(p.active.indexOf(opId),1);other.active.push(opId);record(s,(who===0?'Rival intercepts ':'You intercept ')+op.name+' and take the operator.');return null;}const cost=operatorCost(op,target);if(resolveCost(p,cost,picks)===null)return'Need '+cost.map(resourceName).join(' + ')+'.';const escapesHit=op.ability==='kill'&&hasCrewBonus(other,'Trailer Park');const fxTargets=op.ability==='coerce'?[targetId,...other.active.filter(id=>id!==targetId&&card(id).type==='illegal'&&card(id).crew===target.crew)]:[targetId];pay(p,cost,picks);other.active.splice(other.active.indexOf(targetId),1);if(op.ability==='kill'){if(escapesHit){returnToHand(s,1-who,targetId);record(s,target.name+' escapes the hit and returns to hand.');}else{s.discard.push(targetId);record(s,op.name+' kills '+target.name+'.');}}else if(op.ability==='coerce'){const bounced=[targetId,...other.active.filter(id=>card(id).type==='illegal'&&card(id).crew===target.crew)];for(const id of bounced){const index=other.active.indexOf(id);if(index>=0)other.active.splice(index,1);returnToHand(s,1-who,id);}record(s,op.name+' bounces '+bounced.length+' active members of '+target.crew+'.');}else if(target.type==='illegal'&&illegalCount(p)>=capacity(p)){p.hand.push(targetId);p.suspended.push(targetId);record(s,op.name+' buys '+target.name+'; it waits in hand for capacity.');}else{p.active.push(targetId);record(s,op.name+' buys '+target.name+' into the empire.');}p.active.splice(p.active.indexOf(opId),1);s.discard.push(opId);enforceCapacity(s,1-who);s.pendingOperatorFX={who,opId,targets:fxTargets,destinations:fxTargets.map(id=>s.discard.includes(id)?'Discarded'+(op.ability==='coerce'?' · hand full':''):s.players[1-who].hand.includes(id)?(who===0?'Rival hand':'Your hand'):p.hand.includes(id)?(who===0?'Your hand · awaiting capacity':'Rival hand · awaiting capacity'):(who===0?'Your empire':'Rival empire'))};checkWin(s);return null;}
 function autoPayment(p,n){const res={...p.res},chosen=[];for(let k=0;k<n;k++){const color=[...COLORS].sort((a,b)=>res[b]-res[a])[0];if(!res[color])return[];chosen.push(color);res[color]--;}return chosen;}
+const scoreCardForDiscard=id=>card(id).type==='legit'?80:card(id).type==='illegal'?60:20;
 function actAI(s){
  const who=s.current,p=s.players[who],other=s.players[1-who];
+ if(s.phase==='draw_discard'&&s.pendingDrawDiscard?.who===who){const ids=s.pendingDrawDiscard.ids;return discardDrawChoice(s,who,ids.sort((a,b)=>scoreCardForDiscard(a)-scoreCardForDiscard(b))[0])===null;}
  if(s.phase==='legit_cash'&&s.pendingLegitCash?.who===who){const id=s.pendingLegitCash.drawnId;return cashPendingLegit(s,who,id,card(id).color)===null;}
  if(!legalTurn(s,who))return false;
  const room=()=>illegalCount(p)<capacity(p);
@@ -632,7 +636,7 @@ function actAI(s){
  for(const id of operators){const step=funding(card(id).cost,id);if(step)return execute(step);}
  // Buy as many draws as the rising price allows, checking activation after each.
  if(p.hand.length<7&&(s.deck.length||s.discard.length)&&total(p.res)>=p.drawPrice)
-  return drawCard(s,who,autoPayment(p,p.drawPrice))===null;
+  return drawCard(s,who,autoPayment(p,p.drawPrice),hasCrewBonus(p,'The Docks'))===null;
  // Cash only expendable cards when they can fund a draw or free a full hand.
  const spare=p.hand.filter(id=>{const c=card(id);return c.type==='legit'?legitCount(p)>=3:c.type==='operator'?(operatorCount(p)>=operatorLimit(p)||!targets.length||operators.length>1):!room()&&p.hand.length===7&&!p.hand.some(x=>card(x).type==='legit')&&!protect(id);}).sort((a,b)=>score(a)-score(b));
  const needed=Math.max(0,p.drawPrice-total(p.res));
@@ -797,7 +801,7 @@ function loadSaved(){
   if(s.version!==6||!['ready','play','trim','legit_cash','over'].includes(s.phase)||!Array.isArray(s.players)||s.players.length!==2||![0,1].includes(s.current))return;
   const locations=[...s.deck,...s.discard,...s.players.flatMap(p=>[...p.active,...p.hand])];
   if(locations.length!==36||new Set(locations).size!==36||!locations.every(id=>Number.isInteger(id)&&card(id)))return;
-  if(!s.players.every((p,who)=>p.hand.length<=7&&legitPossessionCount(p)<=(s.phase==='legit_cash'&&s.current===who?4:3)&&COLORS.every(c=>Number.isInteger(p.res[c])&&p.res[c]>=0)))return;
+  if(!s.players.every((p,who)=>p.hand.length<=(s.phase==='draw_discard'&&s.current===who?8:7)&&legitPossessionCount(p)<=(s.phase==='draw_discard'&&s.current===who?5:s.phase==='legit_cash'&&s.current===who?4:3)&&COLORS.every(c=>Number.isInteger(p.res[c])&&p.res[c]>=0)))return;
   if(s.phase==='legit_cash'&&(!s.pendingLegitCash||s.pendingLegitCash.who!==s.current||card(s.pendingLegitCash.drawnId)?.type!=='legit'||!s.players[s.current].hand.includes(s.pendingLegitCash.drawnId)))return;
   if(s.phase==='intercept'&&(!s.pendingIntercept||s.pendingIntercept.who!==0||s.current!==1||card(s.pendingIntercept.opId)?.type!=='operator'||!s.players[1].active.includes(s.pendingIntercept.opId)))return;
   state=s;state.rng=Math.random;state.logs=Array.isArray(s.logs)?s.logs:[];
@@ -855,6 +859,7 @@ function render(){
  el('v-winner').innerHTML=state.winner===null?'':'<h2>'+(state.winner===0?'The city is yours.':'The rival takes the city.')+'</h2><p>'+(state.winReason==='elimination'?(state.winner===0?'The rival has no active distributors.':'You have no active distributors.'):'12 active businesses reached.')+'</p>';
  if(state.phase==='intercept'&&state.pendingIntercept?.who===0)panel={type:'intercept'};
  else if(state.current===0&&state.phase==='trim')panel={type:'trim'};
+ else if(state.current===0&&state.phase==='draw_discard')panel={type:'draw_discard'};
  else if(state.current===0&&state.phase==='legit_cash')panel={type:'legit_cash'};
  renderPanel();renderCatalog();save();
 }
@@ -879,8 +884,8 @@ function renderPanel(){
   const pending=state.pendingIntercept,op=card(pending.opId);heading='Intercept '+op.name+'?';text='Pipeline lets you cancel this attack by paying the operator’s activation cost. The operator becomes active on your side.';body='<div class="v-payment-summary">'+costTokens(op.cost)+'</div><div class="v-choice-row"><button type="button" class="v-button" data-action="intercept-decline">Let the attack happen</button><button type="button" class="v-button v-primary" data-action="intercept-accept">Pay &amp; intercept</button></div>';
  }
  if(panel.type==='draw'){
-  heading='Pay for your draw';text='Spend '+p.drawPrice+' resource'+(p.drawPrice===1?'':'s')+'. The next draw this turn costs '+(p.drawPrice+1)+'.';
-  body='<div class="v-payment">'+COLORS.map(c=>'<div class="v-pay-option"><span>'+token(c)+' · '+p.res[c]+' held</span><div class="v-stepper"><button type="button" data-action="pay-minus" data-color="'+c+'" aria-label="Spend one less '+resourceName(c)+'"'+blockedAttr(!panel.picks[c])+'>&minus;</button><b>'+panel.picks[c]+'</b><button type="button" data-action="pay-plus" data-color="'+c+'" aria-label="Spend one more '+resourceName(c)+'"'+blockedAttr(panel.picks[c]>=p.res[c]||total(panel.picks)>=p.drawPrice)+'>+</button></div></div>').join('')+'</div><button type="button" class="v-button v-primary" data-action="draw-confirm"'+blockedAttr(total(panel.picks)!==p.drawPrice)+'>Spend '+total(panel.picks)+' &amp; draw</button>';
+  heading='Pay for your draw';text='Spend '+p.drawPrice+' resource'+(p.drawPrice===1?'':'s')+'. The next draw this turn costs '+(p.drawPrice+1)+'.';if(panel.useDocksBonus===undefined)panel.useDocksBonus=hasCrewBonus(p,'The Docks');
+  body=(hasCrewBonus(p,'The Docks')?'<div class="v-choice-row"><button type="button" class="v-button" data-action="docks-toggle">'+(panel.useDocksBonus?'Draw 2, discard 1':'Draw 1')+'</button></div>':'')+'<div class="v-payment">'+COLORS.map(c=>'<div class="v-pay-option"><span>'+token(c)+' · '+p.res[c]+' held</span><div class="v-stepper"><button type="button" data-action="pay-minus" data-color="'+c+'" aria-label="Spend one less '+resourceName(c)+'"'+blockedAttr(!panel.picks[c])+'>&minus;</button><b>'+panel.picks[c]+'</b><button type="button" data-action="pay-plus" data-color="'+c+'" aria-label="Spend one more '+resourceName(c)+'"'+blockedAttr(panel.picks[c]>=p.res[c]||total(panel.picks)>=p.drawPrice)+'>+</button></div></div>').join('')+'</div><button type="button" class="v-button v-primary" data-action="draw-confirm"'+blockedAttr(total(panel.picks)!==p.drawPrice)+'>Spend '+total(panel.picks)+' &amp; draw '+(panel.useDocksBonus?'2':'1')+'</button>';
  }
  if(panel.type==='payment'){
   const fixed=panel.cost.filter(c=>c!=='Any'),count=panel.cost.length-fixed.length;
@@ -1044,7 +1049,7 @@ function renderLobby(){
   return true;
  }
  if(screen==='choose'){
-  lobby.innerHTML='<div class="v-lobby-copy"><h1>Choose your first business partner</h1><div class="v-lobby-actions"><button type="button" class="v-button v-dark-button" data-action="main-menu">Main menu</button></div></div><div class="v-opening-grid">'+CARDS.filter(c=>c.type==='illegal').map(c=>'<button type="button" class="v-opening-choice" style="'+colorStyle(c.color)+'" data-action="choose-opening" data-id="'+c.id+'" aria-label="Start with '+escapeHTML(c.name)+'">'+portrait(c)+'<span class="v-opening-caption"><strong>'+escapeHTML(c.name)+'</strong><span>'+escapeHTML(CREWS[c.crew]?.name||c.crew)+'</span><span>'+inlineToken(c.color,'+1 '+resourceName(c.color))+' per turn</span></span></button>').join('')+'</div>';
+  lobby.innerHTML='<div class="v-lobby-copy"><h1>Choose your first business partner</h1><div class="v-lobby-actions"><button type="button" class="v-button v-dark-button" data-action="main-menu">Main menu</button></div></div><div class="v-opening-grid">'+CARDS.filter(c=>c.type==='illegal').map(c=>'<button type="button" class="v-opening-choice" style="'+colorStyle(c.color)+'" data-action="choose-opening" data-id="'+c.id+'" aria-label="Start with '+escapeHTML(c.name)+'">'+portrait(c)+'<span class="v-opening-caption"><strong>'+escapeHTML(c.name)+'</strong><span>'+escapeHTML(CREWS[c.crew]?.name||c.crew)+'</span><span>'+inlineToken(c.color,'+1 '+resourceName(c.color))+' per turn</span><span class="v-opening-bonus"><strong>Complete crew bonus</strong>'+escapeHTML(CREW_BONUSES[c.crew])+'</span></span></button>').join('')+'</div>';
   return true;
  }
  const over=screen==='outcome',won=state.winner===0;if(over)recordAchievements();
