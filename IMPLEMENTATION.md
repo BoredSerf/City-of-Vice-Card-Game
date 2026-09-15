@@ -494,3 +494,4 @@ reason in the linked work item rather than expanding this table.
 
 | Request | Summary | Source | Priority | Disposition |
 | --- | --- | --- | --- | --- |
+| FR-001 | Replace the shared complete-crew resource bonus with eight crew-specific abilities | [request record](docs/feature-requests/FR-001-crew-specific-bonuses.md) | unset | triage |

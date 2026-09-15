@@ -275,6 +275,8 @@
 #vice-smart .v-opening-caption{padding:10px;display:flex;flex-direction:column;gap:5px}
 #vice-smart .v-opening-caption strong{font-size:15px}
 #vice-smart .v-opening-caption span{font-size:12px}
+#vice-smart .v-opening-caption .v-opening-bonus{margin-top:4px;padding-top:7px;border-top:1px solid #b0a589;line-height:1.35}
+#vice-smart .v-opening-caption .v-opening-bonus strong{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.35px;color:#24492d}
 #vice-smart .v-opening-choice:hover{outline:3px solid #efd07d;outline-offset:2px}
 @media(max-width:650px){#vice-smart .v-opening-grid{grid-template-columns:repeat(2,minmax(0,1fr));padding:0 12px 18px;gap:10px}#vice-smart .v-lobby-copy{padding:20px 14px}}
 
@@ -422,7 +424,7 @@
       <div class="v-section-head"><h2>Resources <span id="v-resource-total" class="v-count">0 / 10</span></h2><span id="v-next-income" class="v-secondary"></span></div>
       <div id="v-resources" class="v-resources"></div>
       <div class="v-toolbar">
-        <div class="v-action-cell"><button type="button" id="v-trade" class="v-button" data-action="trade" aria-describedby="v-trade-help">Trade 4 for 1</button><span id="v-trade-help" class="v-action-help"></span></div>
+        <div class="v-action-cell"><button type="button" id="v-trade" class="v-button" data-action="trade" aria-describedby="v-trade-help">Trade 4 for 1</button><button type="button" id="v-swap" class="v-button" data-action="swap">Trade distributors</button><span id="v-trade-help" class="v-action-help"></span></div>
       </div>
       <div id="v-message" class="v-message" role="status" aria-live="polite"></div>
     </aside>
@@ -430,12 +432,12 @@
     <footer class="v-footer">
       <details id="v-rules"><summary>Rules &amp; card actions</summary><div class="v-rules">
         <div><h3>Start &amp; win</h3><p>Each player chooses one distributor to start active, then receives three cards in hand and no resources. Reach 12 active businesses to win. A player with no active distributors loses immediately, even if they still control legitimate businesses. Operators do not count as businesses.</p></div>
-        <div><h3>Income &amp; crews</h3><p>Collect income at the start of each turn. Each active distributor produces one resource of its color. Each complete three-person crew grants one extra resource of your choice. Legit businesses and operators produce nothing.</p></div>
+        <div><h3>Income &amp; crews</h3><p>Collect income at the start of each turn. Each active distributor produces one resource of its color. Each complete three-person crew grants the unique bonus shown on its crew seal. The Docks may draw two cards for one paid draw, then must discard one of them. Legit businesses and operators produce nothing.</p></div>
         <div><h3>Activate or cash</h3><p>Pay a card’s activation cost to put it in play. A distributor or operator costs one of its color. A legit business costs one matching resource plus one of any color. Cash an unactivated card for one resource of its color; a legit card can be cashed for any color. Cashed cards are discarded.</p></div>
         <div><h3>Business capacity</h3><p>You have room for three distributors, plus three more for each active legit business. You may possess up to three legit businesses total, counting active cards and cards in your hand. If you draw a fourth, immediately cash any inactive legit business, including the one just drawn. Active legit businesses count toward victory and are immune to all operators.</p></div>
-        <div><h3>Operators</h3><p>Each player may have at most two active operators. Additional operators can stay in hand. Using an operator frees a slot. Pay activation once, then pay to use the ability. Hitman: pay the target’s cost to discard one distributor. Ruffian: pay one of a chosen target’s color to return every active member of that crew to the rival’s hand. Fixer: pay twice the target’s cost to take one distributor. The operator is discarded after use.</p></div>
-        <div><h3>Draw &amp; trade</h3><p>Your first draw each turn costs one resource of any color, the second costs two, the third costs three, and so on. The price resets each turn. Trade four resources of one color for one of another.</p></div>
-        <div><h3>Hand &amp; resource limits</h3><p>Hold up to seven cards and ten resources. Activate or cash before drawing into a full hand. Choose which excess resources to discard after income. Forced returns beyond seven cards are discarded. A distributor acquired with no open slot waits in hand until you can pay to activate it.</p></div>
+        <div><h3>Operators</h3><p>Each player may have at most two active operators, or three with Club Circuit. Additional operators can stay in hand. Using an operator frees a slot. Pay activation once, then pay to use the ability. Hitman: pay the target’s cost to discard one distributor. Ruffian: pay one of a chosen target’s color to return every active member of that crew to the rival’s hand. Fixer: pay twice the target’s cost to take one distributor. The operator is discarded after use.</p></div>
+        <div><h3>Draw &amp; trade</h3><p>Your first draw each turn costs one resource of any color, the second costs two, the third costs three, and so on. The price resets each turn. Trade four resources of one color for one of another, or two for one with Hill Country.</p></div>
+        <div><h3>Hand &amp; resource limits</h3><p>Hold up to seven cards and ten resources, or twelve resources with Night Shift. Activate or cash before drawing into a full hand. Choose which excess resources to discard after income. Forced returns beyond seven cards are discarded. A distributor acquired with no open slot waits in hand until you can pay to activate it.</p></div>
         <div><h3>The deck</h3><p>The base game has 24 distributors in eight crews, six legit businesses and six operators. When the draw pile runs out, shuffle the discard pile back in. The rival follows the same rules.</p></div>
       </div></details>
       <details id="v-catalog"><summary id="v-catalog-title">Card gallery · 36 cards</summary><div class="v-catalog-nav"><button type="button" class="v-button" id="v-prev-page" data-action="catalog-page" data-direction="-1">Previous 12</button><span id="v-page-label"></span><button type="button" class="v-button" id="v-next-page" data-action="catalog-page" data-direction="1">Next 12</button></div><div id="v-roster" class="v-roster"></div></details>
@@ -482,12 +484,25 @@ const bizCount=p=>p.active.filter(id=>card(id).type!=='operator').length;
 const illegalCount=p=>p.active.filter(id=>card(id).type==='illegal').length;
 const legitCount=p=>p.active.filter(id=>card(id).type==='legit').length;
 const legitPossessionCount=p=>p.active.concat(p.hand).filter(id=>card(id).type==='legit').length;
-const OPERATOR_LIMIT=2;
+const CREW_BONUSES={
+ 'The Docks':'When you pay to draw, you may draw 2 cards, then discard 1.',
+ 'Club Circuit':'You may control up to 3 active operators.',
+ 'Trailer Park':'Distributors hit by a Hitman return to your hand.',
+ 'The Burbs':'Draw a card when you collect income.',
+ 'Pipeline':'Intercept rival operators by paying their activation cost.',
+ 'Night Shift':'Gain 1 extra resource each turn and hold up to 12.',
+ 'Arts District':'Trade one active distributor with the rival once per turn.',
+ 'Hill Country':'Trade 2 resources for 1 instead of 4 for 1.'
+};
+const hasCrewBonus=(p,crew)=>complete(p,crew);
+const operatorLimit=p=>hasCrewBonus(p,'Club Circuit')?3:2;
+const resourceLimit=p=>hasCrewBonus(p,'Night Shift')?12:10;
+const tradeRate=p=>hasCrewBonus(p,'Hill Country')?2:4;
+const activationCost=(s,who,c)=>c.cost;
 const operatorCount=p=>p.active.filter(id=>card(id).type==='operator').length;
 const capacity=p=>3*(legitCount(p)+1);
 const complete=(p,crew)=>CREWS.some(([n,rows])=>n===crew&&rows.every(([name])=>p.active.some(id=>card(id).name===name)));
 const crewBonus=p=>CREWS.filter(([name])=>complete(p,name)).length;
-function claimCrewBonus(s,who,color){if(s.winner!==null||s.current!==who||s.phase!=='bonus'||!COLORS.includes(color)||!s.bonusRemaining)return'Choose a pending crew bonus.';s.players[who].res[color]++;s.bonusRemaining--;record(s,(who===0?'You choose ':'Rival chooses ')+resourceName(color)+' for a crew bonus.');if(!s.bonusRemaining){s.phase=total(s.players[who].res)>10?'trim':'play';}return null;}
 function income(p){const bank=emptyBank();p.active.forEach(id=>{const c=card(id);if(c.type==='illegal')bank[c.color]+=1;});return bank;}
 function resolveCost(p,cost,picks){
  const bank={...p.res},fixed=cost.filter(c=>c!=='Any'),n=cost.length-fixed.length;
@@ -524,41 +539,48 @@ function earnedVictoryAchievements(s,winStreak){
  COLORS.forEach(color=>{const all=CARDS.filter(c=>c.type!=='operator'&&c.color===color);if(all.every(c=>s.players[0].active.includes(c.id)))earned.push('monopoly-'+color);});
  return earned;
 }
-const legalTurn=(s,who)=>s.phase==='play'&&s.winner===null&&s.current===who&&total(s.players[who].res)<=10;
+const legalTurn=(s,who)=>s.phase==='play'&&s.winner===null&&s.current===who&&total(s.players[who].res)<=resourceLimit(s.players[who]);
 function returnToHand(s,who,id){const p=s.players[who];if(p.hand.length<7){p.hand.push(id);return true;}s.discard.push(id);p.suspended=p.suspended.filter(x=>x!==id);record(s,card(id).name+' is discarded: hand limit of 7.');return false;}
 function enforceOperatorLimit(s){
  let adjusted=false;
  s.players.forEach((p,who)=>{
-  const extras=p.active.filter(id=>card(id).type==='operator').slice(OPERATOR_LIMIT);
+  const extras=p.active.filter(id=>card(id).type==='operator').slice(operatorLimit(p));
   for(const id of extras){
    p.active.splice(p.active.indexOf(id),1);
    const kept=returnToHand(s,who,id);
-   record(s,card(id).name+(kept?' returns to hand':' is discarded')+': maximum 2 active operators.');
+   record(s,card(id).name+(kept?' returns to hand':' is discarded')+': active operator limit reached.');
    adjusted=true;
   }
  });
  return adjusted;
 }
 function enforceCapacity(s,who){const p=s.players[who];while(illegalCount(p)>capacity(p)){const id=[...p.active].reverse().find(id=>card(id).type==='illegal');p.active.splice(p.active.indexOf(id),1);if(returnToHand(s,who,id))p.suspended.push(id);record(s,card(id).name+' goes inactive: legitimate-business capacity lost.');}}
-function trimAI(p){while(total(p.res)>10){const useful=color=>p.hand.filter(id=>card(id).color===color).length;const colors=[...COLORS].sort((a,b)=>(p.res[b]-Math.min(useful(b),2)*.35)-(p.res[a]-Math.min(useful(a),2)*.35));p.res[colors[0]]--;}}
+function trimAI(p){while(total(p.res)>resourceLimit(p)){const useful=color=>p.hand.filter(id=>card(id).color===color).length;const colors=[...COLORS].sort((a,b)=>(p.res[b]-Math.min(useful(b),2)*.35)-(p.res[a]-Math.min(useful(a),2)*.35));p.res[colors[0]]--;}}
 function startTurn(s,who){
  if(s.winner!==null||checkWin(s))return;s.current=who;s.phase='play';const p=s.players[who];p.drawPrice=1;
  const made=income(p);COLORS.forEach(c=>p.res[c]+=made[c]);record(s,(who===0?'You collect ':'Rival collects ')+total(made)+' resources.');
- s.bonusRemaining=crewBonus(p);
- if(s.bonusRemaining){s.phase='bonus';if(who===1){while(s.bonusRemaining){const score=color=>p.hand.filter(id=>card(id).cost.includes(color)&&!p.res[color]).length*3-p.res[color];const color=[...COLORS].sort((a,b)=>score(b)-score(a))[0];claimCrewBonus(s,who,color);}}}
- if(who===1){trimAI(p);s.phase='play';}else if(!s.bonusRemaining&&total(p.res)>10)s.phase='trim';
+ if(hasCrewBonus(p,'Night Shift')){const color=[...COLORS].sort((a,b)=>p.res[a]-p.res[b])[0];p.res[color]++;record(s,(who===0?'You gain ':'Rival gains ')+'1 bonus '+resourceName(color)+' from Night Shift.');}
+ if(hasCrewBonus(p,'The Burbs')&&p.hand.length<7&&(s.deck.length||s.discard.length)){if(!s.deck.length)s.deck=shuffle(s.discard.splice(0),s.rng||Math.random);const id=s.deck.pop();p.hand.push(id);record(s,(who===0?'You draw '+card(id).name:'Rival draws a card')+' from The Burbs bonus.');if(card(id).type==='legit'&&legitPossessionCount(p)>3){s.phase='legit_cash';s.pendingLegitCash={who,drawnId:id};}}
+ p.tradedDistributors=false;
+ if(who===1){trimAI(p);if(s.phase!=='legit_cash')s.phase='play';}else if(total(p.res)>resourceLimit(p))s.phase='trim';
 }
-function drawCard(s,who,payment){if(!legalTurn(s,who))return'Finish the current step first.';const p=s.players[who];if(p.hand.length>=7)return'Hand limit is 7. Activate or cash a card before drawing.';if(!s.deck.length&&!s.discard.length)return'No cards remain in the deck or discard pile.';if(payment.length!==p.drawPrice||!afford(p,payment))return'Choose exactly '+p.drawPrice+' resources you own.';pay(p,payment);if(!s.deck.length){s.deck=shuffle(s.discard.splice(0),s.rng||Math.random);record(s,'The discarded cards are shuffled back into the deck.');}const id=s.deck.pop();p.hand.push(id);record(s,(who===0?'You draw '+card(id).name:'Rival draws a card')+' for '+p.drawPrice+'.');p.drawPrice++;if(card(id).type==='legit'&&legitPossessionCount(p)>3){s.phase='legit_cash';s.pendingLegitCash={who,drawnId:id};record(s,(who===0?'You must':'Rival must')+' cash an inactive legit business.');}return null;}
-function cashPendingLegit(s,who,id,color){const pending=s.pendingLegitCash,p=s.players[who],c=card(id);if(s.winner!==null||s.current!==who||s.phase!=='legit_cash'||pending?.who!==who)return'Choose a pending legit business to cash.';if(!c||c.type!=='legit'||!p.hand.includes(id))return'Choose an inactive legit business.';if(!COLORS.includes(color))return'Choose a valid resource type.';if(total(p.res)>=10)return'Spend a resource first; your resource limit is 10.';p.hand.splice(p.hand.indexOf(id),1);p.suspended=p.suspended.filter(x=>x!==id);s.discard.push(id);p.res[color]++;delete s.pendingLegitCash;s.phase='play';record(s,(who===0?'You cash ':'Rival cashes ')+c.name+' for 1 '+resourceName(color)+' to stay within the 3-legit limit.');return null;}
-function activateCard(s,who,id,picks){if(!legalTurn(s,who))return'Finish the current step first.';const p=s.players[who],c=card(id);if(!c||!p.hand.includes(id))return'Card is not in your hand.';if(c.type==='operator'&&operatorCount(p)>=OPERATOR_LIMIT)return'You may control at most 2 active operators. Use one before activating another.';if(c.type==='legit'&&legitCount(p)>=3)return'You may control at most 3 legitimate businesses.';if(c.type==='illegal'&&illegalCount(p)>=capacity(p))return'Activate a legitimate business to open 3 more illegal slots.';if(resolveCost(p,c.cost,picks)===null)return'Need '+c.cost.map(resourceName).join(' + ')+' to activate '+c.name+'.';pay(p,c.cost,picks);p.hand.splice(p.hand.indexOf(id),1);p.suspended=p.suspended.filter(x=>x!==id);p.active.push(id);record(s,(who===0?'You activate ':'Rival activates ')+c.name+'.');if(c.type!=='operator'&&complete(p,c.crew))record(s,c.crew+' complete! Earn 1 extra resource of your choice each turn.');checkWin(s);return null;}
-function cashCard(s,who,id,color){if(!legalTurn(s,who))return'Finish the current step first.';const p=s.players[who],c=card(id);if(!c||!p.hand.includes(id))return'Card is not in your hand.';if(!COLORS.includes(color)||(c.type!=='legit'&&c.color!==color))return'Choose a valid resource type.';if(total(p.res)>=10)return'Spend a resource first; your resource limit is 10.';p.hand.splice(p.hand.indexOf(id),1);p.suspended=p.suspended.filter(x=>x!==id);s.discard.push(id);p.res[color]++;record(s,(who===0?'You cash ':'Rival cashes ')+c.name+' for 1 '+resourceName(color)+'.');return null;}
-function tradeResources(s,who,from,to){if(!legalTurn(s,who))return'Finish the current step first.';const p=s.players[who];if(!COLORS.includes(from)||!COLORS.includes(to)||from===to)return'Choose two different resources.';if(p.res[from]<4)return'You need 4 '+resourceName(from)+' resources.';p.res[from]-=4;p.res[to]++;record(s,(who===0?'You trade ':'Rival trades ')+'4 '+resourceName(from)+' for 1 '+resourceName(to)+'.');return null;}
+function takeDeckCard(s){if(!s.deck.length){s.deck=shuffle(s.discard.splice(0),s.rng||Math.random);record(s,'The discarded cards are shuffled back into the deck.');}return s.deck.pop();}
+function drawCard(s,who,payment,useDocksBonus=false){if(!legalTurn(s,who))return'Finish the current step first.';const p=s.players[who];if(p.hand.length>=7)return'Hand limit is 7. Activate or cash a card before drawing.';if(!s.deck.length&&!s.discard.length)return'No cards remain in the deck or discard pile.';if(payment.length!==p.drawPrice||!afford(p,payment))return'Choose exactly '+p.drawPrice+' resources you own.';pay(p,payment);const ids=[takeDeckCard(s)];if(useDocksBonus&&hasCrewBonus(p,'The Docks')&&(s.deck.length||s.discard.length))ids.push(takeDeckCard(s));p.hand.push(...ids);record(s,(who===0?'You draw '+ids.map(id=>card(id).name).join(' and '):'Rival draws '+ids.length+' card'+(ids.length===1?'':'s'))+' for '+p.drawPrice+'.');p.drawPrice++;if(ids.length===2){s.pendingDrawDiscard={who,ids};s.phase='draw_discard';record(s,(who===0?'You must':'Rival must')+' discard one of the two drawn cards.');}else if(card(ids[0]).type==='legit'&&legitPossessionCount(p)>3){s.phase='legit_cash';s.pendingLegitCash={who,drawnId:ids[0]};record(s,(who===0?'You must':'Rival must')+' cash an inactive legit business.');}return null;}
+function discardDrawChoice(s,who,id){const pending=s.pendingDrawDiscard,p=s.players[who];if(s.phase!=='draw_discard'||pending?.who!==who||!pending.ids.includes(id)||!p.hand.includes(id))return'Choose one of the two drawn cards to discard.';p.hand.splice(p.hand.indexOf(id),1);s.discard.push(id);delete s.pendingDrawDiscard;record(s,(who===0?'You discard ':'Rival discards ')+card(id).name+'.');const remaining=pending.ids.find(x=>x!==id);if(legitPossessionCount(p)>3){s.phase='legit_cash';s.pendingLegitCash={who,drawnId:remaining};}else s.phase='play';return null;}
+function cashPendingLegit(s,who,id,color){const pending=s.pendingLegitCash,p=s.players[who],c=card(id);if(s.winner!==null||s.current!==who||s.phase!=='legit_cash'||pending?.who!==who)return'Choose a pending legit business to cash.';if(!c||c.type!=='legit'||!p.hand.includes(id))return'Choose an inactive legit business.';if(!COLORS.includes(color))return'Choose a valid resource type.';if(total(p.res)>=resourceLimit(p))return'Spend a resource first; your resource limit is '+resourceLimit(p)+'.';p.hand.splice(p.hand.indexOf(id),1);p.suspended=p.suspended.filter(x=>x!==id);s.discard.push(id);p.res[color]++;delete s.pendingLegitCash;s.phase='play';record(s,(who===0?'You cash ':'Rival cashes ')+c.name+' for 1 '+resourceName(color)+' to stay within the 3-legit limit.');return null;}
+function activateCard(s,who,id,picks){if(!legalTurn(s,who))return'Finish the current step first.';const p=s.players[who],c=card(id);if(!c||!p.hand.includes(id))return'Card is not in your hand.';if(c.type==='operator'&&operatorCount(p)>=operatorLimit(p))return'You may control at most '+operatorLimit(p)+' active operators. Use one before activating another.';if(c.type==='legit'&&legitCount(p)>=3)return'You may control at most 3 legitimate businesses.';if(c.type==='illegal'&&illegalCount(p)>=capacity(p))return'Activate a legitimate business to open 3 more illegal slots.';const cost=activationCost(s,who,c);if(resolveCost(p,cost,picks)===null)return'Need '+cost.map(resourceName).join(' + ')+' to activate '+c.name+'.';pay(p,cost,picks);p.hand.splice(p.hand.indexOf(id),1);p.suspended=p.suspended.filter(x=>x!==id);p.active.push(id);record(s,(who===0?'You activate ':'Rival activates ')+c.name+'.');if(c.type!=='operator'&&complete(p,c.crew))record(s,c.crew+' complete! '+CREW_BONUSES[c.crew]);checkWin(s);return null;}
+function cashCard(s,who,id,color){if(!legalTurn(s,who))return'Finish the current step first.';const p=s.players[who],c=card(id);if(!c||!p.hand.includes(id))return'Card is not in your hand.';if(!COLORS.includes(color)||(c.type!=='legit'&&c.color!==color))return'Choose a valid resource type.';if(total(p.res)>=resourceLimit(p))return'Spend a resource first; your resource limit is '+resourceLimit(p)+'.';p.hand.splice(p.hand.indexOf(id),1);p.suspended=p.suspended.filter(x=>x!==id);s.discard.push(id);p.res[color]++;record(s,(who===0?'You cash ':'Rival cashes ')+c.name+' for 1 '+resourceName(color)+'.');return null;}
+function tradeResources(s,who,from,to){if(!legalTurn(s,who))return'Finish the current step first.';const p=s.players[who],rate=tradeRate(p);if(!COLORS.includes(from)||!COLORS.includes(to)||from===to)return'Choose two different resources.';if(p.res[from]<rate)return'You need '+rate+' '+resourceName(from)+' resources.';p.res[from]-=rate;p.res[to]++;record(s,(who===0?'You trade ':'Rival trades ')+rate+' '+resourceName(from)+' for 1 '+resourceName(to)+'.');return null;}
+function tradeDistributors(s,who,ownId,rivalId){if(!legalTurn(s,who))return'Finish the current step first.';const p=s.players[who],other=s.players[1-who],own=card(ownId),rival=card(rivalId);if(p.tradedDistributors)return'You may trade distributors only once per turn.';if(!hasCrewBonus(p,'Arts District'))return'Complete Arts District to trade distributors.';if(own?.type!=='illegal'||rival?.type!=='illegal'||!p.active.includes(ownId)||!other.active.includes(rivalId))return'Choose one active distributor from each side.';p.active[p.active.indexOf(ownId)]=rivalId;other.active[other.active.indexOf(rivalId)]=ownId;p.tradedDistributors=true;record(s,(who===0?'You trade ':'Rival trades ')+own.name+' for '+rival.name+'.');checkWin(s);return null;}
 function operatorCost(op,target){return op.ability==='buy'?[...target.cost,...target.cost]:[...target.cost];}
 const abilityCostText=op=>op.ability==='buy'?'2 × target’s cost':'1 × target’s cost';
-function useOperator(s,who,opId,targetId,picks){if(!legalTurn(s,who))return'Finish the current step first.';const p=s.players[who],other=s.players[1-who],op=card(opId),target=card(targetId);if(!op||op.type!=='operator'||!p.active.includes(opId))return'Activate this operator first.';if(!target||target.type!=='illegal'||!other.active.includes(targetId))return'Operators can only target active rival distributors. Legit businesses are protected.';if(op.ability==='coerce'&&target.type!=='illegal')return'Ruffians target a distributor crew.';if(op.ability==='kill'&&target.type!=='illegal')return'Hitmen target distributors, not locations.';if(op.ability==='buy'&&target.type==='legit'&&legitCount(p)>=3)return'You may control at most 3 legitimate businesses.';if(op.ability==='buy'&&target.type==='illegal'&&illegalCount(p)>=capacity(p)&&p.hand.length>=7)return'Your hand is full and there is no active capacity.';const cost=operatorCost(op,target);if(resolveCost(p,cost,picks)===null)return'Need '+cost.map(resourceName).join(' + ')+'.';const fxTargets=op.ability==='coerce'?[targetId,...other.active.filter(id=>id!==targetId&&card(id).type==='illegal'&&card(id).crew===target.crew)]:[targetId];pay(p,cost,picks);other.active.splice(other.active.indexOf(targetId),1);if(op.ability==='kill'){s.discard.push(targetId);record(s,op.name+' kills '+target.name+'.');}else if(op.ability==='coerce'){const bounced=[targetId,...other.active.filter(id=>card(id).type==='illegal'&&card(id).crew===target.crew)];for(const id of bounced){const index=other.active.indexOf(id);if(index>=0)other.active.splice(index,1);returnToHand(s,1-who,id);}record(s,op.name+' bounces '+bounced.length+' active members of '+target.crew+'.');}else if(target.type==='illegal'&&illegalCount(p)>=capacity(p)){p.hand.push(targetId);p.suspended.push(targetId);record(s,op.name+' buys '+target.name+'; it waits in hand for capacity.');}else{p.active.push(targetId);record(s,op.name+' buys '+target.name+' into the empire.');}p.active.splice(p.active.indexOf(opId),1);s.discard.push(opId);enforceCapacity(s,1-who);s.pendingOperatorFX={who,opId,targets:fxTargets,destinations:fxTargets.map(id=>s.discard.includes(id)?'Discarded'+(op.ability==='coerce'?' · hand full':''):s.players[1-who].hand.includes(id)?(who===0?'Rival hand':'Your hand'):p.hand.includes(id)?(who===0?'Your hand · awaiting capacity':'Rival hand · awaiting capacity'):(who===0?'Your empire':'Rival empire'))};checkWin(s);return null;}
+function useOperator(s,who,opId,targetId,picks,skipIntercept=false){if(!legalTurn(s,who))return'Finish the current step first.';const p=s.players[who],other=s.players[1-who],op=card(opId),target=card(targetId);if(!op||op.type!=='operator'||!p.active.includes(opId))return'Activate this operator first.';if(!target||target.type!=='illegal'||!other.active.includes(targetId))return'Operators can only target active rival distributors. Legit businesses are protected.';if(op.ability==='coerce'&&target.type!=='illegal')return'Ruffians target a distributor crew.';if(op.ability==='kill'&&target.type!=='illegal')return'Hitmen target distributors, not locations.';if(op.ability==='buy'&&target.type==='legit'&&legitCount(p)>=3)return'You may control at most 3 legitimate businesses.';if(op.ability==='buy'&&target.type==='illegal'&&illegalCount(p)>=capacity(p)&&p.hand.length>=7)return'Your hand is full and there is no active capacity.';if(!skipIntercept&&hasCrewBonus(other,'Pipeline')&&operatorCount(other)<operatorLimit(other)&&afford(other,op.cost)){if(1-who===0){s.pendingIntercept={who:0,attacker:who,opId,targetId};s.phase='intercept';record(s,'You may intercept '+op.name+'.');return null;}pay(other,op.cost);p.active.splice(p.active.indexOf(opId),1);other.active.push(opId);record(s,'Rival intercepts '+op.name+' and takes the operator.');return null;}const cost=operatorCost(op,target);if(resolveCost(p,cost,picks)===null)return'Need '+cost.map(resourceName).join(' + ')+'.';const escapesHit=op.ability==='kill'&&hasCrewBonus(other,'Trailer Park');const fxTargets=op.ability==='coerce'?[targetId,...other.active.filter(id=>id!==targetId&&card(id).type==='illegal'&&card(id).crew===target.crew)]:[targetId];pay(p,cost,picks);other.active.splice(other.active.indexOf(targetId),1);if(op.ability==='kill'){if(escapesHit){returnToHand(s,1-who,targetId);record(s,target.name+' escapes the hit and returns to hand.');}else{s.discard.push(targetId);record(s,op.name+' kills '+target.name+'.');}}else if(op.ability==='coerce'){const bounced=[targetId,...other.active.filter(id=>card(id).type==='illegal'&&card(id).crew===target.crew)];for(const id of bounced){const index=other.active.indexOf(id);if(index>=0)other.active.splice(index,1);returnToHand(s,1-who,id);}record(s,op.name+' bounces '+bounced.length+' active members of '+target.crew+'.');}else if(target.type==='illegal'&&illegalCount(p)>=capacity(p)){p.hand.push(targetId);p.suspended.push(targetId);record(s,op.name+' buys '+target.name+'; it waits in hand for capacity.');}else{p.active.push(targetId);record(s,op.name+' buys '+target.name+' into the empire.');}p.active.splice(p.active.indexOf(opId),1);s.discard.push(opId);enforceCapacity(s,1-who);s.pendingOperatorFX={who,opId,targets:fxTargets,destinations:fxTargets.map(id=>s.discard.includes(id)?'Discarded'+(op.ability==='coerce'?' · hand full':''):s.players[1-who].hand.includes(id)?(who===0?'Rival hand':'Your hand'):p.hand.includes(id)?(who===0?'Your hand · awaiting capacity':'Rival hand · awaiting capacity'):(who===0?'Your empire':'Rival empire'))};checkWin(s);return null;}
+function resolveIntercept(s,accept){const pending=s.pendingIntercept;if(s.phase!=='intercept'||pending?.who!==0)return'No operator is waiting to be intercepted.';const attacker=s.players[pending.attacker],defender=s.players[0],op=card(pending.opId);if(accept){if(!afford(defender,op.cost))return'You can no longer afford this interception.';pay(defender,op.cost);attacker.active.splice(attacker.active.indexOf(op.id),1);defender.active.push(op.id);delete s.pendingIntercept;s.phase='play';record(s,'You intercept '+op.name+' and take the operator.');return null;}delete s.pendingIntercept;s.phase='play';return useOperator(s,pending.attacker,pending.opId,pending.targetId,undefined,true);}
 function autoPayment(p,n){const res={...p.res},chosen=[];for(let k=0;k<n;k++){const color=[...COLORS].sort((a,b)=>res[b]-res[a])[0];if(!res[color])return[];chosen.push(color);res[color]--;}return chosen;}
+const scoreCardForDiscard=id=>card(id).type==='legit'?80:card(id).type==='illegal'?60:20;
 function actAI(s){
  const who=s.current,p=s.players[who],other=s.players[1-who];
+ if(s.phase==='draw_discard'&&s.pendingDrawDiscard?.who===who){const ids=s.pendingDrawDiscard.ids;return discardDrawChoice(s,who,ids.sort((a,b)=>scoreCardForDiscard(a)-scoreCardForDiscard(b))[0])===null;}
  if(s.phase==='legit_cash'&&s.pendingLegitCash?.who===who){const id=s.pendingLegitCash.drawnId;return cashPendingLegit(s,who,id,card(id).color)===null;}
  if(!legalTurn(s,who))return false;
  const room=()=>illegalCount(p)<capacity(p);
@@ -566,9 +588,9 @@ function actAI(s){
   const c=card(id),partners=p.active.filter(x=>card(x).type==='illegal'&&card(x).crew===c.crew).length;
   return c.type==='legit'?(!room()?120:35):c.type==='illegal'?60+partners*25+(bizCount(p)===11?200:0):15;
  };
- const possible=id=>card(id).type==='operator'?operatorCount(p)<OPERATOR_LIMIT:card(id).type==='legit'?legitCount(p)<3:room();
+ const possible=id=>card(id).type==='operator'?operatorCount(p)<operatorLimit(p):card(id).type==='legit'?legitCount(p)<3:room();
  const businesses=p.hand.filter(id=>card(id).type!=='operator'&&possible(id)).sort((a,b)=>score(b)-score(a));
- const available=businesses.find(id=>afford(p,card(id).cost));
+ const available=businesses.find(id=>afford(p,activationCost(s,who,card(id))));
  if(available!==undefined)return activateCard(s,who,available)===null;
  const targets=other.active.filter(id=>card(id).type==='illegal').sort((a,b)=>{
   const value=id=>card(id).type==='legit'?10+illegalCount(other):complete(other,card(id).crew)?12:5;
@@ -602,14 +624,14 @@ function actAI(s){
     if(from){bank[from]-=4;bank[missing]++;steps.push({kind:'trade',from,to:missing});continue;}
    }
    const index=missing?donors.findIndex(id=>card(id).color===missing||card(id).type==='legit'):0;
-   if(index<0||!donors.length||total(bank)>=10)return null;
+   if(index<0||!donors.length||total(bank)>=resourceLimit(p))return null;
    const id=donors.splice(index,1)[0],color=missing||card(id).color;
    bank[color]++;steps.push({kind:'cash',id,color});
   }
   return null;
  }
  const execute=step=>step.kind==='cash'?cashCard(s,who,step.id,step.color)===null:tradeResources(s,who,step.from,step.to)===null;
- for(const id of businesses){const step=funding(card(id).cost,id);if(step)return execute(step);}
+ for(const id of businesses){const step=funding(activationCost(s,who,card(id)),id);if(step)return execute(step);}
  const operators=p.hand.filter(id=>card(id).type==='operator'&&possible(id));
  const op=operators.find(id=>afford(p,card(id).cost));
  if(op!==undefined)return activateCard(s,who,op)===null;
@@ -617,11 +639,11 @@ function actAI(s){
  for(const id of operators){const step=funding(card(id).cost,id);if(step)return execute(step);}
  // Buy as many draws as the rising price allows, checking activation after each.
  if(p.hand.length<7&&(s.deck.length||s.discard.length)&&total(p.res)>=p.drawPrice)
-  return drawCard(s,who,autoPayment(p,p.drawPrice))===null;
+  return drawCard(s,who,autoPayment(p,p.drawPrice),hasCrewBonus(p,'The Docks'))===null;
  // Cash only expendable cards when they can fund a draw or free a full hand.
- const spare=p.hand.filter(id=>{const c=card(id);return c.type==='legit'?legitCount(p)>=3:c.type==='operator'?(operatorCount(p)>=2||!targets.length||operators.length>1):!room()&&p.hand.length===7&&!p.hand.some(x=>card(x).type==='legit')&&!protect(id);}).sort((a,b)=>score(a)-score(b));
+ const spare=p.hand.filter(id=>{const c=card(id);return c.type==='legit'?legitCount(p)>=3:c.type==='operator'?(operatorCount(p)>=operatorLimit(p)||!targets.length||operators.length>1):!room()&&p.hand.length===7&&!p.hand.some(x=>card(x).type==='legit')&&!protect(id);}).sort((a,b)=>score(a)-score(b));
  const needed=Math.max(0,p.drawPrice-total(p.res));
- if((s.deck.length||s.discard.length)&&spare.length&&total(p.res)<10&&p.drawPrice<=10&&spare.length>=needed&&(needed>0||p.hand.length===7)){
+ if((s.deck.length||s.discard.length)&&spare.length&&total(p.res)<resourceLimit(p)&&p.drawPrice<=10&&spare.length>=needed&&(needed>0||p.hand.length===7)){
   const id=spare[0];return cashCard(s,who,id,card(id).color)===null;
  }
 
@@ -629,7 +651,7 @@ function actAI(s){
 }
 function runAI(s){startTurn(s,1);let guard=0;while(guard++<100&&s.winner===null&&actAI(s)){}if(s.winner===null){s.turn++;startTurn(s,0);}}
 // A pure rules interface lets the saved prototype be regression-checked without a browser.
-const engine={CARDS,COLORS,CREWS,newState,total,bizCount,illegalCount,legitCount,legitPossessionCount,capacity,complete,income,afford,operatorCost,startTurn,drawCard,activateCard,cashCard,cashPendingLegit,tradeResources,useOperator,actAI,runAI,checkWin,earnedVictoryAchievements,enforceCapacity,resolveCost,crewBonus,claimCrewBonus,operatorCount,OPERATOR_LIMIT,enforceOperatorLimit};
+const engine={CARDS,COLORS,CREWS,newState,total,bizCount,illegalCount,legitCount,legitPossessionCount,capacity,complete,income,afford,operatorCost,startTurn,drawCard,discardDrawChoice,activateCard,cashCard,cashPendingLegit,tradeResources,tradeDistributors,useOperator,resolveIntercept,actAI,runAI,checkWin,earnedVictoryAchievements,enforceCapacity,resolveCost,crewBonus,hasCrewBonus,operatorLimit,resourceLimit,tradeRate,operatorCount,enforceOperatorLimit};
 if(typeof module!=='undefined'&&module.exports){module.exports=engine;return;}
 function portrait(c){
  if(c.id===34)return '<div class="v-portrait" aria-hidden="true" style="background-image:var(--vice-leon);background-size:cover;background-position:center"></div>';
@@ -684,8 +706,9 @@ function gateReason(){
  if(state.winner!==null)return'Game finished';
  if(state.current===1)return'Wait for the rival';
  if(state.phase==='ready')return'Collect income first';
- if(state.phase==='bonus')return'Choose your crew bonus first';
- if(state.phase==='trim')return'Keep 10 resources first';
+  if(state.phase==='intercept')return'Resolve the operator interception first';
+ if(state.phase==='trim')return'Keep '+resourceLimit(player())+' resources first';
+ if(state.phase==='draw_discard')return'Discard one of the two drawn cards first';
  if(state.phase==='legit_cash')return'Cash an inactive legit business first';
  return'';
 }
@@ -698,11 +721,12 @@ function missingPayment(p,cost){
 }
 function activationReason(c){
  const p=player();
- return gateReason()||(c.type==='operator'&&operatorCount(p)>=OPERATOR_LIMIT?'Use an operator first (2/2 active)':c.type==='legit'&&legitCount(p)>=3?'Legit limit reached (3/3)':c.type==='illegal'&&illegalCount(p)>=capacity(p)?'Need a legit business for more slots':missingPayment(p,c.cost));
+ const cost=activationCost(state,0,c);return gateReason()||(c.type==='operator'&&operatorCount(p)>=operatorLimit(p)?'Use an operator first ('+operatorCount(p)+'/'+operatorLimit(p)+' active)':c.type==='legit'&&legitCount(p)>=3?'Legit limit reached (3/3)':c.type==='illegal'&&illegalCount(p)>=capacity(p)?'Need a legit business for more slots':missingPayment(p,cost));
 }
-function cashReason(){return gateReason()||(total(player().res)>=10?'Spend a resource first (10/10)':'');}
+function cashReason(){const p=player(),limit=resourceLimit(p);return gateReason()||(total(p.res)>=limit?'Spend a resource first ('+limit+'/'+limit+')':'');}
 function drawReason(){const p=player();return gateReason()||(p.hand.length>=7?'Hand full: activate or cash a card':!state.deck.length&&!state.discard.length?'No cards left to draw':missingPayment(p,Array(p.drawPrice).fill('Any')));}
-function tradeReason(){return gateReason()||(!COLORS.some(c=>player().res[c]>=4)?'Need 4 resources of the same color':'');}
+function tradeReason(){const rate=tradeRate(player());return gateReason()||(!COLORS.some(c=>player().res[c]>=rate)?'Need '+rate+' resources of the same color':'');}
+function swapReason(){const p=player(),a=state.players[1];return gateReason()||(!hasCrewBonus(p,'Arts District')?'Complete Arts District first':p.tradedDistributors?'Already traded this turn':!p.active.some(id=>card(id).type==='illegal')||!a.active.some(id=>card(id).type==='illegal')?'Both sides need an active distributor':'');}
 function operatorReason(op,target){
  const p=player(),a=state.players[1];
  if(gateReason())return gateReason();
@@ -725,7 +749,7 @@ function actionCell(action,id,label,reason,primary=false){
 function connectionView(c,who=0){
  if(c.type!=='illegal')return'';
  const count=membersOf(c.crew).filter(x=>state.players[who].active.includes(x.id)).length;
- return '<button type="button" class="v-crew-seal '+(count===3?'is-complete':'')+'" data-action="crew" data-id="'+c.id+'" aria-label="Inspect '+escapeHTML(c.crew)+' crew; '+count+' of 3 active"><span class="v-crew-symbol" aria-hidden="true">'+CREW_SYMBOLS[c.crew]+'</span><span class="v-crew-title">'+escapeHTML(c.crew)+'</span><span class="v-crew-count">'+(count===3?'+1 Any':count+'/3')+'</span></button>';
+ return '<button type="button" class="v-crew-seal '+(count===3?'is-complete':'')+'" data-action="crew" data-id="'+c.id+'" aria-label="Inspect '+escapeHTML(c.crew)+' crew; '+count+' of 3 active"><span class="v-crew-symbol" aria-hidden="true">'+CREW_SYMBOLS[c.crew]+'</span><span class="v-crew-title">'+escapeHTML(c.crew)+'</span><span class="v-crew-count">'+(count===3?'Bonus active':count+'/3')+'</span></button>';
 }
 function publicLocation(id){
  if(player().active.includes(id))return'Your businesses';
@@ -764,9 +788,9 @@ function guidance(){
  const p=player();
  if(state.winner!==null)return['Game over',state.winner===0?'The city is yours.':'The rival takes the city.'];
  if(state.current===1)return['Rival’s turn','Watch the actions below. Your next turn begins when the rival finishes.'];
- if(state.phase==='ready')return['Collect your income','Your businesses earn '+total(income(p))+' resource'+(total(income(p))===1?'':'s')+(crewBonus(p)?', plus '+crewBonus(p)+' crew bonus'+(crewBonus(p)===1?'':'es'):'')+'.'];
- if(state.phase==='bonus')return['Choose your crew bonus',safeBonusText()];
- if(state.phase==='trim')return['Keep 10 resources','Discard '+(total(p.res)-10)+' excess resource'+(total(p.res)-10===1?'':'s')+' before taking actions.'];
+ if(state.phase==='ready')return['Collect your income','Your businesses earn '+total(income(p))+' resource'+(total(income(p))===1?'':'s')+(hasCrewBonus(p,'Night Shift')?', plus the Night Shift bonus':'')+'.'];
+  if(state.phase==='trim')return['Keep '+resourceLimit(p)+' resources','Discard '+(total(p.res)-resourceLimit(p))+' excess resource'+(total(p.res)-resourceLimit(p)===1?'':'s')+' before taking actions.'];
+ if(state.phase==='draw_discard')return['Choose a card to discard','The Docks let you draw two for one payment. Keep one of those cards and discard the other.'];
  if(state.phase==='legit_cash')return['Choose a legit business to cash','You may possess only three legit businesses between your hand and active empire.'];
  const affordable=p.hand.filter(id=>!activationReason(card(id))).length;
  if(affordable)return['Your move',affordable+' card'+(affordable===1?' is':'s are')+' ready to activate. You can keep drawing, cashing and acting until you end your turn.'];
@@ -780,11 +804,13 @@ function loadSaved(){
  try{
   const raw=localStorage.getItem(STORAGE_KEY);if(!raw)return;
   const s=JSON.parse(raw);
-  if(s.version!==6||!['ready','play','trim','bonus','legit_cash','over'].includes(s.phase)||!Array.isArray(s.players)||s.players.length!==2||![0,1].includes(s.current))return;
+  if(s.version!==6||!['ready','play','trim','legit_cash','draw_discard','intercept','over'].includes(s.phase)||!Array.isArray(s.players)||s.players.length!==2||![0,1].includes(s.current))return;
   const locations=[...s.deck,...s.discard,...s.players.flatMap(p=>[...p.active,...p.hand])];
   if(locations.length!==36||new Set(locations).size!==36||!locations.every(id=>Number.isInteger(id)&&card(id)))return;
-  if(!s.players.every((p,who)=>p.hand.length<=7&&legitPossessionCount(p)<=(s.phase==='legit_cash'&&s.current===who?4:3)&&COLORS.every(c=>Number.isInteger(p.res[c])&&p.res[c]>=0)))return;
+  if(!s.players.every((p,who)=>p.hand.length<=(s.phase==='draw_discard'&&s.current===who?8:7)&&legitPossessionCount(p)<=(s.phase==='draw_discard'&&s.current===who?5:s.phase==='legit_cash'&&s.current===who?4:3)&&COLORS.every(c=>Number.isInteger(p.res[c])&&p.res[c]>=0)))return;
   if(s.phase==='legit_cash'&&(!s.pendingLegitCash||s.pendingLegitCash.who!==s.current||card(s.pendingLegitCash.drawnId)?.type!=='legit'||!s.players[s.current].hand.includes(s.pendingLegitCash.drawnId)))return;
+  if(s.phase==='draw_discard'&&(!s.pendingDrawDiscard||s.pendingDrawDiscard.who!==s.current||s.pendingDrawDiscard.ids.length!==2||!s.pendingDrawDiscard.ids.every(id=>s.players[s.current].hand.includes(id))))return;
+  if(s.phase==='intercept'&&(!s.pendingIntercept||s.pendingIntercept.who!==0||s.current!==1||card(s.pendingIntercept.opId)?.type!=='operator'||!s.players[1].active.includes(s.pendingIntercept.opId)))return;
   state=s;state.rng=Math.random;state.logs=Array.isArray(s.logs)?s.logs:[];
   if(state.aiRecap&&!Array.isArray(state.aiRecap.events))delete state.aiRecap;
   const adjusted=enforceOperatorLimit(state);
@@ -793,7 +819,6 @@ function loadSaved(){
 }
 function tell(text,error=false){notice=text;isError=error;}
 function after(error,success){if(error)tell(error,true);else{tell(success||state.logs[0]?.msg||'Done.');panel=null;}render();}
-function safeBonusText(){return state.bonusRemaining+' bonus resource'+(state.bonusRemaining===1?'':'s')+' remaining. Choose a color for each.';}
 function setAction(id,label,reason){el(id).textContent=label;el(id).disabled=!!reason;el(id+'-help').textContent=reason||'';}
 function render(){
  if(fxPlaying||endTransition||warningAwaiting)return;
@@ -808,18 +833,18 @@ function render(){
  const p=player(),a=state.players[1],inc=income(p),[heading,help]=guidance();
  el('v-turn').textContent=state.winner!==null?'Game over':'Turn '+state.turn+(state.current===1?' · Rival':' · You');
  el('v-guide-title').textContent=heading;el('v-guide-help').textContent=help;
- const steps=[['ready','1 · Collect'],['bonus','2 · Crew bonus'],['play','3 · Actions']];
+ const steps=[['ready','1 · Collect'],['play','2 · Actions']];
  el('v-steps').innerHTML=steps.map(([phase,label])=>'<span class="v-step '+(state.current===0&&(state.phase===phase||(phase==='play'&&state.phase==='trim'))?'is-current':'')+'"'+(state.current===0&&state.phase===phase?' aria-current="step"':'')+'>'+label+(phase==='bonus'&&!crewBonus(p)?' · none':'')+'</span>').join('');
  for(const [key,side]of[['player',p],['rival',a]]){
   el('v-'+key+'-score').textContent=bizCount(side)+' / 12';
   el('v-'+key+'-pips').innerHTML=Array.from({length:12},(_,i)=>'<span class="v-pip '+(i<bizCount(side)?'on':'')+'"></span>').join('');
  }
- el('v-resource-total').textContent=total(p.res)+' / 10';
- el('v-next-income').textContent='Each turn: '+total(inc)+' resources'+(crewBonus(p)?' + '+crewBonus(p)+' Any':'');
+ el('v-resource-total').textContent=total(p.res)+' / '+resourceLimit(p);
+ el('v-next-income').textContent='Each turn: '+total(inc)+' resources'+(hasCrewBonus(p,'Night Shift')?' + 1 Night Shift bonus':'')+(hasCrewBonus(p,'The Burbs')?' + 1 card':'');
  el('v-resources').innerHTML=COLORS.map(c=>'<div class="v-resource" style="'+colorStyle(c)+'"><span class="v-resource-title">'+dot(c)+resourceName(c)+'</span><strong>'+p.res[c]+'</strong><span class="v-secondary">+'+inc[c]+' / turn</span></div>').join('');
- setAction('v-draw','Draw 1 (Cost '+p.drawPrice+')',drawReason());setAction('v-trade','Trade 4 for 1',tradeReason());
+ setAction('v-draw','Draw 1 (Cost '+p.drawPrice+')',drawReason());setAction('v-trade','Trade '+tradeRate(p)+' for 1',tradeReason());el('v-swap').disabled=!!swapReason();
  el('v-new-game').hidden=state.winner!==null;
- el('v-end').textContent=state.winner!==null?'Play Again':state.current===1?'Rival is playing…':state.phase==='ready'?'Collect income · '+total(inc):state.phase==='bonus'?'Choose crew bonus':state.phase==='trim'?'Keep 10 resources':'End turn';
+ el('v-end').textContent=state.winner!==null?'Play Again':state.current===1?'Rival is playing…':state.phase==='ready'?'Collect income · '+total(inc):state.phase==='trim'?'Keep '+resourceLimit(p)+' resources':'End turn';
  el('v-end').disabled=state.current===1&&state.winner===null;
  el('v-message').textContent=notice;el('v-message').className='v-message'+(isError?' v-error':'');
  el('v-hand-count').textContent=p.hand.length+' / 7';
@@ -827,11 +852,11 @@ function render(){
  el('v-empire-count').textContent=bizCount(p)+' / 12';
  el('v-capacity').textContent='Legit: '+legitPossessionCount(p)+' / 3 possessed · '+legitCount(p)+' active · Distributor slots: '+illegalCount(p)+' / '+capacity(p)+' · '+Math.max(0,capacity(p)-illegalCount(p))+' open';
  el('v-empire').innerHTML=p.active.filter(id=>card(id).type!=='operator').map(id=>cardView(id,'active')).join('')||'<p class="v-empty">No active businesses.</p>';
- el('v-crew-status').textContent=crewBonus(p)?crewBonus(p)+' complete crew'+(crewBonus(p)===1?'':'s')+' · +'+crewBonus(p)+' Any each turn':'Tap a crew symbol to find its other members.';
+ el('v-crew-status').textContent=crewBonus(p)?crewBonus(p)+' crew bonus'+(crewBonus(p)===1?'':'es')+' active':'Tap a crew symbol to find its other members.';
  const operators=p.active.filter(id=>card(id).type==='operator');
- el('v-operator-count').textContent=operators.length+' / '+OPERATOR_LIMIT+' active';
+ el('v-operator-count').textContent=operators.length+' / '+operatorLimit(p)+' active';
  el('v-operators-section').hidden=!operators.length;el('v-operators').innerHTML=operators.map(id=>cardView(id,'operator')).join('');
- el('v-rival-count').textContent=bizCount(a)+' / 12 businesses · '+a.hand.length+' / 7 in hand · '+legitPossessionCount(a)+' / 3 legit possessed · '+operatorCount(a)+' / '+OPERATOR_LIMIT+' operators';
+ el('v-rival-count').textContent=bizCount(a)+' / 12 businesses · '+a.hand.length+' / 7 in hand · '+legitPossessionCount(a)+' / 3 legit possessed · '+operatorCount(a)+' / '+operatorLimit(a)+' operators';
  el('v-rival-resources').innerHTML=COLORS.map(c=>token(c,a.res[c]+' '+resourceName(c))).join('');
  el('v-rival-cards').innerHTML=a.active.map(id=>cardView(id,'active',1)).join('')||'<p class="v-empty">No active businesses.</p>';
  renderRecap();
@@ -839,8 +864,9 @@ function render(){
  el('v-catalog-title').textContent='Card gallery · 36 cards · '+state.deck.length+' in draw pile';
  el('v-winner').hidden=state.winner===null;
  el('v-winner').innerHTML=state.winner===null?'':'<h2>'+(state.winner===0?'The city is yours.':'The rival takes the city.')+'</h2><p>'+(state.winReason==='elimination'?(state.winner===0?'The rival has no active distributors.':'You have no active distributors.'):'12 active businesses reached.')+'</p>';
- if(state.current===0&&state.phase==='bonus')panel={type:'bonus'};
+ if(state.phase==='intercept'&&state.pendingIntercept?.who===0)panel={type:'intercept'};
  else if(state.current===0&&state.phase==='trim')panel={type:'trim'};
+ else if(state.current===0&&state.phase==='draw_discard')panel={type:'draw_discard'};
  else if(state.current===0&&state.phase==='legit_cash')panel={type:'legit_cash'};
  renderPanel();renderCatalog();save();
 }
@@ -861,9 +887,12 @@ function renderPanel(){
  d.hidden=!panel;
  if(!panel){d.innerHTML='';return;}
  const p=player();let heading='',text='',body='';
+ if(panel.type==='intercept'){
+  const pending=state.pendingIntercept,op=card(pending.opId);heading='Intercept '+op.name+'?';text='Pipeline lets you cancel this attack by paying the operator’s activation cost. The operator becomes active on your side.';body='<div class="v-payment-summary">'+costTokens(op.cost)+'</div><div class="v-choice-row"><button type="button" class="v-button" data-action="intercept-decline">Let the attack happen</button><button type="button" class="v-button v-primary" data-action="intercept-accept">Pay &amp; intercept</button></div>';
+ }
  if(panel.type==='draw'){
-  heading='Pay for your draw';text='Spend '+p.drawPrice+' resource'+(p.drawPrice===1?'':'s')+'. The next draw this turn costs '+(p.drawPrice+1)+'.';
-  body='<div class="v-payment">'+COLORS.map(c=>'<div class="v-pay-option"><span>'+token(c)+' · '+p.res[c]+' held</span><div class="v-stepper"><button type="button" data-action="pay-minus" data-color="'+c+'" aria-label="Spend one less '+resourceName(c)+'"'+blockedAttr(!panel.picks[c])+'>&minus;</button><b>'+panel.picks[c]+'</b><button type="button" data-action="pay-plus" data-color="'+c+'" aria-label="Spend one more '+resourceName(c)+'"'+blockedAttr(panel.picks[c]>=p.res[c]||total(panel.picks)>=p.drawPrice)+'>+</button></div></div>').join('')+'</div><button type="button" class="v-button v-primary" data-action="draw-confirm"'+blockedAttr(total(panel.picks)!==p.drawPrice)+'>Spend '+total(panel.picks)+' &amp; draw</button>';
+  heading='Pay for your draw';text='Spend '+p.drawPrice+' resource'+(p.drawPrice===1?'':'s')+'. The next draw this turn costs '+(p.drawPrice+1)+'.';if(panel.useDocksBonus===undefined)panel.useDocksBonus=hasCrewBonus(p,'The Docks');
+  body=(hasCrewBonus(p,'The Docks')?'<div class="v-choice-row"><button type="button" class="v-button" data-action="docks-toggle">'+(panel.useDocksBonus?'Draw 2, discard 1':'Draw 1')+'</button></div>':'')+'<div class="v-payment">'+COLORS.map(c=>'<div class="v-pay-option"><span>'+token(c)+' · '+p.res[c]+' held</span><div class="v-stepper"><button type="button" data-action="pay-minus" data-color="'+c+'" aria-label="Spend one less '+resourceName(c)+'"'+blockedAttr(!panel.picks[c])+'>&minus;</button><b>'+panel.picks[c]+'</b><button type="button" data-action="pay-plus" data-color="'+c+'" aria-label="Spend one more '+resourceName(c)+'"'+blockedAttr(panel.picks[c]>=p.res[c]||total(panel.picks)>=p.drawPrice)+'>+</button></div></div>').join('')+'</div><button type="button" class="v-button v-primary" data-action="draw-confirm"'+blockedAttr(total(panel.picks)!==p.drawPrice)+'>Spend '+total(panel.picks)+' &amp; draw '+(panel.useDocksBonus?'2':'1')+'</button>';
  }
  if(panel.type==='payment'){
   const fixed=panel.cost.filter(c=>c!=='Any'),count=panel.cost.length-fixed.length;
@@ -871,8 +900,11 @@ function renderPanel(){
   body=costTokens(fixed)+'<div class="v-choice-row">'+COLORS.map(c=>{const available=p.res[c]-fixed.filter(x=>x===c).length-panel.picks.filter(x=>x===c).length;return'<button type="button" class="v-button" data-action="generic-pick" data-color="'+c+'"'+blockedAttr(available<=0||panel.picks.length>=count)+'>'+token(c)+' · '+Math.max(0,available)+' available</button>';}).join('')+'</div><p>Chosen: '+(panel.picks.length?costText(panel.picks):'None')+'</p><div class="v-choice-row"><button type="button" class="v-button" data-action="generic-reset">Clear</button><button type="button" class="v-button v-primary" data-action="generic-confirm"'+blockedAttr(panel.picks.length!==count)+'>Pay &amp; activate</button></div>';
  }
  if(panel.type==='trade'){
-  heading='Trade resources';text='Give four resources of one type to receive one of another.';
-  body='<p>Give:</p><div class="v-choice-row">'+COLORS.map(c=>'<button type="button" class="v-button'+(c===panel.from?' v-card-primary':'')+'" data-action="trade-from" data-color="'+c+'"'+blockedAttr(p.res[c]<4)+'>'+inlineToken(c,'4 '+resourceName(c))+' · '+p.res[c]+' held</button>').join('')+'</div><p>Receive:</p><div class="v-choice-row">'+COLORS.map(c=>'<button type="button" class="v-button'+(c===panel.to?' v-card-primary':'')+'" data-action="trade-to" data-color="'+c+'"'+blockedAttr(c===panel.from)+'>'+inlineToken(c,'1 '+resourceName(c))+'</button>').join('')+'</div><div class="v-choice-row"><button type="button" class="v-button v-primary" data-action="trade-confirm"'+blockedAttr(!panel.from||!panel.to||panel.from===panel.to)+'>Confirm trade</button></div>';
+  const rate=tradeRate(p);heading='Trade resources';text='Give '+rate+' resources of one type to receive one of another.';
+  body='<p>Give:</p><div class="v-choice-row">'+COLORS.map(c=>'<button type="button" class="v-button'+(c===panel.from?' v-card-primary':'')+'" data-action="trade-from" data-color="'+c+'"'+blockedAttr(p.res[c]<rate)+'>'+inlineToken(c,rate+' '+resourceName(c))+' · '+p.res[c]+' held</button>').join('')+'</div><p>Receive:</p><div class="v-choice-row">'+COLORS.map(c=>'<button type="button" class="v-button'+(c===panel.to?' v-card-primary':'')+'" data-action="trade-to" data-color="'+c+'"'+blockedAttr(c===panel.from)+'>'+inlineToken(c,'1 '+resourceName(c))+'</button>').join('')+'</div><div class="v-choice-row"><button type="button" class="v-button v-primary" data-action="trade-confirm"'+blockedAttr(!panel.from||!panel.to||panel.from===panel.to)+'>Confirm trade</button></div>';
+ }
+ if(panel.type==='swap'){
+  const own=p.active.filter(id=>card(id).type==='illegal'),rival=state.players[1].active.filter(id=>card(id).type==='illegal');heading='Trade distributors';text='Choose one of your active distributors, then take one of the rival’s. Once per turn.';body='<p>Your distributor:</p><div class="v-choice-row">'+own.map(id=>'<button class="v-button" data-action="swap-own" data-id="'+id+'">'+escapeHTML(card(id).name)+'</button>').join('')+'</div>'+(panel.ownId!==undefined?'<p>Rival distributor:</p><div class="v-choice-row">'+rival.map(id=>'<button class="v-button" data-action="swap-confirm" data-id="'+id+'">Trade for '+escapeHTML(card(id).name)+'</button>').join('')+'</div>':'');
  }
  if(panel.type==='cash'){
   const c=card(panel.id);heading='Cash '+c.name;text='Discard this unactivated card to gain one resource.'+(c.type==='legit'?' Choose any type.':'');
@@ -891,18 +923,18 @@ function renderPanel(){
  }
  if(panel.type==='crew'){
   const c=card(panel.id),crew=c.crew,count=membersOf(crew).filter(x=>p.active.includes(x.id)).length;
-  heading=CREW_SYMBOLS[crew]+' '+crew;text=count+'/3 active for you. Activate all three to earn one extra resource of your choice each turn.';
+  heading=CREW_SYMBOLS[crew]+' '+crew;text=count+'/3 active for you. '+CREW_BONUSES[crew];
   body=crewCards(crew)+'<p class="v-secondary">Unknown cards may be in the draw pile or the rival’s hidden hand.</p>';
  }
  if(panel.type==='inspect'){
   const c=card(panel.id);heading=c.name;text=c.type==='illegal'?c.biz:c.type==='legit'?'Adds three distributor slots. Produces no resources. Counts toward victory and is protected from every operator.':'Maximum two active operators per player. Produces no resources and does not count toward victory. Discarded after use, freeing a slot.';
   body=(c.type==='illegal'?'<p>Produces '+inlineToken(c.color,'1 '+resourceName(c.color))+' per turn while active.</p>':'')+'<div class="v-inspect-grid"><div class="v-inspect-art">'+portrait(c)+'</div><div><span class="v-secondary">Activation cost</span>'+costTokens(c.cost)+(c.type==='operator'?'<p>'+abilityLabel(c)+'. After activation, pay '+(c.ability==='buy'?'twice the target’s cost.':'the target’s cost.')+'</p>':'')+(c.type==='illegal'?'<button type="button" class="v-button" data-action="crew" data-id="'+c.id+'">'+CREW_SYMBOLS[c.crew]+' Inspect '+escapeHTML(c.crew)+'</button><p>'+publicLocation(c.id)+'</p>':'')+(p.hand.includes(c.id)?'<p class="v-block-reason">'+escapeHTML(activationReason(c)||'Ready to activate')+'</p><div class="v-choice-row"><button type="button" class="v-button v-primary" data-action="activate" data-id="'+c.id+'"'+blockedAttr(activationReason(c))+'>Activate</button><button type="button" class="v-button" data-action="cash" data-id="'+c.id+'"'+blockedAttr(cashReason())+'>Cash card</button></div>':'')+(c.type==='operator'&&p.active.includes(c.id)?'<button type="button" class="v-button v-danger-button" data-action="operator" data-id="'+c.id+'"'+blockedAttr(gateReason())+'>See Targets</button>':'')+'</div></div>';
  }
- if(panel.type==='bonus'){heading='Choose your crew bonus';text=safeBonusText();body='<div class="v-choice-row">'+COLORS.map(color=>'<button type="button" class="v-button" data-action="crew-bonus" data-color="'+color+'">'+token(color,'+1 '+resourceName(color))+'</button>').join('')+'</div>';}
- if(panel.type==='trim'){heading='Keep your best 10 resources';text='Discard '+(total(p.res)-10)+' excess resource'+(total(p.res)-10===1?'':'s')+' before taking actions.';body='<div class="v-choice-row">'+COLORS.map(color=>'<button type="button" class="v-button" data-action="trim" data-color="'+color+'"'+blockedAttr(!p.res[color])+'>Discard '+inlineToken(color,'1 '+resourceName(color))+' · '+p.res[color]+' held</button>').join('')+'</div>';}
+  if(panel.type==='trim'){heading='Keep your best '+resourceLimit(p)+' resources';text='Discard '+(total(p.res)-resourceLimit(p))+' excess resource'+(total(p.res)-resourceLimit(p)===1?'':'s')+' before taking actions.';body='<div class="v-choice-row">'+COLORS.map(color=>'<button type="button" class="v-button" data-action="trim" data-color="'+color+'"'+blockedAttr(!p.res[color])+'>Discard '+inlineToken(color,'1 '+resourceName(color))+' · '+p.res[color]+' held</button>').join('')+'</div>';}
+ if(panel.type==='draw_discard'){const ids=state.pendingDrawDiscard.ids;heading='Keep one drawn card';text='Choose the card to discard.';body='<div class="v-forced-legit-grid">'+ids.map(id=>'<button type="button" class="v-crew-member" data-action="draw-discard" data-id="'+id+'">'+portrait(card(id))+'<span><strong>Discard '+escapeHTML(card(id).name)+'</strong></span></button>').join('')+'</div>';}
  if(panel.type==='legit_cash'){const choices=p.hand.filter(id=>card(id).type==='legit');heading='Cash one legit business';text='You drew a fourth legit business. Choose any inactive legit business, including the one just drawn, and take one resource.';body='<div class="v-forced-legit-grid">'+choices.map(forcedLegitCardView).join('')+'</div>';}
  if(panel.type==='new'){heading='Deal a new game?';text='Your current game will be replaced by a fresh deal.';body='<button type="button" class="v-button v-primary" data-action="restart">Deal new game</button>';}
- const forced=panel.type==='bonus'||panel.type==='trim'||panel.type==='legit_cash';
+ const forced=panel.type==='intercept'||panel.type==='trim'||panel.type==='draw_discard'||panel.type==='legit_cash';
  d.innerHTML='<div class="v-decision-head"><h2 id="v-decision-title">'+escapeHTML(heading)+'</h2>'+(!forced?'<button type="button" class="v-button v-close" data-action="close">Close</button>':'')+'</div>'+(text?'<p>'+escapeHTML(text)+'</p>':'')+body;
 }
 function showPanel(value){panel=value;renderPanel();el('v-decision').scrollIntoView({behavior:'auto',block:'start'});}
@@ -931,7 +963,8 @@ function beginAI(resume=false){
  function step(){
   if(state!==game)return;
   if(fxPlaying||endTransition||warningAwaiting){aiTimer=setTimeout(step,100);return;}
-  if(state.winner===null&&count++<100&&collectAIEvents(()=>actAI(state))){render();aiTimer=setTimeout(step,140);return;}
+  if(state.winner===null&&count++<100&&collectAIEvents(()=>actAI(state))){render();if(state.phase==='intercept'){aiTimer=null;return;}aiTimer=setTimeout(step,140);return;}
+  if(state.phase==='intercept'){aiTimer=null;render();return;}
   aiTimer=null;
   if(state.winner===null){state.turn++;state.current=0;state.phase='ready';tell('Your turn. Collect your income to begin.');}
   else tell(state.logs[0]?.msg||'Game over.');
@@ -1024,7 +1057,7 @@ function renderLobby(){
   return true;
  }
  if(screen==='choose'){
-  lobby.innerHTML='<div class="v-lobby-copy"><h1>Choose your first business partner</h1><div class="v-lobby-actions"><button type="button" class="v-button v-dark-button" data-action="main-menu">Main menu</button></div></div><div class="v-opening-grid">'+CARDS.filter(c=>c.type==='illegal').map(c=>'<button type="button" class="v-opening-choice" style="'+colorStyle(c.color)+'" data-action="choose-opening" data-id="'+c.id+'" aria-label="Start with '+escapeHTML(c.name)+'">'+portrait(c)+'<span class="v-opening-caption"><strong>'+escapeHTML(c.name)+'</strong><span>'+escapeHTML(CREWS[c.crew]?.name||c.crew)+'</span><span>'+inlineToken(c.color,'+1 '+resourceName(c.color))+' per turn</span></span></button>').join('')+'</div>';
+  lobby.innerHTML='<div class="v-lobby-copy"><h1>Choose your first business partner</h1><div class="v-lobby-actions"><button type="button" class="v-button v-dark-button" data-action="main-menu">Main menu</button></div></div><div class="v-opening-grid">'+CARDS.filter(c=>c.type==='illegal').map(c=>'<button type="button" class="v-opening-choice" style="'+colorStyle(c.color)+'" data-action="choose-opening" data-id="'+c.id+'" aria-label="Start with '+escapeHTML(c.name)+'">'+portrait(c)+'<span class="v-opening-caption"><strong>'+escapeHTML(c.name)+'</strong><span>'+escapeHTML(CREWS[c.crew]?.name||c.crew)+'</span><span>'+inlineToken(c.color,'+1 '+resourceName(c.color))+' per turn</span><span class="v-opening-bonus"><strong>Complete crew bonus</strong>'+escapeHTML(CREW_BONUSES[c.crew])+'</span></span></button>').join('')+'</div>';
   return true;
  }
  const over=screen==='outcome',won=state.winner===0;if(over)recordAchievements();
@@ -1070,16 +1103,17 @@ root.addEventListener('click',event=>{
   if(state.winner!==null)return;
   if(state.current!==0)return;
   if(state.phase==='ready'){startTurn(state,0);panel=null;tell('Income collected. Take as many actions as you can afford.');render();return;}
-  if(state.phase==='bonus'||state.phase==='trim'){showPanel({type:state.phase});return;}
+  if(state.phase==='trim'){showPanel({type:state.phase});return;}
   if(ready())beginAI();return;
  }
- if(action==='crew-bonus'){after(claimCrewBonus(state,0,color),'Crew bonus collected.');return;}
- if(action==='trim'){if(state.current===0&&state.phase==='trim'&&p.res[color]>0){p.res[color]--;if(total(p.res)<=10){state.phase='play';panel=null;tell('You kept 10 resources. Your actions are ready.');}render();}return;}
+  if(action==='trim'){if(state.current===0&&state.phase==='trim'&&p.res[color]>0){p.res[color]--;if(total(p.res)<=resourceLimit(p)){state.phase='play';panel=null;tell('You kept '+resourceLimit(p)+' resources. Your actions are ready.');}render();}return;}
+ if(action==='intercept-accept'||action==='intercept-decline'){const error=resolveIntercept(state,action==='intercept-accept');if(error){after(error);return;}panel=null;tell(action==='intercept-accept'?'Operator intercepted.':'The rival’s operator resolves.');render();if(state.winner===null)beginAI(true);return;}
+ if(action==='draw-discard'){after(discardDrawChoice(state,0,id),'Card discarded.');return;}
  if(action==='legit-cash-confirm'){after(cashPendingLegit(state,0,id,color),'Legit business cashed. Continue your turn.');return;}
  if(!ready())return;
  if(action==='activate'){
   const c=card(id),reason=activationReason(c);if(reason){after(reason);return;}
-  if(c.cost.includes('Any'))showPanel({type:'payment',id,cost:c.cost,picks:[]});else after(activateCard(state,0,id));return;
+  const cost=activationCost(state,0,c);if(cost.includes('Any'))showPanel({type:'payment',id,cost,picks:[]});else after(activateCard(state,0,id));return;
  }
  if(action==='generic-pick'&&panel?.type==='payment'){
   const fixed=panel.cost.filter(c=>c!=='Any'),available=p.res[color]-fixed.filter(x=>x===color).length-panel.picks.filter(x=>x===color).length;
@@ -1092,11 +1126,15 @@ root.addEventListener('click',event=>{
  if(action==='draw'){if(drawReason()){after(drawReason());return;}const picks=emptyBank();autoPayment(p,p.drawPrice).forEach(c=>picks[c]++);showPanel({type:'draw',picks});return;}
  if(action==='pay-minus'&&panel?.type==='draw'){if(panel.picks[color]>0)panel.picks[color]--;renderPanel();return;}
  if(action==='pay-plus'&&panel?.type==='draw'){if(panel.picks[color]<p.res[color]&&total(panel.picks)<p.drawPrice)panel.picks[color]++;renderPanel();return;}
- if(action==='draw-confirm'&&panel?.type==='draw'){after(drawCard(state,0,COLORS.flatMap(c=>Array(panel.picks[c]).fill(c))));return;}
- if(action==='trade'){const from=COLORS.find(c=>p.res[c]>=4);if(!from){after(tradeReason());return;}showPanel({type:'trade',from,to:COLORS.find(c=>c!==from)});return;}
+ if(action==='docks-toggle'&&panel?.type==='draw'){panel.useDocksBonus=!panel.useDocksBonus;renderPanel();return;}
+ if(action==='draw-confirm'&&panel?.type==='draw'){after(drawCard(state,0,COLORS.flatMap(c=>Array(panel.picks[c]).fill(c)),panel.useDocksBonus));return;}
+ if(action==='trade'){const rate=tradeRate(p),from=COLORS.find(c=>p.res[c]>=rate);if(!from){after(tradeReason());return;}showPanel({type:'trade',from,to:COLORS.find(c=>c!==from)});return;}
  if(action==='trade-from'&&panel?.type==='trade'){panel.from=color;if(panel.to===color)panel.to=COLORS.find(c=>c!==color);renderPanel();return;}
  if(action==='trade-to'&&panel?.type==='trade'&&color!==panel.from){panel.to=color;renderPanel();return;}
  if(action==='trade-confirm'&&panel?.type==='trade'){after(tradeResources(state,0,panel.from,panel.to));return;}
+ if(action==='swap'){const reason=swapReason();if(reason){after(reason);return;}showPanel({type:'swap'});return;}
+ if(action==='swap-own'&&panel?.type==='swap'){panel.ownId=id;renderPanel();return;}
+ if(action==='swap-confirm'&&panel?.type==='swap'&&panel.ownId!==undefined){after(tradeDistributors(state,0,panel.ownId,id),'Distributors traded.');return;}
  if(action==='operator'){if(card(id)?.type==='operator'&&p.active.includes(id))showPanel({type:'operator',id});return;}
  if(action==='target'&&panel?.type==='operator'){showPanel({type:'preview',opId:panel.id,targetId:id});return;}
  if(action==='operator-confirm'&&panel?.type==='preview'){
