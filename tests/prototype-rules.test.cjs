@@ -16,6 +16,10 @@ function load_engine() {
 
 const engine = load_engine();
 
+function complete_crew(player, crew) {
+  player.active.push(...engine.CARDS.filter((card) => card.crew === crew).map((card) => card.id));
+}
+
 function drawing_state(who = 0) {
   const state = engine.newState(() => 0.5);
   state.current = who;
@@ -62,6 +66,114 @@ test('drawing a non-legit card does not create a forced decision', () => {
   assert.equal(engine.drawCard(state, 0, ['Green']), null);
   assert.equal(state.phase, 'play');
   assert.equal(state.pendingLegitCash, undefined);
+});
+
+test('each completed crew applies its distinct rules bonus', () => {
+  const docks = engine.newState(() => 0.5);
+  docks.phase = 'play';
+  docks.players[0].active = [];
+  docks.players[0].hand = [];
+  complete_crew(docks.players[0], 'The Docks');
+  docks.players[0].res.Green = 1;
+  docks.deck = [24, 25];
+  assert.equal(engine.drawCard(docks, 0, ['Green'], true), null);
+  assert.equal(docks.phase, 'draw_discard');
+  assert.deepEqual(docks.pendingDrawDiscard.ids, [25, 24]);
+  assert.equal(engine.discardDrawChoice(docks, 0, 25), null);
+  assert.ok(docks.players[0].hand.includes(24));
+  assert.ok(docks.discard.includes(25));
+
+  const club = engine.newState(() => 0.5);
+  complete_crew(club.players[0], 'Club Circuit');
+  assert.equal(engine.operatorLimit(club.players[0]), 3);
+
+  const trailer = engine.newState(() => 0.5);
+  trailer.phase = 'play';
+  trailer.players[0].active = [0, 30];
+  trailer.players[0].res.Purple = 1;
+  trailer.players[1].active = [6, 7, 8];
+  assert.equal(engine.useOperator(trailer, 0, 30, 6), null);
+  assert.ok(trailer.players[1].hand.includes(6));
+  assert.ok(!trailer.discard.includes(6));
+
+  const burbs = engine.newState(() => 0.5);
+  burbs.players[0].active = [];
+  burbs.players[0].hand = [];
+  complete_crew(burbs.players[0], 'The Burbs');
+  const hand_before = burbs.players[0].hand.length;
+  engine.startTurn(burbs, 0);
+  assert.equal(burbs.players[0].hand.length, hand_before + 1);
+
+  const pipeline = engine.newState(() => 0.5);
+  pipeline.phase = 'play';
+  pipeline.players[0].active = [0, 30];
+  pipeline.players[1].active = [];
+  complete_crew(pipeline.players[1], 'Pipeline');
+  pipeline.players[1].res.Green = 1;
+  assert.equal(engine.useOperator(pipeline, 0, 30, 12), null);
+  assert.ok(pipeline.players[1].active.includes(30));
+  assert.ok(pipeline.players[1].active.includes(12));
+
+  const human_pipeline = engine.newState(() => 0.5);
+  human_pipeline.current = 1;
+  human_pipeline.phase = 'play';
+  human_pipeline.players[0].active = [];
+  complete_crew(human_pipeline.players[0], 'Pipeline');
+  human_pipeline.players[0].res.Green = 1;
+  human_pipeline.players[1].active = [0, 30];
+  assert.equal(engine.useOperator(human_pipeline, 1, 30, 12), null);
+  assert.equal(human_pipeline.phase, 'intercept');
+  assert.equal(engine.resolveIntercept(human_pipeline, true), null);
+  assert.ok(human_pipeline.players[0].active.includes(30));
+
+
+  const declined = engine.newState(() => 0.5);
+  declined.current = 1;
+  declined.phase = 'play';
+  declined.players[0].active = [];
+  complete_crew(declined.players[0], 'Pipeline');
+  declined.players[0].res.Green = 1;
+  declined.players[1].active = [0, 30];
+  declined.players[1].res.Black = 1;
+  assert.equal(engine.useOperator(declined, 1, 30, 12), null);
+  assert.equal(engine.resolveIntercept(declined, false), null);
+  assert.ok(declined.discard.includes(12));
+
+  const night = engine.newState(() => 0.5);
+  night.players[0].active = [];
+  complete_crew(night.players[0], 'Night Shift');
+  assert.equal(engine.resourceLimit(night.players[0]), 12);
+  engine.startTurn(night, 0);
+  assert.equal(engine.total(night.players[0].res), 4);
+
+  const arts = engine.newState(() => 0.5);
+  arts.phase = 'play';
+  arts.players[0].active = [];
+  complete_crew(arts.players[0], 'Arts District');
+  arts.players[1].active = [0];
+  assert.equal(engine.tradeDistributors(arts, 0, 18, 0), null);
+  assert.ok(arts.players[0].active.includes(0));
+  assert.ok(arts.players[1].active.includes(18));
+  assert.match(engine.tradeDistributors(arts, 0, 19, 18), /once per turn/);
+
+  const hills = engine.newState(() => 0.5);
+  hills.phase = 'play';
+  hills.players[0].active = [];
+  complete_crew(hills.players[0], 'Hill Country');
+  hills.players[0].res.Green = 2;
+  assert.equal(engine.tradeRate(hills.players[0]), 2);
+  assert.equal(engine.tradeResources(hills, 0, 'Green', 'Blue'), null);
+  assert.equal(hills.players[0].res.Blue, 1);
+});
+
+
+test('opening partner choices clearly show every crew bonus', () => {
+  const html = fs.readFileSync(new URL('../index.html', `file://${__filename}`), 'utf8');
+  assert.ok(html.includes('<strong>Complete crew bonus:</strong>'));
+  assert.ok(html.includes("escapeHTML(CREW_BONUSES[crew])"));
+  assert.match(html, /CREWS\.map\(\(\[crew\]\)=>'<section class="v-opening-crew"/);
+  assert.match(html, /\.v-opening-crew-head\{/);
+  assert.ok(html.includes("'The Docks':'Whenever you pay to draw a card, you may draw two but you must discard one.'"));
 });
 
 test('the forced legit cash decision renders the normal illustrated card treatment', () => {
@@ -171,4 +283,33 @@ test('the draw action clearly distinguishes affordable and unavailable states', 
   assert.match(html, /#v-draw:not\(:disabled\)\{background:linear-gradient\(180deg,#fff3a8 0%,#f4c94f 100%\);[^}]*box-shadow:[^}]+\}/);
   assert.match(html, /#v-draw:hover:not\(:disabled\)\{background:linear-gradient\(180deg,#fff9cf 0%,#ffda63 100%\);/);
   assert.match(html, /#v-draw:disabled\{background:#777d78;color:#d2d5d2;border-color:#949a95;box-shadow:none;text-shadow:none\}/);
+});
+
+test('the complete browser script initializes without a runtime exception', () => {
+  const html = fs.readFileSync(new URL('../index.html', `file://${__filename}`), 'utf8');
+  const source = html.match(/<script>\s*([\s\S]*?)\s*<\/script>/)[1];
+  const target = {hidden: false, innerHTML: '', textContent: '', className: '', disabled: false, dataset: {}, style: {}};
+  let element;
+  element = new Proxy(target, {
+    get(object, property) {
+      if (property in object) return object[property];
+      if (property === 'querySelector') return () => element;
+      if (property === 'querySelectorAll') return () => [];
+      if (property === 'closest') return () => null;
+      if (['insertBefore', 'appendChild', 'before', 'after', 'addEventListener', 'setAttribute', 'scrollIntoView'].includes(property)) return () => {};
+      return undefined;
+    },
+  });
+  target.parentElement = element;
+  const document_stub = {getElementById: () => element, createElement: () => element};
+  const prior_storage = global.localStorage;
+  const prior_match_media = global.matchMedia;
+  global.localStorage = {getItem: () => null, setItem: () => {}};
+  global.matchMedia = () => ({matches: true, addEventListener: () => {}});
+  try {
+    Function('document', source)(document_stub);
+  } finally {
+    global.localStorage = prior_storage;
+    global.matchMedia = prior_match_media;
+  }
 });
