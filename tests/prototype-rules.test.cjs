@@ -295,3 +295,13 @@ test('the complete browser script initializes without a runtime exception', () =
     global.matchMedia = prior_match_media;
   }
 });
+
+test('opening partners are grouped three per crew with one bonus description', () => {
+  const html = fs.readFileSync(new URL('../index.html', `file://${__filename}`), 'utf8');
+
+  assert.match(html, /\.v-opening-members\{display:grid;grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
+  assert.match(html, /CREWS\.map\(\(\[crew\]\)=>'<section class="v-opening-crew">/);
+  assert.match(html, /class="v-opening-crew-head"[\s\S]*Complete crew bonus:[\s\S]*class="v-opening-members"/);
+  assert.match(html, /CARDS\.filter\(c=>c\.type==='illegal'&&c\.crew===crew\)/);
+  assert.ok(!html.includes('class="v-opening-bonus"'));
+});

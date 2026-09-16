@@ -284,7 +284,7 @@
 #vice-smart .v-opening-caption .v-opening-bonus strong{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.35px;color:#24492d}
 #vice-smart .v-opening-choice:hover{outline:3px solid #efd07d;outline-offset:2px}
 @media(max-width:650px){#vice-smart .v-opening-grid{grid-template-columns:1fr;padding:0 12px 18px;gap:10px}#vice-smart .v-lobby-copy{padding:20px 14px}}
-@media(max-width:420px){#vice-smart .v-opening-members{grid-template-columns:1fr}#vice-smart .v-opening-choice{flex-direction:row;align-items:center}#vice-smart .v-opening-choice .v-portrait{width:90px;flex:0 0 90px}}
+@media(max-width:420px){#vice-smart .v-opening-members{gap:5px;padding:5px}#vice-smart .v-opening-caption{padding:7px 5px}#vice-smart .v-opening-caption strong{font-size:12px}#vice-smart .v-opening-caption span{font-size:10px}}
 
 #vice-smart .v-fx{padding:16px;background:#203529;color:#f5efdc;border:1px solid #71816d;border-radius:8px;text-align:center;margin:16px 0}
 #vice-smart .v-fx h2{font-size:18px;margin:5px 0 12px}
@@ -1063,7 +1063,7 @@ function achievementsScreen(){
  if(aiTimer!==null)clearTimeout(aiTimer);
  aiTimer=null;panel=null;screen='achievements';render();
 }
-function hasSavedGame(){try{const saved=JSON.parse(localStorage.getItem(STORAGE_KEY));return saved?.version===6&&saved.winner===null;}catch(e){return false;}}
+function hasSavedGame(){try{const saved=JSON.parse(localStorage.getItem(STORAGE_KEY));return saved?.version===7&&saved.winner===null;}catch(e){return false;}}
 function renderLobby(){
  const lobby=el('v-lobby'),board=el('v-game-board');
  lobby.className=screen==='outcome'?'v-ending'+(state.winner===1?' is-defeat':''):'';
@@ -1080,7 +1080,7 @@ function renderLobby(){
   return true;
  }
  if(screen==='choose'){
-  lobby.innerHTML='<div class="v-lobby-copy"><h1>Choose your first business partner</h1><div class="v-lobby-actions"><button type="button" class="v-button v-dark-button" data-action="main-menu">Main menu</button></div></div><div class="v-opening-grid">'+CARDS.filter(c=>c.type==='illegal').map(c=>'<button type="button" class="v-opening-choice" style="'+colorStyle(c.color)+'" data-action="choose-opening" data-id="'+c.id+'" aria-label="Start with '+escapeHTML(c.name)+'">'+portrait(c)+'<span class="v-opening-caption"><strong>'+escapeHTML(c.name)+'</strong><span>'+escapeHTML(CREWS[c.crew]?.name||c.crew)+'</span><span>'+inlineToken(c.color,'+1 '+resourceName(c.color))+' per turn</span><span class="v-opening-bonus"><strong>Complete crew bonus</strong>'+escapeHTML(CREW_BONUSES[c.crew])+'</span></span></button>').join('')+'</div>';
+  lobby.innerHTML='<div class="v-lobby-copy"><h1>Choose your first business partner</h1><div class="v-lobby-actions"><button type="button" class="v-button v-dark-button" data-action="main-menu">Main menu</button></div></div><div class="v-opening-grid">'+CREWS.map(([crew])=>'<section class="v-opening-crew"><header class="v-opening-crew-head"><h2>'+escapeHTML(crew)+'</h2><p><strong>Complete crew bonus:</strong> '+escapeHTML(CREW_BONUSES[crew])+'</p></header><div class="v-opening-members">'+CARDS.filter(c=>c.type==='illegal'&&c.crew===crew).map(c=>'<button type="button" class="v-opening-choice" style="'+colorStyle(c.color)+'" data-action="choose-opening" data-id="'+c.id+'" aria-label="Start with '+escapeHTML(c.name)+'">'+portrait(c)+'<span class="v-opening-caption"><strong>'+escapeHTML(c.name)+'</strong><span>'+inlineToken(c.color,'+1 '+resourceName(c.color))+' per turn</span></span></button>').join('')+'</div></section>').join('')+'</div>';
   return true;
  }
  const over=screen==='outcome',won=state.winner===0;if(over)recordAchievements();
