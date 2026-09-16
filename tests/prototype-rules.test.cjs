@@ -301,21 +301,7 @@ test('opening partners are grouped three per crew with one bonus description', (
 
   assert.match(html, /\.v-opening-members\{display:grid;grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
   assert.match(html, /CREWS\.map\(\(\[crew\]\)=>'<section class="v-opening-crew">/);
-  assert.match(html, /class="v-opening-crew-head"[\s\S]*Bonus unlocked by completing this crew[\s\S]*class="v-opening-members"/);
+  assert.match(html, /class="v-opening-crew-head"[\s\S]*Complete crew bonus:[\s\S]*class="v-opening-members"/);
   assert.match(html, /CARDS\.filter\(c=>c\.type==='illegal'&&c\.crew===crew\)/);
   assert.ok(!html.includes('class="v-opening-bonus"'));
-});
-
-test('opening crew bonuses use the revised plain-language text', () => {
-  const html = fs.readFileSync(new URL('../index.html', `file://${__filename}`), 'utf8');
-
-  assert.ok(html.includes('Bonus unlocked by completing this crew'));
-  assert.ok(html.includes('draw 2 cards and discard 1 of them'));
-  assert.ok(html.includes('ability cost for each target'));
-  assert.ok(html.includes('put that Distributor in your hand instead'));
-  assert.ok(html.includes('draw 1 card for free'));
-  assert.ok(html.includes('stop the attack and take that Operator'));
-  assert.ok(html.includes('keep up to 12 resources instead of 10'));
-  assert.ok(html.includes('activation cost of both Distributors'));
-  assert.ok(html.includes('Normally this trade costs 4'));
 });
