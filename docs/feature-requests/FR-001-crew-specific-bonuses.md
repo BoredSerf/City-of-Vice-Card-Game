@@ -13,22 +13,29 @@
 
 ## Request
 
-Replace the current bonus of one free resource per completed crew with one distinct
-bonus for each of the eight crews:
+Replace the current one-free-resource bonus with one ability per crew, following
+prototype crew order:
 
-1. The rival's legitimate businesses cost twice as much to activate.
-2. The player may hold up to three active operators.
-3. When one of the player's distributors would die, return it to the player's hand
-   instead.
-4. The player draws one card when collecting income.
-5. The player may intercept an operator used against them by paying that operator's
-   cost. On payment, the operator becomes active for the player and can be paid for
-   and used during a later turn.
-6. The player receives one additional resource each turn and may hold up to twelve
-   resources.
-7. Once per turn, the player may trade one active distributor for one active rival
-   distributor.
-8. The player may trade two resources for one instead of four resources for one.
+1. **The Docks:** when the owner pays to draw one card, they may draw two instead.
+   If they do, they discard one of those cards.
+2. **Club Circuit:** when the owner uses an Operator, they may choose a second
+   target by paying the full ability cost for both targets.
+3. **Trailer Park:** if one of the owner's Distributors would be killed or bought,
+   it returns to the owner's hand instead.
+4. **The Burbs:** whenever the owner collects income, they draw one card.
+5. **Pipeline:** when a rival uses an Operator against the owner, the owner may
+   pay that Operator's activation cost to cancel the attack and take the Operator.
+   It becomes active on the owner's side.
+6. **Night Shift:** at the start of the owner's turn, they gain one extra resource.
+   Their resource limit is twelve instead of ten.
+7. **Arts District:** once per turn, the owner may swap one of their active
+   Distributors with one of the rival's by paying both Distributors' activation
+   costs.
+8. **Hill Country:** when the owner trades resources, they give two of one type to
+   receive one of another instead of giving four.
+
+Display each ability once per crew on the opening-partner screen. Remove the copy
+“Unknown cards may be in the draw pile or the rival’s hidden hand.”
 
 ## Roadmap destination
 
@@ -55,28 +62,10 @@ application would need a separately accepted delta and migration work.
 
 ## Decisions required before acceptance
 
-1. Map each numbered ability to a named crew. The request supplies eight abilities
-   but does not explicitly associate them with the eight crew names.
-2. Decide whether a completed crew grants its ability to both players symmetrically
-   and when the ability starts and stops applying.
-3. Define "operator's cost" for interception: activation cost, effect cost, or
-   both; define who pays any target-dependent effect cost; and define whether the
-   intercepted effect is cancelled.
-4. Define destinations and overflow behavior for saved distributors, intercepted
-   operators, income draws, and exchanged distributors when hand, operator, or
-   distributor limits are full.
-5. Define whether doubled legitimate-business costs double each printed color,
-   the total number of resources, or another payment representation, including how
-   wildcard payments work.
-6. Define the timing and color choice for the extra resource, whether the resource
-   cap returns to ten when the crew becomes incomplete, and how excess resources
-   are trimmed.
-7. Define the distributor-trade command's timing, eligibility, capacity handling,
-   once-per-turn state, AI behavior, and interaction with victory and elimination.
-8. Define whether the improved resource rate applies to every trade and whether
-   crew bonuses stack when several crews are complete.
-9. Decide save-schema compatibility and whether existing games retain the old
-   shared bonus or migrate to the new rules.
+The clarified request maps each ability to prototype crew order and supplies the
+cost rule for the Arts District trade. Product authority, priority, disposition,
+save-schema compatibility, overflow behavior, and the modular-MVP scheduling
+decision still require an authorized record under `CONTRIBUTING.md`.
 
 ## Verification expected if accepted
 
