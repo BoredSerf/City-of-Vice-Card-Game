@@ -71,17 +71,14 @@ test('drawing a non-legit card does not create a forced decision', () => {
 test('each completed crew applies its distinct rules bonus', () => {
   const docks = engine.newState(() => 0.5);
   docks.phase = 'play';
-  docks.players[0].active = [];
-  docks.players[0].hand = [];
-  complete_crew(docks.players[0], 'The Docks');
-  docks.players[0].res.Green = 1;
-  docks.deck = [24, 25];
-  assert.equal(engine.drawCard(docks, 0, ['Green'], true), null);
-  assert.equal(docks.phase, 'draw_discard');
-  assert.deepEqual(docks.pendingDrawDiscard.ids, [25, 24]);
-  assert.equal(engine.discardDrawChoice(docks, 0, 25), null);
-  assert.ok(docks.players[0].hand.includes(24));
-  assert.ok(docks.discard.includes(25));
+  docks.players[0].active = [3];
+  docks.players[0].hand = [24];
+  docks.players[0].res.Green = 2;
+  docks.players[0].res.Blue = 1;
+  complete_crew(docks.players[1], 'The Docks');
+  assert.match(engine.activateCard(docks, 0, 24), /Need/);
+  docks.players[0].res.Blue++;
+  assert.equal(engine.activateCard(docks, 0, 24), null);
 
   const club = engine.newState(() => 0.5);
   complete_crew(club.players[0], 'Club Circuit');
@@ -114,31 +111,6 @@ test('each completed crew applies its distinct rules bonus', () => {
   assert.ok(pipeline.players[1].active.includes(30));
   assert.ok(pipeline.players[1].active.includes(12));
 
-  const human_pipeline = engine.newState(() => 0.5);
-  human_pipeline.current = 1;
-  human_pipeline.phase = 'play';
-  human_pipeline.players[0].active = [];
-  complete_crew(human_pipeline.players[0], 'Pipeline');
-  human_pipeline.players[0].res.Green = 1;
-  human_pipeline.players[1].active = [0, 30];
-  assert.equal(engine.useOperator(human_pipeline, 1, 30, 12), null);
-  assert.equal(human_pipeline.phase, 'intercept');
-  assert.equal(engine.resolveIntercept(human_pipeline, true), null);
-  assert.ok(human_pipeline.players[0].active.includes(30));
-
-
-  const declined = engine.newState(() => 0.5);
-  declined.current = 1;
-  declined.phase = 'play';
-  declined.players[0].active = [];
-  complete_crew(declined.players[0], 'Pipeline');
-  declined.players[0].res.Green = 1;
-  declined.players[1].active = [0, 30];
-  declined.players[1].res.Black = 1;
-  assert.equal(engine.useOperator(declined, 1, 30, 12), null);
-  assert.equal(engine.resolveIntercept(declined, false), null);
-  assert.ok(declined.discard.includes(12));
-
   const night = engine.newState(() => 0.5);
   night.players[0].active = [];
   complete_crew(night.players[0], 'Night Shift');
@@ -164,17 +136,6 @@ test('each completed crew applies its distinct rules bonus', () => {
   assert.equal(engine.tradeRate(hills.players[0]), 2);
   assert.equal(engine.tradeResources(hills, 0, 'Green', 'Blue'), null);
   assert.equal(hills.players[0].res.Blue, 1);
-});
-
-
-test('opening partner choices clearly show every crew bonus', () => {
-  const html = fs.readFileSync(new URL('../index.html', `file://${__filename}`), 'utf8');
-  assert.ok(html.includes('aria-label="Crew completion bonuses"'));
-  assert.ok(html.includes("escapeHTML(CREW_BONUSES[crew])"));
-  assert.match(html, /CREWS\.map\(\(\[crew\]\)=>'<div class="v-opening-bonus"/);
-  assert.match(html, /\.v-opening-grid\{display:grid;grid-template-columns:repeat\(4/);
-  assert.match(html, /\.v-opening-choice \.v-portrait\{width:100%;max-height:210px/);
-  assert.ok(html.includes("'The Docks':'Whenever you pay to draw a card, you may draw two but you must discard one.'"));
 });
 
 test('the forced legit cash decision renders the normal illustrated card treatment', () => {

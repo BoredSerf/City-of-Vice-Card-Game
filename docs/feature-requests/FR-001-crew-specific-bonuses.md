@@ -16,7 +16,7 @@
 Replace the current bonus of one free resource per completed crew with one distinct
 bonus for each of the eight crews:
 
-1. Whenever the player pays to draw a card, they may draw two but must discard one.
+1. The rival's legitimate businesses cost twice as much to activate.
 2. The player may hold up to three active operators.
 3. When one of the player's distributors would die, return it to the player's hand
    instead.
@@ -65,7 +65,9 @@ application would need a separately accepted delta and migration work.
 4. Define destinations and overflow behavior for saved distributors, intercepted
    operators, income draws, and exchanged distributors when hand, operator, or
    distributor limits are full.
-5. Define the paid-draw bonus timing, including the mandatory choice between the two drawn cards and interactions with hand and legitimate-business limits.
+5. Define whether doubled legitimate-business costs double each printed color,
+   the total number of resources, or another payment representation, including how
+   wildcard payments work.
 6. Define the timing and color choice for the extra resource, whether the resource
    cap returns to ten when the crew becomes incomplete, and how excess resources
    are trimmed.
