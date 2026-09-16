@@ -491,14 +491,14 @@ const illegalCount=p=>p.active.filter(id=>card(id).type==='illegal').length;
 const legitCount=p=>p.active.filter(id=>card(id).type==='legit').length;
 const legitPossessionCount=p=>p.active.concat(p.hand).filter(id=>card(id).type==='legit').length;
 const CREW_BONUSES={
- 'The Docks':'When you pay to draw 1 card, you may draw 2 instead. If you do, discard 1 of those cards.',
- 'Club Circuit':'When you use an Operator, you may choose a second target. Pay the full ability cost for both targets.',
- 'Trailer Park':'If one of your Distributors would be killed or bought, return it to your hand instead.',
- 'The Burbs':'Whenever you collect income, draw 1 card.',
- 'Pipeline':'When a rival uses an Operator against you, you may pay that Operator’s activation cost to cancel the attack and take the Operator. It becomes active on your side.',
- 'Night Shift':'At the start of your turn, gain 1 extra resource. Your resource limit is 12 instead of 10.',
- 'Arts District':'Once per turn, you may swap one of your active Distributors with one of your rival’s. Pay both Distributors’ activation costs.',
- 'Hill Country':'When you trade resources, give 2 of one type to receive 1 of another, instead of giving 4.'
+ 'The Docks':'Whenever you pay to draw, you may draw 2 cards, then discard 1.',
+ 'Club Circuit':'If you can afford each target cost, operators may affect up to 2 targets.',
+ 'Trailer Park':'When a distributor would be killed or bought, it returns to your hand instead.',
+ 'The Burbs':'Draw a card when you collect income.',
+ 'Pipeline':'Intercept rival operators by paying their activation cost.',
+ 'Night Shift':'Gain 1 extra resource each turn and hold up to 12.',
+ 'Arts District':'Once per turn, pay the target and gift costs to trade an active distributor with the rival.',
+ 'Hill Country':'Trade 2 resources for 1 instead of 4 for 1.'
 };
 const hasCrewBonus=(p,crew)=>complete(p,crew);
 const operatorLimit=p=>2;
@@ -576,7 +576,7 @@ function cashPendingLegit(s,who,id,color){const pending=s.pendingLegitCash,p=s.p
 function activateCard(s,who,id,picks){if(!legalTurn(s,who))return'Finish the current step first.';const p=s.players[who],c=card(id);if(!c||!p.hand.includes(id))return'Card is not in your hand.';if(c.type==='operator'&&operatorCount(p)>=operatorLimit(p))return'You may control at most '+operatorLimit(p)+' active operators. Use one before activating another.';if(c.type==='legit'&&legitCount(p)>=3)return'You may control at most 3 legitimate businesses.';if(c.type==='illegal'&&illegalCount(p)>=capacity(p))return'Activate a legitimate business to open 3 more illegal slots.';const cost=activationCost(s,who,c);if(resolveCost(p,cost,picks)===null)return'Need '+cost.map(resourceName).join(' + ')+' to activate '+c.name+'.';pay(p,cost,picks);p.hand.splice(p.hand.indexOf(id),1);p.suspended=p.suspended.filter(x=>x!==id);p.active.push(id);record(s,(who===0?'You activate ':'Rival activates ')+c.name+'.');if(c.type!=='operator'&&complete(p,c.crew))record(s,c.crew+' complete! '+CREW_BONUSES[c.crew]);checkWin(s);return null;}
 function cashCard(s,who,id,color){if(!legalTurn(s,who))return'Finish the current step first.';const p=s.players[who],c=card(id);if(!c||!p.hand.includes(id))return'Card is not in your hand.';if(!COLORS.includes(color)||(c.type!=='legit'&&c.color!==color))return'Choose a valid resource type.';if(total(p.res)>=resourceLimit(p))return'Spend a resource first; your resource limit is '+resourceLimit(p)+'.';p.hand.splice(p.hand.indexOf(id),1);p.suspended=p.suspended.filter(x=>x!==id);s.discard.push(id);p.res[color]++;record(s,(who===0?'You cash ':'Rival cashes ')+c.name+' for 1 '+resourceName(color)+'.');return null;}
 function tradeResources(s,who,from,to){if(!legalTurn(s,who))return'Finish the current step first.';const p=s.players[who],rate=tradeRate(p);if(!COLORS.includes(from)||!COLORS.includes(to)||from===to)return'Choose two different resources.';if(p.res[from]<rate)return'You need '+rate+' '+resourceName(from)+' resources.';p.res[from]-=rate;p.res[to]++;record(s,(who===0?'You trade ':'Rival trades ')+rate+' '+resourceName(from)+' for 1 '+resourceName(to)+'.');return null;}
-function tradeDistributors(s,who,ownId,rivalId,picks){if(!legalTurn(s,who))return'Finish the current step first.';const p=s.players[who],other=s.players[1-who],own=card(ownId),rival=card(rivalId);if(p.tradedDistributors)return'You may trade distributors only once per turn.';if(!hasCrewBonus(p,'Arts District'))return'Complete Arts District to trade distributors.';if(own?.type!=='illegal'||rival?.type!=='illegal'||!p.active.includes(ownId)||!other.active.includes(rivalId))return'Choose one active distributor from each side.';const cost=[...own.cost,...rival.cost];if(resolveCost(p,cost,picks)===null)return'Need '+cost.map(resourceName).join(' + ')+' to pay both Distributors’ activation costs.';pay(p,cost,picks);p.active[p.active.indexOf(ownId)]=rivalId;other.active[other.active.indexOf(rivalId)]=ownId;p.tradedDistributors=true;record(s,(who===0?'You trade ':'Rival trades ')+own.name+' for '+rival.name+'.');checkWin(s);return null;}
+function tradeDistributors(s,who,ownId,rivalId,picks){if(!legalTurn(s,who))return'Finish the current step first.';const p=s.players[who],other=s.players[1-who],own=card(ownId),rival=card(rivalId);if(p.tradedDistributors)return'You may trade distributors only once per turn.';if(!hasCrewBonus(p,'Arts District'))return'Complete Arts District to trade distributors.';if(own?.type!=='illegal'||rival?.type!=='illegal'||!p.active.includes(ownId)||!other.active.includes(rivalId))return'Choose one active distributor from each side.';const cost=[...own.cost,...rival.cost];if(resolveCost(p,cost,picks)===null)return'Need '+cost.map(resourceName).join(' + ')+' to pay the target and gift costs.';pay(p,cost,picks);p.active[p.active.indexOf(ownId)]=rivalId;other.active[other.active.indexOf(rivalId)]=ownId;p.tradedDistributors=true;record(s,(who===0?'You trade ':'Rival trades ')+own.name+' for '+rival.name+'.');checkWin(s);return null;}
 function operatorCost(op,target){return op.ability==='buy'?[...target.cost,...target.cost]:[...target.cost];}
 const abilityCostText=op=>op.ability==='buy'?'2 × target’s cost':'1 × target’s cost';
 function useOperator(s,who,opId,targetIds,picks){

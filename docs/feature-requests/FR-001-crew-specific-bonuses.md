@@ -16,23 +16,20 @@
 Replace the current one-free-resource bonus with one ability per crew, following
 prototype crew order:
 
-1. **The Docks:** when the owner pays to draw one card, they may draw two instead.
-   If they do, they discard one of those cards.
-2. **Club Circuit:** when the owner uses an Operator, they may choose a second
-   target by paying the full ability cost for both targets.
-3. **Trailer Park:** if one of the owner's Distributors would be killed or bought,
-   it returns to the owner's hand instead.
-4. **The Burbs:** whenever the owner collects income, they draw one card.
-5. **Pipeline:** when a rival uses an Operator against the owner, the owner may
-   pay that Operator's activation cost to cancel the attack and take the Operator.
-   It becomes active on the owner's side.
-6. **Night Shift:** at the start of the owner's turn, they gain one extra resource.
-   Their resource limit is twelve instead of ten.
-7. **Arts District:** once per turn, the owner may swap one of their active
-   Distributors with one of the rival's by paying both Distributors' activation
-   costs.
-8. **Hill Country:** when the owner trades resources, they give two of one type to
-   receive one of another instead of giving four.
+1. **The Docks:** whenever the owner pays to draw, they may draw two cards and
+   must discard one.
+2. **Club Circuit:** when the owner can afford each target cost, an operator may
+   perform its function on up to two targets.
+3. **Trailer Park:** when one of the owner's distributors would be killed or
+   bought, return it to the owner's hand instead.
+4. **The Burbs:** draw one card when collecting income.
+5. **Pipeline:** the owner may intercept an operator used against them by paying
+   its cost; the operator becomes active on their side and can be paid to perform
+   its function on a later turn.
+6. **Night Shift:** gain one extra resource per turn and hold up to twelve.
+7. **Arts District:** once per turn, pay the costs of the target and the gifted
+   distributor to trade one active distributor with the rival.
+8. **Hill Country:** trade two resources for one instead of four for one.
 
 Display each ability once per crew on the opening-partner screen. Remove the copy
 “Unknown cards may be in the draw pile or the rival’s hidden hand.”
