@@ -201,6 +201,11 @@
 #vice-smart .v-footer summary{padding:14px 0;font-size:15px;font-weight:600}
 #vice-smart .v-rules{display:grid;grid-template-columns:1fr 1fr;gap:22px;padding:4px 0 22px}
 #vice-smart .v-rules p{font-size:14px;color:#dedfce;margin-top:7px}
+#vice-smart .v-rules-bonuses{padding-top:20px;border-top:1px solid #5c705e}
+#vice-smart .v-rules-bonus-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+#vice-smart .v-rules-bonus{padding:12px;background:#263b2f;border-left:3px solid var(--v-gold);border-radius:5px}
+#vice-smart .v-rules-bonus strong{display:block;margin-bottom:4px;color:#fff1c7}
+#vice-smart .v-rules-bonus span{font-size:14px;color:#dedfce}
 #vice-smart .v-catalog-nav{display:flex;justify-content:space-between;gap:8px;align-items:center;margin:8px 0 16px;font-size:13px}
 #vice-smart .v-roster{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding-bottom:20px}
 #vice-smart .v-catalog-card{display:flex;flex-direction:column;background:var(--v-paper);color:var(--v-paper-ink);border:3px solid var(--v-card-color);border-radius:7px;padding:0;overflow:hidden;text-align:left;min-width:0;--v-muted:var(--v-paper-muted)}
@@ -211,7 +216,7 @@
 #vice-smart .v-log li{margin:8px 0}
 @media(max-width:1000px){#vice-smart .v-grid{grid-template-columns:repeat(3,minmax(0,1fr))}#vice-smart .v-targets{grid-template-columns:repeat(2,minmax(0,1fr))}#vice-smart .v-mini-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#vice-smart .v-roster{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:740px){#vice-smart .v-header{padding:16px;gap:12px}#vice-smart h1{font-size:29px}#vice-smart .v-main{padding:16px}#vice-smart .v-player-layout{display:block}#vice-smart .v-player-sidebar{position:static}#vice-smart .v-player-sidebar .v-resources{grid-template-columns:repeat(3,minmax(0,1fr))}#vice-smart .v-player-sidebar .v-toolbar{flex-direction:row}#vice-smart .v-player-sidebar .v-toolbar .v-action-cell{flex:1 1 140px}#vice-smart .v-grid,#vice-smart .v-roster,#vice-smart .v-forced-legit-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#vice-smart .v-turn-guide{align-items:stretch;gap:14px;flex-direction:column}#vice-smart .v-turn-actions{width:100%}#vice-smart .v-turn-actions .v-action-cell,#vice-smart .v-end{flex:1 1 0;min-width:0;width:auto}#vice-smart .v-resources{grid-template-columns:repeat(3,minmax(0,1fr))}#vice-smart .v-payment{grid-template-columns:repeat(3,minmax(0,1fr))}#vice-smart .v-race{grid-template-columns:1fr 1fr;gap:12px;margin-left:-16px;margin-right:-16px;padding-left:16px;padding-right:16px}#vice-smart .v-goal{grid-column:1/-1;grid-row:2;display:flex;gap:12px;justify-content:center}#vice-smart .v-header-actions{max-width:230px}#vice-smart .v-turn{width:100%;text-align:right}#vice-smart .v-recap summary{flex-wrap:wrap;gap:5px 10px}#vice-smart .v-recap summary::after{margin-left:auto}}
-@media(max-width:500px){#vice-smart{border:0;border-radius:0}#vice-smart .v-header{align-items:flex-start}#vice-smart h1{font-size:27px}#vice-smart .v-eyebrow{font-size:12px;letter-spacing:.5px}#vice-smart .v-header-actions{max-width:140px;gap:5px}#vice-smart .v-header-actions .v-button{padding:6px 8px;font-size:12px}#vice-smart .v-race-title{font-size:13px;gap:5px}#vice-smart .v-race-title strong{font-size:19px}#vice-smart .v-main{padding:14px 12px}#vice-smart .v-race{margin-left:-12px;margin-right:-12px;padding-left:12px;padding-right:12px}#vice-smart .v-turn-guide{padding:14px}#vice-smart .v-guide-copy h2{font-size:21px}#vice-smart .v-grid,#vice-smart .v-mini-grid{gap:9px}#vice-smart .v-card-actions{flex-direction:column}#vice-smart .v-card-actions .v-action-cell{width:100%}#vice-smart .v-namebar{font-size:16px;min-height:59px;padding:8px}#vice-smart .v-type-strip{font-size:12px;flex-wrap:wrap}#vice-smart .v-mini-grid{grid-template-columns:1fr}#vice-smart .v-targets{grid-template-columns:1fr}#vice-smart .v-decision{padding:14px 12px}#vice-smart .v-crew-members{grid-template-columns:1fr}#vice-smart .v-crew-member{flex-direction:row;align-items:center}#vice-smart .v-crew-member .v-portrait{width:85px}#vice-smart .v-inspect-grid{grid-template-columns:1fr;gap:14px}#vice-smart .v-inspect-art{width:180px;max-width:100%;margin:auto}#vice-smart .v-rules{grid-template-columns:1fr}#vice-smart .v-achievement-grid{grid-template-columns:1fr}#vice-smart .v-achievements-page{padding:24px 14px}#vice-smart .v-toolbar .v-action-cell{flex:1 1 140px}#vice-smart .v-catalog-nav .v-button{font-size:12px;padding:8px}#vice-smart .v-crew-title{overflow-wrap:anywhere}#vice-smart .v-affected-card{width:calc(50% - 6px)}}
+@media(max-width:500px){#vice-smart{border:0;border-radius:0}#vice-smart .v-header{align-items:flex-start}#vice-smart h1{font-size:27px}#vice-smart .v-eyebrow{font-size:12px;letter-spacing:.5px}#vice-smart .v-header-actions{max-width:140px;gap:5px}#vice-smart .v-header-actions .v-button{padding:6px 8px;font-size:12px}#vice-smart .v-race-title{font-size:13px;gap:5px}#vice-smart .v-race-title strong{font-size:19px}#vice-smart .v-main{padding:14px 12px}#vice-smart .v-race{margin-left:-12px;margin-right:-12px;padding-left:12px;padding-right:12px}#vice-smart .v-turn-guide{padding:14px}#vice-smart .v-guide-copy h2{font-size:21px}#vice-smart .v-grid,#vice-smart .v-mini-grid{gap:9px}#vice-smart .v-card-actions{flex-direction:column}#vice-smart .v-card-actions .v-action-cell{width:100%}#vice-smart .v-namebar{font-size:16px;min-height:59px;padding:8px}#vice-smart .v-type-strip{font-size:12px;flex-wrap:wrap}#vice-smart .v-mini-grid{grid-template-columns:1fr}#vice-smart .v-targets{grid-template-columns:1fr}#vice-smart .v-decision{padding:14px 12px}#vice-smart .v-crew-members{grid-template-columns:1fr}#vice-smart .v-crew-member{flex-direction:row;align-items:center}#vice-smart .v-crew-member .v-portrait{width:85px}#vice-smart .v-inspect-grid{grid-template-columns:1fr;gap:14px}#vice-smart .v-inspect-art{width:180px;max-width:100%;margin:auto}#vice-smart .v-rules,#vice-smart .v-rules-bonus-grid{grid-template-columns:1fr}#vice-smart .v-achievement-grid{grid-template-columns:1fr}#vice-smart .v-achievements-page{padding:24px 14px}#vice-smart .v-toolbar .v-action-cell{flex:1 1 140px}#vice-smart .v-catalog-nav .v-button{font-size:12px;padding:8px}#vice-smart .v-crew-title{overflow-wrap:anywhere}#vice-smart .v-affected-card{width:calc(50% - 6px)}}
 @media(max-width:500px){#vice-smart .v-forced-legit-grid{grid-template-columns:1fr}}
 @media(max-width:359px){#vice-smart .v-grid,#vice-smart .v-roster{grid-template-columns:1fr}#vice-smart .v-payment{grid-template-columns:repeat(2,minmax(0,1fr))}#vice-smart .v-header{flex-direction:column}#vice-smart .v-header-actions{max-width:none;justify-content:flex-start}#vice-smart .v-turn{width:auto;text-align:left}#vice-smart .v-goal{flex-wrap:wrap;gap:2px 10px}}
 
@@ -273,7 +278,8 @@
 #vice-smart .v-opening-crew{border:2px solid #8c8068;border-radius:10px;background:#e9dfca;overflow:hidden}
 #vice-smart .v-opening-crew-head{padding:10px 12px;background:#2d5938;color:#fff4da}
 #vice-smart .v-opening-crew-head h2{font-size:18px;margin-bottom:4px}
-#vice-smart .v-opening-crew-head p{font-size:13px;line-height:1.35;margin:0}
+#vice-smart .v-opening-crew-head p{font-size:13px;line-height:1.4;margin:0}
+#vice-smart .v-opening-bonus-label{display:block;margin-bottom:3px;color:#efd07d;font-size:11px;text-transform:uppercase;letter-spacing:.45px}
 #vice-smart .v-opening-members{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:8px}
 #vice-smart .v-opening-choice{--v-surface-ink:#273126;display:flex;flex-direction:column;padding:0;overflow:hidden;border:3px solid var(--v-card-color);border-radius:9px;background:#f5edda;color:#273126;cursor:pointer;text-align:left;font:inherit}
 #vice-smart .v-opening-choice .v-portrait{width:100%;border-radius:0}
@@ -284,7 +290,7 @@
 #vice-smart .v-opening-caption .v-opening-bonus strong{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.35px;color:#24492d}
 #vice-smart .v-opening-choice:hover{outline:3px solid #efd07d;outline-offset:2px}
 @media(max-width:650px){#vice-smart .v-opening-grid{grid-template-columns:1fr;padding:0 12px 18px;gap:10px}#vice-smart .v-lobby-copy{padding:20px 14px}}
-@media(max-width:420px){#vice-smart .v-opening-members{grid-template-columns:1fr}#vice-smart .v-opening-choice{flex-direction:row;align-items:center}#vice-smart .v-opening-choice .v-portrait{width:90px;flex:0 0 90px}}
+@media(max-width:420px){#vice-smart .v-opening-members{gap:5px;padding:5px}#vice-smart .v-opening-caption{padding:7px 5px}#vice-smart .v-opening-caption strong{font-size:12px}#vice-smart .v-opening-caption span{font-size:10px}}
 
 #vice-smart .v-fx{padding:16px;background:#203529;color:#f5efdc;border:1px solid #71816d;border-radius:8px;text-align:center;margin:16px 0}
 #vice-smart .v-fx h2{font-size:18px;margin:5px 0 12px}
@@ -441,8 +447,8 @@
         <div><h3>Income &amp; crews</h3><p>Collect income at the start of each turn. Each active distributor produces one resource of its color. Each complete three-person crew grants the unique bonus shown on its crew seal. Legit businesses and operators produce nothing.</p></div>
         <div><h3>Activate or cash</h3><p>Pay a card’s activation cost to put it in play. A distributor or operator costs one of its color. A legit business costs one matching resource plus one of any color. Cash an unactivated card for one resource of its color; a legit card can be cashed for any color. Cashed cards are discarded.</p></div>
         <div><h3>Business capacity</h3><p>You have room for three distributors, plus three more for each active legit business. You may possess up to three legit businesses total, counting active cards and cards in your hand. If you draw a fourth, immediately cash any inactive legit business, including the one just drawn. Active legit businesses count toward victory and are immune to all operators.</p></div>
-        <div><h3>Operators</h3><p>Each player may have at most two active operators, or three with Club Circuit. Additional operators can stay in hand. Using an operator frees a slot. Pay activation once, then pay to use the ability. Hitman: pay the target’s cost to discard one distributor. Ruffian: pay one of a chosen target’s color to return every active member of that crew to the rival’s hand. Fixer: pay twice the target’s cost to take one distributor. The operator is discarded after use.</p></div>
-        <div><h3>Draw &amp; trade</h3><p>Your first draw each turn costs one resource of any color, the second costs two, the third costs three, and so on. The price resets each turn. Trade four resources of one color for one of another, or two for one with Hill Country.</p></div>
+        <div><h3>Operators</h3><p>Each player may have at most two active operators. With Club Circuit, an operator may affect up to two targets when you can pay each target cost. Additional operators can stay in hand. Using an operator frees a slot. Pay activation once, then pay to use the ability. Hitman: pay the target’s cost to discard one distributor. Ruffian: pay one of a chosen target’s color to return every active member of that crew to the rival’s hand. Fixer: pay twice the target’s cost to take one distributor. The operator is discarded after use.</p></div>
+        <div><h3>Draw &amp; trade</h3><p>Your first draw each turn costs one resource of any color, the second costs two, the third costs three, and so on. The price resets each turn. Trade four resources of one color for one of another, or two for one with Hill Country. Arts District allows one distributor trade per turn after paying the costs of both the target and the gift.</p></div>
         <div><h3>Hand &amp; resource limits</h3><p>Hold up to seven cards and ten resources, or twelve resources with Night Shift. Activate or cash before drawing into a full hand. Choose which excess resources to discard after income. Forced returns beyond seven cards are discarded. A distributor acquired with no open slot waits in hand until you can pay to activate it.</p></div>
         <div><h3>The deck</h3><p>The base game has 24 distributors in eight crews, six legit businesses and six operators. When the draw pile runs out, shuffle the discard pile back in. The rival follows the same rules.</p></div>
       </div></details>
@@ -471,7 +477,7 @@ const shuffle=(a,rng=Math.random)=>{for(let i=a.length-1;i>0;i--){const j=Math.f
 function newState(rng=Math.random,openingId=null){
  const player=()=>({res:emptyBank(),active:[],hand:[],drawPrice:1,suspended:[]});
  const deck=shuffle(CARDS.map(c=>c.id),rng);
- const s={version:6,turn:1,current:0,phase:'ready',winner:null,players:[player(),player()],deck,discard:[],logs:[],rng};
+ const s={version:7,turn:1,current:0,phase:'ready',winner:null,players:[player(),player()],deck,discard:[],logs:[],rng};
  // Reserve chosen starters before dealing either hand.
  if(openingId!==null&&card(openingId)?.type==='illegal'){
   s.players[0].active.push(deck.splice(deck.indexOf(openingId),1)[0]);
@@ -491,20 +497,20 @@ const illegalCount=p=>p.active.filter(id=>card(id).type==='illegal').length;
 const legitCount=p=>p.active.filter(id=>card(id).type==='legit').length;
 const legitPossessionCount=p=>p.active.concat(p.hand).filter(id=>card(id).type==='legit').length;
 const CREW_BONUSES={
- 'The Docks':'Rival legit businesses cost double to activate.',
- 'Club Circuit':'You may control up to 3 active operators.',
- 'Trailer Park':'Distributors hit by a Hitman return to your hand.',
- 'The Burbs':'Draw a card when you collect income.',
- 'Pipeline':'Intercept rival operators by paying their activation cost.',
- 'Night Shift':'Gain 1 extra resource each turn and hold up to 12.',
- 'Arts District':'Trade one active distributor with the rival once per turn.',
- 'Hill Country':'Trade 2 resources for 1 instead of 4 for 1.'
+ 'The Docks':'Pay for one draw, then choose: draw 1 card normally, or draw 2 cards and discard 1 of them.',
+ 'Club Circuit':'Your Operator may target 2 rivals instead of 1. You must pay the Operator’s ability cost for each target.',
+ 'Trailer Park':'If a rival would kill or buy one of your Distributors, put that Distributor in your hand instead.',
+ 'The Burbs':'After you collect your income, draw 1 card for free.',
+ 'Pipeline':'When a rival Operator targets you, you may pay its activation cost to stop the attack and take that Operator. Put it into play on your side.',
+ 'Night Shift':'Gain 1 extra resource when your turn starts. You may keep up to 12 resources instead of 10.',
+ 'Arts District':'Once each turn, swap one of your active Distributors for one of your rival’s. Pay the activation cost of both Distributors.',
+ 'Hill Country':'Trade 2 matching resources for 1 resource of another type. Normally this trade costs 4.'
 };
 const hasCrewBonus=(p,crew)=>complete(p,crew);
-const operatorLimit=p=>hasCrewBonus(p,'Club Circuit')?3:2;
+const operatorLimit=p=>2;
 const resourceLimit=p=>hasCrewBonus(p,'Night Shift')?12:10;
 const tradeRate=p=>hasCrewBonus(p,'Hill Country')?2:4;
-const activationCost=(s,who,c)=>c.type==='legit'&&hasCrewBonus(s.players[1-who],'The Docks')?[...c.cost,...c.cost]:c.cost;
+const activationCost=(s,who,c)=>c.cost;
 const operatorCount=p=>p.active.filter(id=>card(id).type==='operator').length;
 const capacity=p=>3*(legitCount(p)+1);
 const complete=(p,crew)=>CREWS.some(([n,rows])=>n===crew&&rows.every(([name])=>p.active.some(id=>card(id).name===name)));
@@ -570,15 +576,37 @@ function startTurn(s,who){
  p.tradedDistributors=false;
  if(who===1){trimAI(p);s.phase='play';}else if(total(p.res)>resourceLimit(p))s.phase='trim';
 }
-function drawCard(s,who,payment){if(!legalTurn(s,who))return'Finish the current step first.';const p=s.players[who];if(p.hand.length>=7)return'Hand limit is 7. Activate or cash a card before drawing.';if(!s.deck.length&&!s.discard.length)return'No cards remain in the deck or discard pile.';if(payment.length!==p.drawPrice||!afford(p,payment))return'Choose exactly '+p.drawPrice+' resources you own.';pay(p,payment);if(!s.deck.length){s.deck=shuffle(s.discard.splice(0),s.rng||Math.random);record(s,'The discarded cards are shuffled back into the deck.');}const id=s.deck.pop();p.hand.push(id);record(s,(who===0?'You draw '+card(id).name:'Rival draws a card')+' for '+p.drawPrice+'.');p.drawPrice++;if(card(id).type==='legit'&&legitPossessionCount(p)>3){s.phase='legit_cash';s.pendingLegitCash={who,drawnId:id};record(s,(who===0?'You must':'Rival must')+' cash an inactive legit business.');}return null;}
+function drawCard(s,who,payment,useDocksBonus=false){if(!legalTurn(s,who))return'Finish the current step first.';const p=s.players[who],drawCount=useDocksBonus&&hasCrewBonus(p,'The Docks')?2:1;if(p.hand.length+drawCount>8)return'You need room to draw before choosing a discard.';if(s.deck.length+s.discard.length<drawCount)return'Not enough cards remain to draw.';if(payment.length!==p.drawPrice||!afford(p,payment))return'Choose exactly '+p.drawPrice+' resources you own.';pay(p,payment);const ids=[];for(let i=0;i<drawCount;i++){if(!s.deck.length){s.deck=shuffle(s.discard.splice(0),s.rng||Math.random);record(s,'The discarded cards are shuffled back into the deck.');}const id=s.deck.pop();p.hand.push(id);ids.push(id);}record(s,(who===0?'You draw '+ids.map(id=>card(id).name).join(' and '):'Rival draws '+drawCount+' card'+(drawCount===1?'':'s'))+' for '+p.drawPrice+'.');p.drawPrice++;if(drawCount===2){s.phase='draw_discard';s.pendingDrawDiscard={who,ids};record(s,(who===0?'You must':'Rival must')+' discard one of the two cards.');return null;}const id=ids[0];if(card(id).type==='legit'&&legitPossessionCount(p)>3){s.phase='legit_cash';s.pendingLegitCash={who,drawnId:id};record(s,(who===0?'You must':'Rival must')+' cash an inactive legit business.');}return null;}
+function discardDrawChoice(s,who,id){const pending=s.pendingDrawDiscard,p=s.players[who];if(s.phase!=='draw_discard'||pending?.who!==who||!pending.ids.includes(id)||!p.hand.includes(id))return'Discard one of the two cards you just drew.';p.hand.splice(p.hand.indexOf(id),1);s.discard.push(id);delete s.pendingDrawDiscard;s.phase='play';record(s,(who===0?'You discard ':'Rival discards ')+card(id).name+'.');const kept=pending.ids.find(x=>x!==id);if(card(kept).type==='legit'&&legitPossessionCount(p)>3){s.phase='legit_cash';s.pendingLegitCash={who,drawnId:kept};}return null;}
 function cashPendingLegit(s,who,id,color){const pending=s.pendingLegitCash,p=s.players[who],c=card(id);if(s.winner!==null||s.current!==who||s.phase!=='legit_cash'||pending?.who!==who)return'Choose a pending legit business to cash.';if(!c||c.type!=='legit'||!p.hand.includes(id))return'Choose an inactive legit business.';if(!COLORS.includes(color))return'Choose a valid resource type.';if(total(p.res)>=resourceLimit(p))return'Spend a resource first; your resource limit is '+resourceLimit(p)+'.';p.hand.splice(p.hand.indexOf(id),1);p.suspended=p.suspended.filter(x=>x!==id);s.discard.push(id);p.res[color]++;delete s.pendingLegitCash;s.phase='play';record(s,(who===0?'You cash ':'Rival cashes ')+c.name+' for 1 '+resourceName(color)+' to stay within the 3-legit limit.');return null;}
 function activateCard(s,who,id,picks){if(!legalTurn(s,who))return'Finish the current step first.';const p=s.players[who],c=card(id);if(!c||!p.hand.includes(id))return'Card is not in your hand.';if(c.type==='operator'&&operatorCount(p)>=operatorLimit(p))return'You may control at most '+operatorLimit(p)+' active operators. Use one before activating another.';if(c.type==='legit'&&legitCount(p)>=3)return'You may control at most 3 legitimate businesses.';if(c.type==='illegal'&&illegalCount(p)>=capacity(p))return'Activate a legitimate business to open 3 more illegal slots.';const cost=activationCost(s,who,c);if(resolveCost(p,cost,picks)===null)return'Need '+cost.map(resourceName).join(' + ')+' to activate '+c.name+'.';pay(p,cost,picks);p.hand.splice(p.hand.indexOf(id),1);p.suspended=p.suspended.filter(x=>x!==id);p.active.push(id);record(s,(who===0?'You activate ':'Rival activates ')+c.name+'.');if(c.type!=='operator'&&complete(p,c.crew))record(s,c.crew+' complete! '+CREW_BONUSES[c.crew]);checkWin(s);return null;}
 function cashCard(s,who,id,color){if(!legalTurn(s,who))return'Finish the current step first.';const p=s.players[who],c=card(id);if(!c||!p.hand.includes(id))return'Card is not in your hand.';if(!COLORS.includes(color)||(c.type!=='legit'&&c.color!==color))return'Choose a valid resource type.';if(total(p.res)>=resourceLimit(p))return'Spend a resource first; your resource limit is '+resourceLimit(p)+'.';p.hand.splice(p.hand.indexOf(id),1);p.suspended=p.suspended.filter(x=>x!==id);s.discard.push(id);p.res[color]++;record(s,(who===0?'You cash ':'Rival cashes ')+c.name+' for 1 '+resourceName(color)+'.');return null;}
 function tradeResources(s,who,from,to){if(!legalTurn(s,who))return'Finish the current step first.';const p=s.players[who],rate=tradeRate(p);if(!COLORS.includes(from)||!COLORS.includes(to)||from===to)return'Choose two different resources.';if(p.res[from]<rate)return'You need '+rate+' '+resourceName(from)+' resources.';p.res[from]-=rate;p.res[to]++;record(s,(who===0?'You trade ':'Rival trades ')+rate+' '+resourceName(from)+' for 1 '+resourceName(to)+'.');return null;}
-function tradeDistributors(s,who,ownId,rivalId){if(!legalTurn(s,who))return'Finish the current step first.';const p=s.players[who],other=s.players[1-who],own=card(ownId),rival=card(rivalId);if(p.tradedDistributors)return'You may trade distributors only once per turn.';if(!hasCrewBonus(p,'Arts District'))return'Complete Arts District to trade distributors.';if(own?.type!=='illegal'||rival?.type!=='illegal'||!p.active.includes(ownId)||!other.active.includes(rivalId))return'Choose one active distributor from each side.';p.active[p.active.indexOf(ownId)]=rivalId;other.active[other.active.indexOf(rivalId)]=ownId;p.tradedDistributors=true;record(s,(who===0?'You trade ':'Rival trades ')+own.name+' for '+rival.name+'.');checkWin(s);return null;}
+function tradeDistributors(s,who,ownId,rivalId,picks){if(!legalTurn(s,who))return'Finish the current step first.';const p=s.players[who],other=s.players[1-who],own=card(ownId),rival=card(rivalId);if(p.tradedDistributors)return'You may trade distributors only once per turn.';if(!hasCrewBonus(p,'Arts District'))return'Complete Arts District to trade distributors.';if(own?.type!=='illegal'||rival?.type!=='illegal'||!p.active.includes(ownId)||!other.active.includes(rivalId))return'Choose one active distributor from each side.';const cost=[...own.cost,...rival.cost];if(resolveCost(p,cost,picks)===null)return'Need '+cost.map(resourceName).join(' + ')+' to pay both Distributors’ activation costs.';pay(p,cost,picks);p.active[p.active.indexOf(ownId)]=rivalId;other.active[other.active.indexOf(rivalId)]=ownId;p.tradedDistributors=true;record(s,(who===0?'You trade ':'Rival trades ')+own.name+' for '+rival.name+'.');checkWin(s);return null;}
 function operatorCost(op,target){return op.ability==='buy'?[...target.cost,...target.cost]:[...target.cost];}
 const abilityCostText=op=>op.ability==='buy'?'2 × target’s cost':'1 × target’s cost';
-function useOperator(s,who,opId,targetId,picks){if(!legalTurn(s,who))return'Finish the current step first.';const p=s.players[who],other=s.players[1-who],op=card(opId),target=card(targetId);if(!op||op.type!=='operator'||!p.active.includes(opId))return'Activate this operator first.';if(!target||target.type!=='illegal'||!other.active.includes(targetId))return'Operators can only target active rival distributors. Legit businesses are protected.';if(op.ability==='coerce'&&target.type!=='illegal')return'Ruffians target a distributor crew.';if(op.ability==='kill'&&target.type!=='illegal')return'Hitmen target distributors, not locations.';if(op.ability==='buy'&&target.type==='legit'&&legitCount(p)>=3)return'You may control at most 3 legitimate businesses.';if(op.ability==='buy'&&target.type==='illegal'&&illegalCount(p)>=capacity(p)&&p.hand.length>=7)return'Your hand is full and there is no active capacity.';if(hasCrewBonus(other,'Pipeline')&&operatorCount(other)<operatorLimit(other)&&afford(other,op.cost)){pay(other,op.cost);p.active.splice(p.active.indexOf(opId),1);other.active.push(opId);record(s,(who===0?'Rival intercepts ':'You intercept ')+op.name+' and take the operator.');return null;}const cost=operatorCost(op,target);if(resolveCost(p,cost,picks)===null)return'Need '+cost.map(resourceName).join(' + ')+'.';const escapesHit=op.ability==='kill'&&hasCrewBonus(other,'Trailer Park');const fxTargets=op.ability==='coerce'?[targetId,...other.active.filter(id=>id!==targetId&&card(id).type==='illegal'&&card(id).crew===target.crew)]:[targetId];pay(p,cost,picks);other.active.splice(other.active.indexOf(targetId),1);if(op.ability==='kill'){if(escapesHit){returnToHand(s,1-who,targetId);record(s,target.name+' escapes the hit and returns to hand.');}else{s.discard.push(targetId);record(s,op.name+' kills '+target.name+'.');}}else if(op.ability==='coerce'){const bounced=[targetId,...other.active.filter(id=>card(id).type==='illegal'&&card(id).crew===target.crew)];for(const id of bounced){const index=other.active.indexOf(id);if(index>=0)other.active.splice(index,1);returnToHand(s,1-who,id);}record(s,op.name+' bounces '+bounced.length+' active members of '+target.crew+'.');}else if(target.type==='illegal'&&illegalCount(p)>=capacity(p)){p.hand.push(targetId);p.suspended.push(targetId);record(s,op.name+' buys '+target.name+'; it waits in hand for capacity.');}else{p.active.push(targetId);record(s,op.name+' buys '+target.name+' into the empire.');}p.active.splice(p.active.indexOf(opId),1);s.discard.push(opId);enforceCapacity(s,1-who);s.pendingOperatorFX={who,opId,targets:fxTargets,destinations:fxTargets.map(id=>s.discard.includes(id)?'Discarded'+(op.ability==='coerce'?' · hand full':''):s.players[1-who].hand.includes(id)?(who===0?'Rival hand':'Your hand'):p.hand.includes(id)?(who===0?'Your hand · awaiting capacity':'Rival hand · awaiting capacity'):(who===0?'Your empire':'Rival empire'))};checkWin(s);return null;}
+function useOperator(s,who,opId,targetIds,picks){
+ if(!legalTurn(s,who))return'Finish the current step first.';
+ const p=s.players[who],other=s.players[1-who],op=card(opId),ids=Array.isArray(targetIds)?targetIds:[targetIds],trailerBonus=hasCrewBonus(other,'Trailer Park');
+ if(!op||op.type!=='operator'||!p.active.includes(opId))return'Activate this operator first.';
+ if(!ids.length||ids.length>(hasCrewBonus(p,'Club Circuit')?2:1)||new Set(ids).size!==ids.length)return hasCrewBonus(p,'Club Circuit')?'Choose one or two different targets.':'Choose one target.';
+ const targets=ids.map(card);
+ if(targets.some((target,i)=>!target||target.type!=='illegal'||!other.active.includes(ids[i])))return'Operators can only target active rival distributors. Legit businesses are protected.';
+ if(hasCrewBonus(other,'Pipeline')&&operatorCount(other)<operatorLimit(other)&&afford(other,op.cost)){pay(other,op.cost);p.active.splice(p.active.indexOf(opId),1);other.active.push(opId);record(s,(who===0?'Rival intercepts ':'You intercept ')+op.name+' and take the operator.');return null;}
+ const costs=targets.flatMap(target=>operatorCost(op,target));if(resolveCost(p,costs,picks)===null)return'Need '+costs.map(resourceName).join(' + ')+'.';
+ pay(p,costs,picks);const affected=[];
+ for(const [i,target] of targets.entries()){
+  const targetId=ids[i];if(!other.active.includes(targetId))continue;
+  const fxIds=op.ability==='coerce'?[targetId,...other.active.filter(id=>id!==targetId&&card(id).type==='illegal'&&card(id).crew===target.crew)]:[targetId];
+  for(const id of fxIds){const index=other.active.indexOf(id);if(index>=0)other.active.splice(index,1);if(!affected.includes(id))affected.push(id);}
+  if(op.ability==='kill'){if(trailerBonus){returnToHand(s,1-who,targetId);record(s,target.name+' escapes the hit and returns to hand.');}else{s.discard.push(targetId);record(s,op.name+' kills '+target.name+'.');}}
+  else if(op.ability==='coerce'){for(const id of fxIds)returnToHand(s,1-who,id);record(s,op.name+' bounces '+fxIds.length+' active members of '+target.crew+'.');}
+  else if(trailerBonus){returnToHand(s,1-who,targetId);record(s,target.name+' avoids the buyout and returns to hand.');}
+  else if(illegalCount(p)>=capacity(p)){p.hand.push(targetId);p.suspended.push(targetId);record(s,op.name+' buys '+target.name+'; it waits in hand for capacity.');}
+  else{p.active.push(targetId);record(s,op.name+' buys '+target.name+' into the empire.');}
+ }
+ p.active.splice(p.active.indexOf(opId),1);s.discard.push(opId);enforceCapacity(s,1-who);s.pendingOperatorFX={who,opId,targets:affected,destinations:affected.map(id=>s.discard.includes(id)?'Discarded':other.hand.includes(id)?(who===0?'Rival hand':'Your hand'):p.hand.includes(id)?(who===0?'Your hand · awaiting capacity':'Rival hand · awaiting capacity'):(who===0?'Your empire':'Rival empire'))};checkWin(s);return null;
+}
 function autoPayment(p,n){const res={...p.res},chosen=[];for(let k=0;k<n;k++){const color=[...COLORS].sort((a,b)=>res[b]-res[a])[0];if(!res[color])return[];chosen.push(color);res[color]--;}return chosen;}
 const scoreCardForDiscard=id=>card(id).type==='legit'?80:card(id).type==='illegal'?60:20;
 function actAI(s){
@@ -654,7 +682,7 @@ function actAI(s){
 }
 function runAI(s){startTurn(s,1);let guard=0;while(guard++<100&&s.winner===null&&actAI(s)){}if(s.winner===null){s.turn++;startTurn(s,0);}}
 // A pure rules interface lets the saved prototype be regression-checked without a browser.
-const engine={CARDS,COLORS,CREWS,newState,total,bizCount,illegalCount,legitCount,legitPossessionCount,capacity,complete,income,afford,operatorCost,startTurn,drawCard,activateCard,cashCard,cashPendingLegit,tradeResources,tradeDistributors,useOperator,actAI,runAI,checkWin,earnedVictoryAchievements,enforceCapacity,resolveCost,crewBonus,hasCrewBonus,operatorLimit,resourceLimit,tradeRate,operatorCount,enforceOperatorLimit};
+const engine={CARDS,COLORS,CREWS,newState,total,bizCount,illegalCount,legitCount,legitPossessionCount,capacity,complete,income,afford,operatorCost,startTurn,drawCard,activateCard,cashCard,cashPendingLegit,tradeResources,tradeDistributors,discardDrawChoice,useOperator,actAI,runAI,checkWin,earnedVictoryAchievements,enforceCapacity,resolveCost,crewBonus,hasCrewBonus,operatorLimit,resourceLimit,tradeRate,operatorCount,enforceOperatorLimit};
 if(typeof module!=='undefined'&&module.exports){module.exports=engine;return;}
 function portrait(c){
  if(c.id===34)return '<div class="v-portrait" aria-hidden="true" style="background-image:var(--vice-leon);background-size:cover;background-position:center"></div>';
@@ -694,6 +722,7 @@ const el=id=>root.querySelector('#'+id);
 const player=()=>state.players[0];
 const ready=()=>legalTurn(state,0);
 const escapeHTML=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const crewBonusReference=()=>'<section class="v-rules-bonuses"><h2>Crew bonuses</h2><div class="v-rules-bonus-grid">'+CREWS.map(([crew])=>'<div class="v-rules-bonus"><strong>'+escapeHTML(crew)+'</strong><span>'+escapeHTML(CREW_BONUSES[crew])+'</span></div>').join('')+'</div></section>';
 const colorStyle=color=>'--v-card-color:'+COLOR_VALUES[color];
 const dot=color=>'<span class="v-dot" style="'+colorStyle(color)+'" aria-hidden="true"></span>';
 const token=(color,value)=>'<span class="v-token">'+dot(color)+escapeHTML(value===undefined?resourceName(color):value)+'</span>';
@@ -893,6 +922,9 @@ function renderPanel(){
   heading='Pay for your draw';text='Spend '+p.drawPrice+' resource'+(p.drawPrice===1?'':'s')+'. The next draw this turn costs '+(p.drawPrice+1)+'.';if(panel.useDocksBonus===undefined)panel.useDocksBonus=hasCrewBonus(p,'The Docks');
   body=(hasCrewBonus(p,'The Docks')?'<div class="v-choice-row"><button type="button" class="v-button" data-action="docks-toggle">'+(panel.useDocksBonus?'Draw 2, discard 1':'Draw 1')+'</button></div>':'')+'<div class="v-payment">'+COLORS.map(c=>'<div class="v-pay-option"><span>'+token(c)+' · '+p.res[c]+' held</span><div class="v-stepper"><button type="button" data-action="pay-minus" data-color="'+c+'" aria-label="Spend one less '+resourceName(c)+'"'+blockedAttr(!panel.picks[c])+'>&minus;</button><b>'+panel.picks[c]+'</b><button type="button" data-action="pay-plus" data-color="'+c+'" aria-label="Spend one more '+resourceName(c)+'"'+blockedAttr(panel.picks[c]>=p.res[c]||total(panel.picks)>=p.drawPrice)+'>+</button></div></div>').join('')+'</div><button type="button" class="v-button v-primary" data-action="draw-confirm"'+blockedAttr(total(panel.picks)!==p.drawPrice)+'>Spend '+total(panel.picks)+' &amp; draw '+(panel.useDocksBonus?'2':'1')+'</button>';
  }
+ if(panel.type==='draw_discard'){
+  const ids=state.pendingDrawDiscard?.ids||[];heading='Choose one card to discard';text='The Docks let you draw two cards for one paid draw. Keep one and discard the other.';body='<div class="v-choice-row">'+ids.map(id=>'<button type="button" class="v-button" data-action="draw-discard" data-id="'+id+'">Discard '+escapeHTML(card(id).name)+'</button>').join('')+'</div>';
+ }
  if(panel.type==='payment'){
   const fixed=panel.cost.filter(c=>c!=='Any'),count=panel.cost.length-fixed.length;
   heading='Activate '+card(panel.id).name;text='Pay '+costText(fixed)+' plus '+count+' of any color. Choose the extra resource.';
@@ -915,15 +947,15 @@ function renderPanel(){
   body='<div class="v-targets">'+targets.map(c=>{const reason=operatorReason(op,c),ids=affectedCards(op,c);return'<button type="button" class="v-target" data-action="target" data-id="'+c.id+'">'+portrait(c)+'<span><strong>'+escapeHTML(c.name)+'</strong><span>'+escapeHTML(op.ability==='coerce'?c.crew+' · '+ids.length+' affected':c.crew)+'</span>'+costTokens(operatorCost(op,c))+'<span class="v-target-help">'+escapeHTML(reason||'Select target')+'</span></span></button>';}).join('')+'</div>'+(targets.length?'':'<p>No rival distributors can be targeted.</p>');
  }
  if(panel.type==='preview'){
-  const op=card(panel.opId),target=card(panel.targetId),ids=affectedCards(op,target),reason=operatorReason(op,target),cost=operatorCost(op,target);
-  heading=abilityLabel(op);text=op.name+' · '+op.biz;
-  const result=op.ability==='kill'?'Discard':op.ability==='buy'?(illegalCount(p)>=capacity(p)?'Your hand':'Your businesses'):'Rival’s hand';
-  body='<div class="v-payment-summary"><div><span>Activation already paid</span>'+costTokens(op.cost)+'</div><div class="v-pay-now"><strong>Pay now</strong>'+costTokens(cost)+'</div></div><div class="v-affected">'+ids.map((id,i)=>{const c=card(id);const destination=op.ability==='coerce'&&i>=Math.max(0,7-state.players[1].hand.length)?'Discard · hand full':result;return'<div class="v-affected-card" data-affected-id="'+id+'">'+portrait(c)+'<strong>'+escapeHTML(c.name)+'</strong><span>'+destination+'</span></div>';}).join('')+'</div><p>'+previewOutcome(op,target,ids)+'</p>'+(illegalCount(state.players[1])-ids.length===0?'<p class="v-impact">The rival will have no distributors. You win.</p>':'')+(op.ability==='buy'&&illegalCount(p)<capacity(p)&&bizCount(p)===11?'<p class="v-impact">This becomes your 12th business. You win.</p>':'')+'<p class="v-secondary">'+escapeHTML(op.name)+' is discarded after use.</p><div class="v-choice-row"><button type="button" class="v-button" data-action="operator" data-id="'+op.id+'">Change target</button><button type="button" class="v-button v-danger-button" data-action="operator-confirm"'+blockedAttr(reason)+'>'+escapeHTML('Pay '+costText(cost)+' & '+(op.ability==='kill'?'kill':op.ability==='coerce'?'bounce crew':'take distributor'))+'</button></div>'+(reason?'<p class="v-block-reason">'+escapeHTML(reason)+'</p>':'');
+  const op=card(panel.opId),targetIds=panel.targetIds||[panel.targetId],targets=targetIds.map(card),cost=targets.flatMap(target=>operatorCost(op,target)),reason=targets.map(target=>operatorReason(op,target)).find(Boolean)||missingPayment(p,cost),ids=[...new Set(targets.flatMap(target=>affectedCards(op,target)))];
+  heading=abilityLabel(op);text=op.name+' · '+op.biz+(targetIds.length===2?' · 2 targets':'');
+  const result=op.ability==='kill'?'Discard':op.ability==='buy'?(illegalCount(p)>=capacity(p)?'Your hand':'Your businesses'):'Rival’s hand',extraTargets=hasCrewBonus(p,'Club Circuit')&&targetIds.length===1?state.players[1].active.map(card).filter(c=>c.type==='illegal'&&!targetIds.includes(c.id)):[];
+  body='<div class="v-payment-summary"><div><span>Activation already paid</span>'+costTokens(op.cost)+'</div><div class="v-pay-now"><strong>Pay now</strong>'+costTokens(cost)+'</div></div><div class="v-affected">'+ids.map(id=>{const c=card(id);return'<div class="v-affected-card" data-affected-id="'+id+'">'+portrait(c)+'<strong>'+escapeHTML(c.name)+'</strong><span>'+result+'</span></div>';}).join('')+'</div>'+(extraTargets.length?'<p>Club Circuit: optionally add a second target.</p><div class="v-choice-row">'+extraTargets.map(c=>'<button type="button" class="v-button" data-action="target-add" data-id="'+c.id+'">Add '+escapeHTML(c.name)+'</button>').join('')+'</div>':'')+'<p class="v-secondary">'+escapeHTML(op.name)+' is discarded after use.</p><div class="v-choice-row"><button type="button" class="v-button" data-action="operator" data-id="'+op.id+'">Change target</button><button type="button" class="v-button v-danger-button" data-action="operator-confirm"'+blockedAttr(reason)+'>'+escapeHTML('Pay '+costText(cost)+' & use operator')+'</button></div>'+(reason?'<p class="v-block-reason">'+escapeHTML(reason)+'</p>':'');
  }
  if(panel.type==='crew'){
   const c=card(panel.id),crew=c.crew,count=membersOf(crew).filter(x=>p.active.includes(x.id)).length;
   heading=CREW_SYMBOLS[crew]+' '+crew;text=count+'/3 active for you. '+CREW_BONUSES[crew];
-  body=crewCards(crew)+'<p class="v-secondary">Unknown cards may be in the draw pile or the rival’s hidden hand.</p>';
+  body=crewCards(crew);
  }
  if(panel.type==='inspect'){
   const c=card(panel.id);heading=c.name;text=c.type==='illegal'?c.biz:c.type==='legit'?'Adds three distributor slots. Produces no resources. Counts toward victory and is protected from every operator.':'Maximum two active operators per player. Produces no resources and does not count toward victory. Discarded after use, freeing a slot.';
@@ -1038,7 +1070,7 @@ function achievementsScreen(){
  if(aiTimer!==null)clearTimeout(aiTimer);
  aiTimer=null;panel=null;screen='achievements';render();
 }
-function hasSavedGame(){try{const saved=JSON.parse(localStorage.getItem(STORAGE_KEY));return saved?.version===6&&saved.winner===null;}catch(e){return false;}}
+function hasSavedGame(){try{const saved=JSON.parse(localStorage.getItem(STORAGE_KEY));return saved?.version===7&&saved.winner===null;}catch(e){return false;}}
 function renderLobby(){
  const lobby=el('v-lobby'),board=el('v-game-board');
  lobby.className=screen==='outcome'?'v-ending'+(state.winner===1?' is-defeat':''):'';
@@ -1046,7 +1078,7 @@ function renderLobby(){
  board.hidden=screen!=='game';lobby.hidden=screen==='game';
  if(screen==='game')return false;
  if(screen==='rules'){
-  lobby.innerHTML='<div class="v-rules-page"><div class="v-rules-page-head"><h1>Rules</h1><button type="button" class="v-button v-dark-button" data-action="main-menu">Main menu</button></div><div class="v-rules">'+el('v-rules').querySelector('.v-rules').innerHTML+'</div></div>';
+  lobby.innerHTML='<div class="v-rules-page"><div class="v-rules-page-head"><h1>Rules</h1><button type="button" class="v-button v-dark-button" data-action="main-menu">Main menu</button></div><div class="v-rules">'+el('v-rules').querySelector('.v-rules').innerHTML+'</div>'+crewBonusReference()+'</div>';
   return true;
  }
  if(screen==='achievements'){
@@ -1055,7 +1087,7 @@ function renderLobby(){
   return true;
  }
  if(screen==='choose'){
-  lobby.innerHTML='<div class="v-lobby-copy"><h1>Choose your first business partner</h1><div class="v-lobby-actions"><button type="button" class="v-button v-dark-button" data-action="main-menu">Main menu</button></div></div><div class="v-opening-grid">'+CARDS.filter(c=>c.type==='illegal').map(c=>'<button type="button" class="v-opening-choice" style="'+colorStyle(c.color)+'" data-action="choose-opening" data-id="'+c.id+'" aria-label="Start with '+escapeHTML(c.name)+'">'+portrait(c)+'<span class="v-opening-caption"><strong>'+escapeHTML(c.name)+'</strong><span>'+escapeHTML(CREWS[c.crew]?.name||c.crew)+'</span><span>'+inlineToken(c.color,'+1 '+resourceName(c.color))+' per turn</span><span class="v-opening-bonus"><strong>Complete crew bonus</strong>'+escapeHTML(CREW_BONUSES[c.crew])+'</span></span></button>').join('')+'</div>';
+  lobby.innerHTML='<div class="v-lobby-copy"><h1>Choose your first business partner</h1><div class="v-lobby-actions"><button type="button" class="v-button v-dark-button" data-action="main-menu">Main menu</button></div></div><div class="v-opening-grid">'+CREWS.map(([crew])=>'<section class="v-opening-crew"><header class="v-opening-crew-head"><h2>'+escapeHTML(crew)+'</h2><p><strong class="v-opening-bonus-label">Bonus unlocked by completing this crew</strong>'+escapeHTML(CREW_BONUSES[crew])+'</p></header><div class="v-opening-members">'+CARDS.filter(c=>c.type==='illegal'&&c.crew===crew).map(c=>'<button type="button" class="v-opening-choice" style="'+colorStyle(c.color)+'" data-action="choose-opening" data-id="'+c.id+'" aria-label="Start with '+escapeHTML(c.name)+'">'+portrait(c)+'<span class="v-opening-caption"><strong>'+escapeHTML(c.name)+'</strong><span>'+inlineToken(c.color,'+1 '+resourceName(c.color))+' per turn</span></span></button>').join('')+'</div></section>').join('')+'</div>';
   return true;
  }
  const over=screen==='outcome',won=state.winner===0;if(over)recordAchievements();
@@ -1105,6 +1137,7 @@ root.addEventListener('click',event=>{
   if(ready())beginAI();return;
  }
   if(action==='trim'){if(state.current===0&&state.phase==='trim'&&p.res[color]>0){p.res[color]--;if(total(p.res)<=resourceLimit(p)){state.phase='play';panel=null;tell('You kept '+resourceLimit(p)+' resources. Your actions are ready.');}render();}return;}
+ if(action==='draw-discard'){after(discardDrawChoice(state,0,id),'Card discarded. Continue your turn.');return;}
  if(action==='legit-cash-confirm'){after(cashPendingLegit(state,0,id,color),'Legit business cashed. Continue your turn.');return;}
  if(!ready())return;
  if(action==='activate'){
@@ -1122,7 +1155,8 @@ root.addEventListener('click',event=>{
  if(action==='draw'){if(drawReason()){after(drawReason());return;}const picks=emptyBank();autoPayment(p,p.drawPrice).forEach(c=>picks[c]++);showPanel({type:'draw',picks});return;}
  if(action==='pay-minus'&&panel?.type==='draw'){if(panel.picks[color]>0)panel.picks[color]--;renderPanel();return;}
  if(action==='pay-plus'&&panel?.type==='draw'){if(panel.picks[color]<p.res[color]&&total(panel.picks)<p.drawPrice)panel.picks[color]++;renderPanel();return;}
- if(action==='draw-confirm'&&panel?.type==='draw'){after(drawCard(state,0,COLORS.flatMap(c=>Array(panel.picks[c]).fill(c))));return;}
+ if(action==='docks-toggle'&&panel?.type==='draw'){panel.useDocksBonus=!panel.useDocksBonus;renderPanel();return;}
+ if(action==='draw-confirm'&&panel?.type==='draw'){after(drawCard(state,0,COLORS.flatMap(c=>Array(panel.picks[c]).fill(c)),panel.useDocksBonus));return;}
  if(action==='trade'){const rate=tradeRate(p),from=COLORS.find(c=>p.res[c]>=rate);if(!from){after(tradeReason());return;}showPanel({type:'trade',from,to:COLORS.find(c=>c!==from)});return;}
  if(action==='trade-from'&&panel?.type==='trade'){panel.from=color;if(panel.to===color)panel.to=COLORS.find(c=>c!==color);renderPanel();return;}
  if(action==='trade-to'&&panel?.type==='trade'&&color!==panel.from){panel.to=color;renderPanel();return;}
@@ -1131,10 +1165,11 @@ root.addEventListener('click',event=>{
  if(action==='swap-own'&&panel?.type==='swap'){panel.ownId=id;renderPanel();return;}
  if(action==='swap-confirm'&&panel?.type==='swap'&&panel.ownId!==undefined){after(tradeDistributors(state,0,panel.ownId,id),'Distributors traded.');return;}
  if(action==='operator'){if(card(id)?.type==='operator'&&p.active.includes(id))showPanel({type:'operator',id});return;}
- if(action==='target'&&panel?.type==='operator'){showPanel({type:'preview',opId:panel.id,targetId:id});return;}
+ if(action==='target'&&panel?.type==='operator'){showPanel({type:'preview',opId:panel.id,targetId:id,targetIds:[id]});return;}
+ if(action==='target-add'&&panel?.type==='preview'){panel.targetIds=[panel.targetId,id];renderPanel();return;}
  if(action==='operator-confirm'&&panel?.type==='preview'){
-  const {opId,targetId}=panel,reason=operatorReason(card(opId),card(targetId));
-  if(reason){after(reason);return;}after(useOperator(state,0,opId,targetId));return;
+  const {opId,targetId}=panel,targetIds=panel.targetIds||[targetId],reason=targetIds.map(id=>operatorReason(card(opId),card(id))).find(Boolean);
+  if(reason){after(reason);return;}after(useOperator(state,0,opId,targetIds));return;
  }
 });
 loadAchievements();loadSaved();render();

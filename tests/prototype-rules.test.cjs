@@ -71,18 +71,29 @@ test('drawing a non-legit card does not create a forced decision', () => {
 test('each completed crew applies its distinct rules bonus', () => {
   const docks = engine.newState(() => 0.5);
   docks.phase = 'play';
-  docks.players[0].active = [3];
-  docks.players[0].hand = [24];
-  docks.players[0].res.Green = 2;
-  docks.players[0].res.Blue = 1;
-  complete_crew(docks.players[1], 'The Docks');
-  assert.match(engine.activateCard(docks, 0, 24), /Need/);
-  docks.players[0].res.Blue++;
-  assert.equal(engine.activateCard(docks, 0, 24), null);
+  docks.players[0].active = [];
+  docks.players[0].hand = [];
+  complete_crew(docks.players[0], 'The Docks');
+  docks.players[0].res.Green = 1;
+  docks.deck = [24, 25];
+  assert.equal(engine.drawCard(docks, 0, ['Green'], true), null);
+  assert.equal(docks.phase, 'draw_discard');
+  assert.deepEqual(docks.pendingDrawDiscard.ids, [25, 24]);
+  assert.equal(engine.discardDrawChoice(docks, 0, 25), null);
+  assert.ok(docks.players[0].hand.includes(24));
+  assert.ok(docks.discard.includes(25));
 
   const club = engine.newState(() => 0.5);
   complete_crew(club.players[0], 'Club Circuit');
-  assert.equal(engine.operatorLimit(club.players[0]), 3);
+  assert.equal(engine.operatorLimit(club.players[0]), 2);
+  club.phase = 'play';
+  club.players[0].active.push(30);
+  club.players[0].res.Purple = 1;
+  club.players[0].res.Black = 1;
+  club.players[1].active = [6, 9];
+  assert.equal(engine.useOperator(club, 0, 30, [6, 9]), null);
+  assert.ok(club.discard.includes(6));
+  assert.ok(club.discard.includes(9));
 
   const trailer = engine.newState(() => 0.5);
   trailer.phase = 'play';
@@ -92,6 +103,14 @@ test('each completed crew applies its distinct rules bonus', () => {
   assert.equal(engine.useOperator(trailer, 0, 30, 6), null);
   assert.ok(trailer.players[1].hand.includes(6));
   assert.ok(!trailer.discard.includes(6));
+  const buyout = engine.newState(() => 0.5);
+  buyout.phase = 'play';
+  buyout.players[0].active = [0, 34];
+  buyout.players[0].res.Purple = 2;
+  buyout.players[1].active = [6, 7, 8];
+  assert.equal(engine.useOperator(buyout, 0, 34, 6), null);
+  assert.ok(buyout.players[1].hand.includes(6));
+  assert.ok(!buyout.players[0].active.includes(6));
 
   const burbs = engine.newState(() => 0.5);
   burbs.players[0].active = [];
@@ -109,7 +128,6 @@ test('each completed crew applies its distinct rules bonus', () => {
   pipeline.players[1].res.Green = 1;
   assert.equal(engine.useOperator(pipeline, 0, 30, 12), null);
   assert.ok(pipeline.players[1].active.includes(30));
-  assert.ok(pipeline.players[1].active.includes(12));
 
   const night = engine.newState(() => 0.5);
   night.players[0].active = [];
@@ -123,9 +141,11 @@ test('each completed crew applies its distinct rules bonus', () => {
   arts.players[0].active = [];
   complete_crew(arts.players[0], 'Arts District');
   arts.players[1].active = [0];
+  arts.players[0].res.Purple = 1;
+  arts.players[0].res.Green = 1;
   assert.equal(engine.tradeDistributors(arts, 0, 18, 0), null);
   assert.ok(arts.players[0].active.includes(0));
-  assert.ok(arts.players[1].active.includes(18));
+  assert.equal(engine.total(arts.players[0].res), 0);
   assert.match(engine.tradeDistributors(arts, 0, 19, 18), /once per turn/);
 
   const hills = engine.newState(() => 0.5);
@@ -274,4 +294,30 @@ test('the complete browser script initializes without a runtime exception', () =
     global.localStorage = prior_storage;
     global.matchMedia = prior_match_media;
   }
+});
+
+test('opening partners are grouped three per crew with one bonus description', () => {
+  const html = fs.readFileSync(new URL('../index.html', `file://${__filename}`), 'utf8');
+
+  assert.match(html, /\.v-opening-members\{display:grid;grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
+  assert.match(html, /CREWS\.map\(\(\[crew\]\)=>'<section class="v-opening-crew">/);
+  assert.match(html, /class="v-opening-crew-head"[\s\S]*Bonus unlocked by completing this crew[\s\S]*class="v-opening-members"/);
+  assert.match(html, /CARDS\.filter\(c=>c\.type==='illegal'&&c\.crew===crew\)/);
+  assert.ok(!html.includes('class="v-opening-bonus"'));
+});
+
+test('opening crew bonuses use the revised plain-language text', () => {
+  const html = fs.readFileSync(new URL('../index.html', `file://${__filename}`), 'utf8');
+
+  assert.ok(html.includes('Bonus unlocked by completing this crew'));
+  assert.ok(html.includes('draw 2 cards and discard 1 of them'));
+  assert.ok(html.includes('ability cost for each target'));
+  assert.ok(html.includes('put that Distributor in your hand instead'));
+  assert.ok(html.includes('draw 1 card for free'));
+  assert.ok(html.includes('stop the attack and take that Operator'));
+  assert.ok(html.includes('keep up to 12 resources instead of 10'));
+  assert.ok(html.includes('activation cost of both Distributors'));
+  assert.ok(html.includes('Normally this trade costs 4'));
+  assert.match(html, /<h2>Crew bonuses<\/h2>/);
+  assert.match(html, /crewBonusReference\(\)/);
 });
