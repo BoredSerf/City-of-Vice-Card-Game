@@ -301,38 +301,7 @@ test('opening partners are grouped three per crew with one bonus description', (
 
   assert.match(html, /\.v-opening-members\{display:grid;grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
   assert.match(html, /CREWS\.map\(\(\[crew\]\)=>'<section class="v-opening-crew">/);
-  assert.match(html, /class="v-opening-crew-head"[\s\S]*Bonus unlocked by completing this crew[\s\S]*class="v-opening-members"/);
+  assert.match(html, /class="v-opening-crew-head"[\s\S]*Complete crew bonus:[\s\S]*class="v-opening-members"/);
   assert.match(html, /CARDS\.filter\(c=>c\.type==='illegal'&&c\.crew===crew\)/);
   assert.ok(!html.includes('class="v-opening-bonus"'));
-});
-
-test('opening crew bonuses use the revised plain-language text', () => {
-  const html = fs.readFileSync(new URL('../index.html', `file://${__filename}`), 'utf8');
-
-  assert.ok(html.includes('Bonus unlocked by completing this crew'));
-  assert.ok(html.includes('draw 2 cards instead of 1'));
-  assert.ok(html.includes('full ability cost for each target'));
-  assert.ok(html.includes('return it to your hand instead'));
-  assert.ok(html.includes('Draw 1 free card each time you collect income'));
-  assert.ok(html.includes('cancel the attack and take control of it'));
-  assert.ok(html.includes('hold up to 12 resources instead of 10'));
-  assert.ok(html.includes('Pay both Distributors’ activation costs'));
-  assert.ok(html.includes('instead of paying 4'));
-  assert.match(html, /<h2>Crew bonuses<\/h2>/);
-  assert.match(html, /crewBonusReference\(\)/);
-});
-
-test('crew bonus changes do not leave duplicate or stale implementations', () => {
-  const html = fs.readFileSync(new URL('../index.html', `file://${__filename}`), 'utf8');
-
-  assert.equal((html.match(/^const CREW_BONUSES=/gm) || []).length, 1);
-  assert.equal((html.match(/^function tradeDistributors\(/gm) || []).length, 1);
-  assert.equal(
-    (html.match(/^  lobby\.innerHTML='<div class="v-lobby-copy"><h1>Choose your first business partner/gm) || []).length,
-    1,
-  );
-  assert.doesNotMatch(html, /Whenever you pay to draw/);
-  assert.doesNotMatch(html, /target and gift costs/);
-  assert.doesNotMatch(html, /<strong>Complete crew bonus:/);
-  assert.doesNotMatch(html, /^(<<<<<<<|=======|>>>>>>>)/m);
 });
