@@ -1,0 +1,371 @@
+[
+  {
+    "id": "RD-001",
+    "title": "Approve an exact initial parity reference",
+    "status": "unresolved",
+    "human_decision_record": null,
+    "observed": "The source is exactly identified and executable, but this checkpoint has no verified human decision accepting it as the initial prototype_baseline.",
+    "conflict": "S01 requires an approved exact baseline; successful observation tests and a merged prototype commit do not supply that authority.",
+    "decision_required": "Accept this exact candidate or designate another exact source and require its corpus to be regenerated and verified before S03 becomes ready.",
+    "scenario_ids": [
+      "*"
+    ],
+    "affected_commands": [
+      "start_game",
+      "collect_income",
+      "choose_crew_bonus",
+      "trim_resource",
+      "activate_card",
+      "cash_card",
+      "draw_card",
+      "trade_resources",
+      "use_operator",
+      "end_turn"
+    ],
+    "blocked_slices": [
+      "S03"
+    ],
+    "source_refs": [
+      "IMPLEMENTATION.md#s01--behavioral-baseline-and-rule-decisions",
+      "CONTRIBUTING.md#baselines-and-prototype-changes"
+    ]
+  },
+  {
+    "id": "RD-002",
+    "title": "Resolve FR-001 crew semantics and authority",
+    "status": "unresolved",
+    "human_decision_record": null,
+    "observed": "The source implements all eight crew-specific abilities; the versioned FR-001 request still says triage/unset and lacks an authorized acceptance record.",
+    "conflict": "The request replaces the shared crew-resource rule and requires an accepted plan amendment; later code and tests do not resolve that recorded gate.",
+    "decision_required": "Record product authority, disposition, priority, exact intended abilities and overflow/timing/save rules, and the accepted MVP amendment or deferral.",
+    "scenario_ids": [
+      "S01-CREW-DOCKS-001",
+      "S01-CREW-DOCKS-002",
+      "S01-CREW-CLUB-001",
+      "S01-CREW-TRAILER-001",
+      "S01-CREW-TRAILER-002",
+      "S01-CREW-BURBS-001",
+      "S01-CREW-BURBS-002",
+      "S01-CREW-BURBS-003",
+      "S01-CREW-BURBS-004",
+      "S01-CREW-BURBS-005",
+      "S01-CREW-PIPELINE-001",
+      "S01-CREW-PIPELINE-002",
+      "S01-CREW-PIPELINE-003",
+      "S01-CREW-NIGHT-001",
+      "S01-CREW-MULTI-001",
+      "S01-CREW-ARTS-001",
+      "S01-CREW-ARTS-002",
+      "S01-CREW-HILL-001",
+      "S01-RUFFIAN-002",
+      "S01-FIXER-004",
+      "S01-OPERATOR-REJECT-003",
+      "S01-OPERATOR-REJECT-004",
+      "S01-WIN-001",
+      "S01-AI-FUND-004",
+      "S01-AI-DECIDE-001",
+      "S01-SAVE-003",
+      "S01-UI-DOCKS-001"
+    ],
+    "affected_commands": [
+      "collect_income",
+      "choose_crew_bonus",
+      "trim_resource",
+      "draw_card",
+      "trade_resources",
+      "trade_distributors",
+      "activate_card",
+      "use_operator",
+      "ai_step"
+    ],
+    "blocked_slices": [
+      "S04",
+      "S05",
+      "S06",
+      "S07",
+      "S08",
+      "S09",
+      "S10",
+      "S11"
+    ],
+    "source_refs": [
+      "docs/feature-requests/FR-001-crew-specific-bonuses.md",
+      "index.html#L499-L508"
+    ]
+  },
+  {
+    "id": "RD-003",
+    "title": "Ordinary draw at the seven-card boundary",
+    "status": "unresolved",
+    "human_decision_record": null,
+    "observed": "The direct rules call draws an eighth card and remains in play; the browser draw gate rejects the same full-hand input.",
+    "conflict": "Displayed hand rules say activate or cash before drawing into a full hand; the API and UI disagree.",
+    "decision_required": "Approve the intended hand boundary and an explicit correction or parity exception for the exported draw path.",
+    "scenario_ids": [
+      "S01-DRAW-006",
+      "S01-DRAW-007"
+    ],
+    "affected_commands": [
+      "draw_card"
+    ],
+    "blocked_slices": [
+      "S04",
+      "S07",
+      "S09"
+    ],
+    "source_refs": [
+      "index.html#L452",
+      "index.html#L579",
+      "index.html#L757"
+    ]
+  },
+  {
+    "id": "RD-004",
+    "title": "Fixer destination capacity and aggregate overflow",
+    "status": "unresolved",
+    "human_decision_record": null,
+    "observed": "Direct Fixer use appends into a full hand. Two individually permitted Club Circuit targets also leave eight when the first fills the last active slot.",
+    "conflict": "Displayed rules cap the hand at seven and discard forced-return overflow; acquisition overflow and multi-target preflight are unresolved in FR-001.",
+    "decision_required": "Choose rejection, discard, or an explicit mandatory destination choice for unplaceable acquisitions; define atomic multi-target handling.",
+    "scenario_ids": [
+      "S01-FIXER-003",
+      "S01-FIXER-004"
+    ],
+    "affected_commands": [
+      "use_operator"
+    ],
+    "blocked_slices": [
+      "S05",
+      "S06",
+      "S07",
+      "S09",
+      "S10"
+    ],
+    "source_refs": [
+      "index.html#L452",
+      "index.html#L588-L609",
+      "index.html#L760-L766"
+    ]
+  },
+  {
+    "id": "RD-005",
+    "title": "Sequence Burbs cash and resource trimming",
+    "status": "unresolved",
+    "human_decision_record": null,
+    "observed": "A fourth legit drawn at a full bank cannot be cashed. Excess human income replaces legit_cash with trim; rival income replaces it with play. Pending data remains.",
+    "conflict": "The immediate three-legit possession rule conflicts with the resource cap and the observed phase order.",
+    "decision_required": "Specify the ordering and continuation of mandatory cash/trim decisions for both players, including the at-cap case.",
+    "scenario_ids": [
+      "S01-CREW-BURBS-003",
+      "S01-CREW-BURBS-004",
+      "S01-CREW-BURBS-005"
+    ],
+    "affected_commands": [
+      "collect_income",
+      "cash_card",
+      "trim_resource",
+      "choose_crew_bonus"
+    ],
+    "blocked_slices": [
+      "S04",
+      "S05",
+      "S06",
+      "S08",
+      "S09",
+      "S11"
+    ],
+    "source_refs": [
+      "index.html#L571-L581"
+    ]
+  },
+  {
+    "id": "RD-006",
+    "title": "Pipeline consent and validation order",
+    "status": "unresolved",
+    "human_decision_record": null,
+    "observed": "An eligible defender automatically spends and takes the operator, even when the attacker cannot pay the intended target cost.",
+    "conflict": "FR-001 says the owner may intercept; no choice is offered by useOperator and attacker funding is checked after interception.",
+    "decision_required": "Specify optional human/AI interception, its pending phase, and whether an unfunded attack may trigger it.",
+    "scenario_ids": [
+      "S01-CREW-PIPELINE-001",
+      "S01-CREW-PIPELINE-003"
+    ],
+    "affected_commands": [
+      "use_operator"
+    ],
+    "blocked_slices": [
+      "S05",
+      "S06",
+      "S09"
+    ],
+    "source_refs": [
+      "docs/feature-requests/FR-001-crew-specific-bonuses.md",
+      "index.html#L588-L598"
+    ]
+  },
+  {
+    "id": "RD-007",
+    "title": "Legacy helper permissiveness versus the future public command boundary",
+    "status": "unresolved",
+    "human_decision_record": null,
+    "observed": "Invalid opening IDs take the fallback deal, and direct startTurn calls collect income repeatedly in play. Exported runAI returns the human to play with income; browser beginAI returns ready without human income on the same input.",
+    "conflict": "The browser constrains helper entry and differs in turn handoff. The accepted engine requires explicit phase/player validation; it does not select either legacy handoff path as intended semantics.",
+    "decision_required": "Identify helper observations excluded from public-command parity; specify intended rejections and whether end-turn handoff requires a separate collect_income command before human play.",
+    "scenario_ids": [
+      "S01-SETUP-002",
+      "S01-INCOME-004",
+      "S01-DRAW-002",
+      "S01-CREW-NIGHT-001",
+      "S01-TURN-001",
+      "S01-TURN-002"
+    ],
+    "affected_commands": [
+      "start_game",
+      "collect_income",
+      "end_turn"
+    ],
+    "blocked_slices": [
+      "S03",
+      "S04",
+      "S07",
+      "S08",
+      "S09"
+    ],
+    "source_refs": [
+      "docs/MVP_PLAN.md#5-engine-contract",
+      "index.html#L477-L494",
+      "index.html#L571-L577",
+      "index.html#L683",
+      "index.html#L986-L1003"
+    ]
+  },
+  {
+    "id": "RD-008",
+    "title": "Save schema and resume eligibility",
+    "status": "unresolved",
+    "human_decision_record": null,
+    "observed": "The factory and menu predicate use version 7, but the loader accepts only 6. A valid version-6 draw_discard state is rejected by the phase whitelist.",
+    "conflict": "The README promises unfinished-game resume. Menu eligibility and loaded state disagree; accepted MVP persistence must reject safely without overwriting rejected data.",
+    "decision_required": "Decide the legacy compatibility policy and approve aligned version, phase, pending-choice, menu and replacement behavior.",
+    "scenario_ids": [
+      "S01-SAVE-001",
+      "S01-SAVE-002",
+      "S01-SAVE-003",
+      "S01-SAVE-004"
+    ],
+    "affected_commands": [
+      "load_saved_state",
+      "resume_game"
+    ],
+    "blocked_slices": [
+      "S08",
+      "S09",
+      "S10",
+      "S11"
+    ],
+    "source_refs": [
+      "README.md",
+      "index.html#L480",
+      "index.html#L832-L846",
+      "index.html#L1073"
+    ]
+  },
+  {
+    "id": "RD-009",
+    "title": "Ruffian redundant same-crew second target",
+    "status": "unresolved",
+    "human_decision_record": null,
+    "observed": "Club Circuit pays both selected costs upfront; the first Ruffian effect removes that whole crew and the second iteration skips its now-absent target.",
+    "conflict": "The second paid target adds no effect; FR-001 has not specified whether this is a legal intentional overpayment.",
+    "decision_required": "Choose whether redundant same-crew targets are forbidden, charged once, or explicitly allowed.",
+    "scenario_ids": [
+      "S01-RUFFIAN-002"
+    ],
+    "affected_commands": [
+      "use_operator"
+    ],
+    "blocked_slices": [
+      "S05",
+      "S06",
+      "S09"
+    ],
+    "source_refs": [
+      "index.html#L588-L609",
+      "index.html#L950-L953"
+    ]
+  },
+  {
+    "id": "RD-010",
+    "title": "Visible return log after overflow discard",
+    "status": "unresolved",
+    "human_decision_record": null,
+    "observed": "Trailer Park overflow correctly records a discard, then also logs that the same distributor returns to hand; the recorded actual destination is Discarded.",
+    "conflict": "The visible log describes mutually inconsistent destinations.",
+    "decision_required": "Approve outcome copy derived from the actual destination while retaining or correcting the underlying overflow rule separately.",
+    "scenario_ids": [
+      "S01-CREW-TRAILER-002"
+    ],
+    "affected_commands": [
+      "use_operator"
+    ],
+    "blocked_slices": [
+      "S09",
+      "S10",
+      "S11"
+    ],
+    "source_refs": [
+      "index.html#L555",
+      "index.html#L588-L609"
+    ]
+  },
+  {
+    "id": "RD-011",
+    "title": "Docks mandatory-choice dismissal and UI gating",
+    "status": "unresolved",
+    "human_decision_record": null,
+    "observed": "The panel renders two discard buttons and Close. Closing removes both choices. drawReason then returns an empty gate reason while drawCard rejects the pending phase.",
+    "conflict": "A required decision can disappear while ordinary controls appear usable. No absence of an initial discard renderer is claimed.",
+    "decision_required": "Approve a non-dismissible or reliably reopenable mandatory decision and consistent gating for the remaining controls.",
+    "scenario_ids": [
+      "S01-UI-DOCKS-001"
+    ],
+    "affected_commands": [
+      "draw_card",
+      "discard_draw_choice",
+      "end_turn"
+    ],
+    "blocked_slices": [
+      "S09",
+      "S10",
+      "S11"
+    ],
+    "source_refs": [
+      "index.html#L737-L757",
+      "index.html#L925-L927",
+      "index.html#L967"
+    ]
+  },
+  {
+    "id": "RD-012",
+    "title": "AI funding under Hill Country",
+    "status": "unresolved",
+    "human_decision_record": null,
+    "observed": "The rival stops with two surplus resources despite a legal two-for-one trade that immediately funds the held distributor; funding still budgets four.",
+    "conflict": "FR-001 asks the policy to value/use all new bonuses, while the current prototype heuristic omits this available plan.",
+    "decision_required": "Choose strict observed policy parity or approve the crew-aware funding correction alongside FR-001.",
+    "scenario_ids": [
+      "S01-AI-FUND-004"
+    ],
+    "affected_commands": [
+      "ai_step",
+      "trade_resources"
+    ],
+    "blocked_slices": [
+      "S06"
+    ],
+    "source_refs": [
+      "docs/feature-requests/FR-001-crew-specific-bonuses.md",
+      "index.html#L646-L660"
+    ]
+  }
+]

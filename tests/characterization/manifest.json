@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "status": "characterization_candidate",
+  "prototype_baseline": null,
+  "human_decision_record": null,
+  "source": {
+    "repository": "https://github.com/BoredSerf/City-of-Vice-Card-Game",
+    "commit": "4ccb19703d4af1a1c202d922b514a58a17d0e537",
+    "tree": "2ec9c3176abea9efcce93491a9ea0265dbb6db17",
+    "files": [
+      {
+        "path": "index.html",
+        "sha256": "f01755c9c82c3f871fafc7f8b5b1b078ad05ddb6421a15425a0e824ebc6fac15",
+        "git_blob": "2285bc94c58eae4918602c3d5c980b3fc64d77ef"
+      },
+      {
+        "path": "tests/prototype-rules.test.cjs",
+        "sha256": "1f635a4a2852ca08fefecaaa8b98460eaf49e5144735a734fbce0334d6d19469",
+        "git_blob": "267dc21fcfbffda323312d1748bdbacb708c844c"
+      }
+    ]
+  },
+  "required_areas": [
+    "opening_distributor",
+    "initial_deal",
+    "income",
+    "crew_bonuses",
+    "resource_trimming",
+    "fixed_payment",
+    "wildcard_payment",
+    "draw_price",
+    "discard_reshuffle",
+    "activate_distributor",
+    "activate_legit",
+    "activate_operator",
+    "cash_distributor",
+    "cash_legit",
+    "cash_operator",
+    "distributor_capacity",
+    "legit_protection",
+    "operator_limit",
+    "legit_limit",
+    "hitman",
+    "ruffian",
+    "fixer",
+    "hand_limit",
+    "expansion_victory",
+    "elimination_victory",
+    "ai_funding",
+    "ai_targeting",
+    "ai_stopping"
+  ],
+  "fixtures": [
+    "cards.json",
+    "scenarios.json"
+  ],
+  "rule_decision_register": "rule_decisions.json",
+  "expectation_policy": "Literal expected deltas and visible log entries; unlisted serializable changes fail. This corpus observes a candidate and grants no rule approval.",
+  "random_policy": "Constant 0.999999 supplied independently per scenario; explicit bottom-to-top deck arrays, with the final element drawn first.",
+  "gates": [
+    "RD-001",
+    "RD-002",
+    "RD-003",
+    "RD-004",
+    "RD-005",
+    "RD-006",
+    "RD-007",
+    "RD-008",
+    "RD-009",
+    "RD-010",
+    "RD-011",
+    "RD-012"
+  ],
+  "approved_golden_scenarios": [],
+  "coverage_limitations": [
+    "No approved golden scenarios. The earlier shared crew-resource choice cannot be executed against this candidate; its intended semantics await RD-002.",
+    "Instrumented source probes, including the two-callback beginAI queue, are not real-browser, elapsed-timing, layout, animation, accessibility or reload acceptance tests.",
+    "Controlled states prove local observations, not full-game reachability or exhaustive AI behavior."
+  ]
+}
