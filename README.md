@@ -21,3 +21,12 @@ Choose **New game**, then an opening distributor. Rules and achievements are ava
 All game code, styling, and artwork are embedded in `index.html`. No installation, build command, external asset downloads, API keys, or backend required. Edit that file to change the prototype.
 
 This is a playtesting prototype; balance and AI still need playtesting. Reloading returns to the main menu, where an unfinished saved game can be resumed. Starting a new game replaces that saved game, while earned achievements and the win streak remain stored in the browser. No open-source license is assigned by this package.
+
+## Modular foundation preparation
+
+S02 development scaffolding is being prepared separately from the playable
+prototype. It is not yet runnable: dependency locks, bootstrap, implementation,
+and toolchain/browser verification remain pending. See
+[the foundation preparation notes](docs/S02_FOUNDATION.md) for the intended
+commands, boundaries, and remaining acceptance gates. Continue to use the root
+`index.html` for the current prototype.
