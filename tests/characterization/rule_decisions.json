@@ -2,11 +2,11 @@
   {
     "id": "RD-001",
     "title": "Approve an exact initial parity reference",
-    "status": "unresolved",
-    "human_decision_record": null,
-    "observed": "The source is exactly identified and executable, but this checkpoint has no verified human decision accepting it as the initial prototype_baseline.",
-    "conflict": "S01 requires an approved exact baseline; successful observation tests and a merged prototype commit do not supply that authority.",
-    "decision_required": "Accept this exact candidate or designate another exact source and require its corpus to be regenerated and verified before S03 becomes ready.",
+    "status": "resolved",
+    "human_decision_record": "docs/decisions/PD-001-reference-and-crews.md#initial-reference",
+    "observed": "The product owner approved exact source 4ccb19703d4af1a1c202d922b514a58a17d0e537 as the initial reference while keeping documented defects and edge cases open.",
+    "conflict": "The original absence of human baseline approval is resolved by PD-001; source acceptance does not approve every observed rule outcome.",
+    "decision_required": "None for this initial reference. A later baseline move or a specific correction needs separate authority; RD-007 still blocks S03.",
     "scenario_ids": [
       "*"
     ],
@@ -22,9 +22,7 @@
       "use_operator",
       "end_turn"
     ],
-    "blocked_slices": [
-      "S03"
-    ],
+    "blocked_slices": [],
     "source_refs": [
       "IMPLEMENTATION.md#s01--behavioral-baseline-and-rule-decisions",
       "CONTRIBUTING.md#baselines-and-prototype-changes"
@@ -32,12 +30,13 @@
   },
   {
     "id": "RD-002",
-    "title": "Resolve FR-001 crew semantics and authority",
+    "title": "Resolve detailed semantics of the accepted eight-crew direction",
     "status": "unresolved",
     "human_decision_record": null,
-    "observed": "The source implements all eight crew-specific abilities; the versioned FR-001 request still says triage/unset and lacks an authorized acceptance record.",
-    "conflict": "The request replaces the shared crew-resource rule and requires an accepted plan amendment; later code and tests do not resolve that recorded gate.",
-    "decision_required": "Record product authority, disposition, priority, exact intended abilities and overflow/timing/save rules, and the accepted MVP amendment or deferral.",
+    "partial_decision_record": "docs/decisions/PD-001-reference-and-crews.md#crew-direction",
+    "observed": "The source implements eight distinct crew bonuses. PD-001 accepts retaining that high-level MVP direction instead of the shared bonus, while documented defects and edge cases remain open.",
+    "conflict": "The high-level plan amendment does not decide every ability's timing, mandatory-choice order, overflow, consent or save compatibility; merged code and passing observations do not supply those rulings.",
+    "decision_required": "Approve detailed intended ability semantics and their unresolved timing, consent, overflow and save rules before affected implementation. FR-001 priority remains unset pending a separate authorized priority decision.",
     "scenario_ids": [
       "S01-CREW-DOCKS-001",
       "S01-CREW-DOCKS-002",
@@ -90,6 +89,8 @@
     ],
     "source_refs": [
       "docs/feature-requests/FR-001-crew-specific-bonuses.md",
+      "docs/decisions/PD-001-reference-and-crews.md#crew-direction",
+      "docs/MVP_PLAN.md#accepted-amendment-2026-10-13",
       "index.html#L499-L508"
     ]
   },

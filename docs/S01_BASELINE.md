@@ -1,34 +1,39 @@
-# S01 behavioral characterization candidate
+# S01 observational baseline
 
 This is an implementation checkpoint of the existing S01 contract in
 [`IMPLEMENTATION.md`](../IMPLEMENTATION.md#s01--behavioral-baseline-and-rule-decisions).
-It does not change the game, approve FR-001, lock a parity baseline, or complete
-S01. Product acceptance and independent review remain separate gates.
+The product owner has accepted the initial source reference and the high-level
+eight-crew MVP direction in [PD-001](decisions/PD-001-reference-and-crews.md).
+This checkpoint does not change the game or complete S01. Detailed product rulings
+and independent review remain separate gates.
 
 ## Exact source and authority
 
-The candidate is commit
+The approved initial reference is commit
 [`4ccb19703d4af1a1c202d922b514a58a17d0e537`](https://github.com/BoredSerf/City-of-Vice-Card-Game/commit/4ccb19703d4af1a1c202d922b514a58a17d0e537),
 tree `2ec9c3176abea9efcce93491a9ea0265dbb6db17`, the merge of PR #50.
 The [manifest](../tests/characterization/manifest.json) records the commit, tree,
 SHA-256 and Git blob identities of both the prototype and its existing tests.
 The harness refuses a source-file mismatch. A later `main` is not a substitute.
 
-`prototype_baseline` and `human_decision_record` are deliberately null. There is
-no verified human decision accepting this exact candidate in this checkpoint.
-The available versioned FR-001 record remains `triage` / `unset`. Merged code,
-automated review comments, and passing prototype tests do not resolve that record.
-This statement is about this candidate's verified evidence, not a claim that no
-earlier development or approval ever occurred.
+On 2026-10-13 the product owner accepted this exact initial reference with its
+documented defects still open. The manifest records its SHA as
+`prototype_baseline` and cites PD-001 as the human decision record. RD-001 is
+resolved. FR-001 is accepted only as the high-level direction to retain eight
+distinct crew bonuses; its priority remains `unset`. RD-002 retains the detailed
+timing, consent, overflow and compatibility questions. Merged code and passing
+tests supply no additional product approval.
 
-Every scenario is `prototype_observation` / `unapproved_candidate`. There are no
+Every scenario remains `prototype_observation` / `unapproved_candidate`; the
+retained approval label means the individual outcome has not been promoted to an
+approved intended rule. All 92 expected outcomes are unchanged. There are no
 approved corrections or approved golden scenarios. The former shared crew bonus
-cannot be executed against this candidate; no intended replacement expectation
-has been invented. See RD-001 and RD-002 in the
+cannot execute against this reference and is no longer the selected MVP direction.
+See RD-001 and RD-002 in the
 [rule-decision register](../tests/characterization/rule_decisions.json).
 
-S03 remains gated on baseline acceptance. Each other unresolved decision lists
-the commands and downstream slices it blocks. S02's independent foundation work
+S03 remains gated by RD-007 and its ordinary S01/S02 dependencies. Each unresolved
+decision lists the commands and downstream slices it blocks. S02's foundation work
 is not blocked by these rule decisions; ordinary roadmap dependencies still apply.
 The roadmap coordinator alone owns the slice register.
 
@@ -42,10 +47,12 @@ The roadmap coordinator alone owns the slice register.
 | [`harness.cjs`](../tests/characterization/harness.cjs) | Independent Node runner against the pinned prototype, not the replacement engine. |
 | [`characterization.test.cjs`](../tests/characterization.test.cjs) | Validator, exact-transition, mutation-sensitivity and traceability checks, plus the complete corpus run. |
 | [`PROTOTYPE_CHANGES.md`](PROTOTYPE_CHANGES.md) | Change-ledger intake and authority status. |
+| [`PD-001`](decisions/PD-001-reference-and-crews.md) | Public-safe product-owner decision, exact initial reference and bounded crew direction. |
 
-The existing `index.html`, original tests, MVP scope, and roadmap register are
-unchanged by these artifacts. There is no new dependency, build system, or runtime
-engine implementation.
+The existing `index.html`, original tests, scenarios and roadmap register are
+unchanged by this approval-record amendment. The MVP plan and FR-001 record now
+reflect PD-001's high-level direction. There is no new dependency, build system or
+runtime engine implementation.
 
 The source card records leave operator `ability_cost` empty; effective use costs
 come from the target (twice its cost for a Fixer), as exercised by the operator
@@ -93,14 +100,22 @@ The original tests remain useful historical evidence, but some of their setup
 helpers duplicate or omit cards. This new corpus establishes its own complete
 partitions; it does not rewrite or silently endorse those older fixtures.
 
-The candidate metadata validator requires all twelve unique manifest gates to
+The version-2 metadata validator requires all twelve unique manifest gates to
 match the register exactly, checks both directions of every scenario link, and
 accepts only known slice IDs and declared command-family labels. These labels
 include future public/controller operations; they need not be executable legacy
-methods. This candidate schema supports only unresolved decisions with null human
-records, unapproved scenarios, a null baseline and no approved golden scenarios.
-It does not authenticate a supplied approval string or promote a decision to
-resolved. Later acceptance requires a deliberately reviewed metadata update.
+methods. The sole resolved gate is RD-001, bound to the exact approved source
+commit/tree and PD-001 reference. The other eleven gates must remain unresolved
+with null resolution records and nonempty downstream mappings. RD-002 alone has a
+separate partial decision record for crew direction. Unapproved scenarios and an
+empty approved-golden list remain mandatory.
+
+These closed rules reject missing/substituted human-record references, source
+movement and broader approval claims. The corpus also requires the referenced
+decision document to exist and be nonempty. They check consistency with the
+recorded decision; they cannot authenticate product authority from arbitrary text.
+Independent review checks the actual human decision and its scope. Later product
+decisions require a deliberately reviewed metadata update.
 
 ### Execution boundaries
 
@@ -165,13 +180,13 @@ timeout 30s node --max-old-space-size=128 --test --test-concurrency=1 tests/*.te
 timeout 30s node --max-old-space-size=128 tests/characterization/harness.cjs
 ```
 
-The full suite contains the 16 unchanged original tests plus fourteen characterization
-harness tests. The corpus runner reports 36 cards, 92 scenarios, a null approved
-baseline, and the exact candidate source commit. There is no `package.json` at
+The full suite contains the 16 unchanged original tests plus eighteen characterization
+harness tests. The corpus runner reports 36 cards, 92 scenarios, the approved
+baseline SHA, and the same exact source commit. There is no `package.json` at
 this checkpoint, so no npm lint/build/test result is claimed. S02 must add these
 checks to the integration gate when the foundation exists.
 
-To verify against a clean candidate materialization while retaining the new corpus
+To verify against a clean reference materialization while retaining the corpus
 in the working branch, use a fresh destination and existing Git objects:
 
 ```sh
@@ -181,7 +196,7 @@ git -C ../city-of-vice-candidate rev-parse HEAD
 git -C ../city-of-vice-candidate status --short
 ```
 
-The source-hash check covers the candidate `index.html` and original test file.
+The source-hash check covers the reference `index.html` and original test file.
 The new corpus itself belongs to the S01 branch; copying it into the source
 worktree is unnecessary. A clean detached materialization at the stated source
 commit passed the corpus on 2026-10-13. The tree stayed clean.
@@ -196,7 +211,9 @@ commit passed the corpus on 2026-10-13. The tree stayed clean.
   and validates candidate authority, identifiers, complete gate membership and
   both link directions. Independent acceptance and the disposition of these
   findings are recorded separately in the review receipt for the exact reviewed
-  artifact. These changes do not resolve any of the twelve product decisions.
+  artifact. That remediation did not resolve product decisions; the later PD-001
+  approval resolves RD-001 only. The original adverse findings and their
+  dispositions remain in [the historical review receipt](S01_REVIEW.md).
 - Test-first validator checks were observed failing before implementation, then
   passing. Later malformed-field and missing-decision-gate tests likewise failed
   before their validation was added.
@@ -211,14 +228,21 @@ commit passed the corpus on 2026-10-13. The tree stayed clean.
   against current behavior. `S01-CREW-ARTS-002` proves twelve resources become ten
   before losing the crew and a further legal trade succeeds. It is not an open
   cap-deadlock finding for this source.
-- A human baseline decision, FR-001 disposition and the mapped rule decisions
-  remain open. A green observation run or independent technical acceptance
-  approves none of those product decisions. No replacement-engine slice is made
-  ready by these files.
+- The PD-001 metadata amendment was test-first: four failures exposed the old
+  null-baseline policy and missing checks for scoped human evidence, source
+  identity and partial crew direction; the revised checks then passed. The
+  original negative identifier, gate-membership and reciprocal-link cases remain.
+  A further negative test first exposed that RD-007 could lose S03 while retaining
+  its other slice links; the scoped validator now rejects that unauthorized lift.
+- Eleven rule decisions remain unresolved, including RD-002's detailed crew
+  semantics. FR-001 priority is unset, and RD-007 still blocks S03. A green run
+  supplies no additional product ruling. Independent acceptance of this changed
+  artifact must be recorded in a new review receipt; the historical receipt
+  applies only to its identified checkpoint.
 
-Future S03–S06 work must consume these same stable IDs only after their relevant
-outcomes have been approved, incorporating explicitly accepted corrections or
-deltas. Domain adapters must not import prototype-only UI state into the pure
-engine. If the accepted source changes, retain traceability, regenerate and
-reverify the affected corpus deliberately, and follow `CONTRIBUTING.md` rather
-than silently refreshing expected results.
+Future S03–S06 work must consume these same stable IDs as reference evidence,
+with affected rule implementation blocked by the unresolved decision mappings.
+Incorporate only explicitly accepted corrections or deltas. Domain adapters must
+not import prototype-only UI state into the pure engine. If the accepted source
+changes, retain traceability, regenerate and reverify the affected corpus
+deliberately, and follow `CONTRIBUTING.md` rather than silently refreshing results.

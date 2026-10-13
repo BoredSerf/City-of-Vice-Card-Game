@@ -83,12 +83,13 @@ test('transition checking catches unlisted mutation as well as the intended chan
   assert.throws(() => assert_transition(before, after, expected), /deep-equal/);
 });
 
-test('the recorded inventory and candidate corpus execute against the pinned prototype', () => {
+test('the recorded reference executes the corpus without granting scenario approval', () => {
   const {verify_corpus} = require(harness_path);
   assert.equal(typeof verify_corpus, 'function', 'Candidate corpus runner is not implemented');
   const result = verify_corpus();
   assert.equal(result.inventory_count, 36);
-  assert.equal(result.approved_baseline, null);
+  assert.equal(result.approved_baseline, '4ccb19703d4af1a1c202d922b514a58a17d0e537');
+  assert.equal(result.scenario_count, 92);
 });
 
 test('corpus execution detects a missing payment and identifies the failing stable scenario', () => {
@@ -110,10 +111,10 @@ test('an unresolved decision cannot silently reference a missing scenario or omi
   const {scenarios, decisions, manifest} = decision_fixture();
   assert.doesNotThrow(() => validate_decisions(scenarios, decisions, manifest));
   const missing = structuredClone(decisions);
-  missing[0].scenario_ids = ['S01-MISSING-001'];
+  missing[2].scenario_ids = ['S01-MISSING-001'];
   assert.throws(() => validate_decisions(scenarios, missing, manifest), /Unknown scenario/);
   const ungated = structuredClone(decisions);
-  ungated[0].blocked_slices = [];
+  ungated[2].blocked_slices = [];
   assert.throws(() => validate_decisions(scenarios, ungated, manifest), /downstream gate/);
 });
 
@@ -152,12 +153,12 @@ test('decision gates reject unsupported command and slice identifiers', () => {
   }
 });
 
-test('candidate authority cannot be supplied by an unsupported status or an unverified record', () => {
+test('unapproved rules cannot be resolved by an unsupported status or an unverified record', () => {
   const {validate_decisions} = require(harness_path);
   for (const [field, value] of [['status', 'resolved'], ['status', 'accepted'], ['human_decision_record', 'assumed approval']]) {
     const {scenarios, decisions, manifest} = decision_fixture();
     decisions[2][field] = value;
-    assert.throws(() => validate_decisions(scenarios, decisions, manifest), /candidate|human decision/i);
+    assert.throws(() => validate_decisions(scenarios, decisions, manifest), /unresolved|human decision/i);
   }
   for (const [field, value] of [
     ['status', 'approved'], ['prototype_baseline', 'unverified'], ['human_decision_record', 'assumed approval'],
@@ -165,8 +166,61 @@ test('candidate authority cannot be supplied by an unsupported status or an unve
   ]) {
     const {scenarios, decisions, manifest} = decision_fixture();
     manifest[field] = value;
-    assert.throws(() => validate_decisions(scenarios, decisions, manifest), /candidate|approval|schema|golden/i);
+    assert.throws(() => validate_decisions(scenarios, decisions, manifest), /baseline|approval|schema|golden/i);
   }
+});
+
+test('a recorded baseline cannot omit or substitute its human decision evidence', () => {
+  const {validate_decisions} = require(harness_path);
+  for (const value of [null, '', 'assumed approval', 'docs/missing-approval.md']) {
+    const {scenarios, decisions, manifest} = decision_fixture();
+    manifest.human_decision_record = value;
+    assert.throws(() => validate_decisions(scenarios, decisions, manifest), /baseline human decision record/i);
+  }
+  for (const value of [null, 'assumed approval']) {
+    const {scenarios, decisions, manifest} = decision_fixture();
+    decisions[0].human_decision_record = value;
+    assert.throws(() => validate_decisions(scenarios, decisions, manifest), /baseline human decision record/i);
+  }
+});
+
+test('reference approval cannot move to another source commit or tree', () => {
+  const {validate_decisions} = require(harness_path);
+  for (const change of [
+    manifest => {manifest.prototype_baseline = null;},
+    manifest => {manifest.prototype_baseline = 'a0058a03950e23231507ff5487d528b85f7c7244';},
+    manifest => {manifest.source.commit = 'a0058a03950e23231507ff5487d528b85f7c7244';},
+    manifest => {manifest.source.tree = '0000000000000000000000000000000000000000';},
+  ]) {
+    const {scenarios, decisions, manifest} = decision_fixture();
+    change(manifest);
+    assert.throws(() => validate_decisions(scenarios, decisions, manifest), /approved baseline|approved source/i);
+  }
+});
+
+test('partial crew direction preserves unresolved command gates and observational scenarios', () => {
+  const {validate_decisions} = require(harness_path);
+  for (const change of [
+    ({decisions}) => {decisions[1].status = 'resolved';},
+    ({decisions}) => {decisions[1].human_decision_record = decisions[0].human_decision_record;},
+    ({decisions}) => {decisions[1].partial_decision_record = null;},
+    ({decisions}) => {decisions[2].partial_decision_record = decisions[1].partial_decision_record;},
+    ({scenarios}) => {scenarios[0].approval = 'approved';},
+    ({manifest}) => {manifest.approved_golden_scenarios = ['S01-CREW-PIPELINE-001'];},
+  ]) {
+    const fixture = decision_fixture();
+    change(fixture);
+    assert.throws(() => validate_decisions(fixture.scenarios, fixture.decisions, fixture.manifest),
+      /unresolved|human decision|scenario approval|golden/i);
+  }
+});
+
+test('initial reference approval cannot lift the unresolved RD-007 setup gate', () => {
+  const {validate_decisions} = require(harness_path);
+  const {scenarios, decisions, manifest} = decision_fixture();
+  const setup_gate = decisions.find(decision => decision.id === 'RD-007');
+  setup_gate.blocked_slices = setup_gate.blocked_slices.filter(id => id !== 'S03');
+  assert.throws(() => validate_decisions(scenarios, decisions, manifest), /RD-007 still gates S03/);
 });
 
 test('register-to-scenario links cannot disappear even when every forward link is removed', () => {

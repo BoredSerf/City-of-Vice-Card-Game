@@ -229,32 +229,50 @@ const supported_command_ids = new Set([
 ]);
 const supported_slice_ids = new Set(Array.from({length: 15}, (_, index) => `S${String(index + 1).padStart(2, '0')}`));
 const supported_gate_ids = new Set(Array.from({length: 12}, (_, index) => `RD-${String(index + 1).padStart(3, '0')}`));
+// PD-001 approves this exact reference and only the high-level crew direction.
+// These closed metadata rules encode that reviewed scope, not an approval service.
+const approved_source_commit = '4ccb19703d4af1a1c202d922b514a58a17d0e537';
+const approved_source_tree = '2ec9c3176abea9efcce93491a9ea0265dbb6db17';
+const baseline_decision_record = 'docs/decisions/PD-001-reference-and-crews.md#initial-reference';
+const crew_decision_record = 'docs/decisions/PD-001-reference-and-crews.md#crew-direction';
 
 function validate_decisions(scenarios, decisions, manifest) {
-  assert.ok(manifest && manifest.schema_version === 1, 'Unsupported candidate metadata schema');
-  assert.equal(manifest.status, 'characterization_candidate', 'Unsupported candidate approval status');
-  assert.equal(manifest.prototype_baseline, null, 'Candidate baseline approval is absent');
-  assert.equal(manifest.human_decision_record, null, 'Candidate human decision approval is absent');
-  assert.deepEqual(manifest.approved_golden_scenarios, [], 'Candidate cannot claim approved golden scenarios');
-  assert.ok(Array.isArray(manifest.gates), 'Candidate gates must be an array');
+  assert.ok(manifest && manifest.schema_version === 2, 'Unsupported baseline metadata schema');
+  assert.equal(manifest.status, 'observational_baseline', 'Unsupported baseline approval status');
+  assert.equal(manifest.prototype_baseline, approved_source_commit, 'Approved baseline differs');
+  assert.ok(manifest.source && manifest.source.commit === approved_source_commit &&
+    manifest.source.tree === approved_source_tree, 'Approved source identity differs');
+  assert.equal(manifest.human_decision_record, baseline_decision_record, 'Baseline human decision record is required');
+  assert.deepEqual(manifest.approved_golden_scenarios, [], 'Reference approval does not approve golden scenarios');
+  assert.ok(Array.isArray(manifest.gates), 'Baseline gates must be an array');
   assert.equal(new Set(manifest.gates).size, manifest.gates.length, 'Manifest gates must be unique');
   assert.ok(manifest.gates.every(id => supported_gate_ids.has(id)), 'Unsupported gate identifier');
-  assert.ok(Array.isArray(scenarios) && Array.isArray(decisions), 'Candidate metadata collections must be arrays');
+  assert.ok(Array.isArray(scenarios) && Array.isArray(decisions), 'Baseline metadata collections must be arrays');
   const scenario_ids = new Set(scenarios.map(scenario => scenario.id));
   const decision_ids = new Set(decisions.map(decision => decision.id));
   assert.equal(scenario_ids.size, scenarios.length, 'Scenario IDs must be unique');
   assert.equal(decision_ids.size, decisions.length, 'Decision IDs must be unique');
   assert.deepEqual([...decision_ids].sort(), [...manifest.gates].sort(), 'Manifest gates and decision register differ');
-  assert.deepEqual([...decision_ids].sort(), [...supported_gate_ids].sort(), 'Candidate schema requires all twelve decision gates');
+  assert.deepEqual([...decision_ids].sort(), [...supported_gate_ids].sort(), 'Baseline schema requires all twelve decision gates');
   for (const decision of decisions) {
-    assert.equal(decision.status, 'unresolved', 'This candidate supports only unresolved decisions');
-    assert.equal(decision.human_decision_record, null, 'Candidate human decision evidence is absent');
-    assert.ok(Array.isArray(decision.affected_commands) && decision.affected_commands.length &&
-      Array.isArray(decision.blocked_slices) && decision.blocked_slices.length, 'An unresolved decision needs a downstream gate');
+    if (decision.id === 'RD-001') {
+      assert.equal(decision.status, 'resolved', 'The recorded baseline decision is resolved');
+      assert.equal(decision.human_decision_record, baseline_decision_record, 'Baseline human decision record is required');
+      assert.deepEqual(decision.blocked_slices, [], 'Resolved baseline gate cannot block slices');
+    } else {
+      assert.equal(decision.status, 'unresolved', 'This decision remains unresolved');
+      assert.equal(decision.human_decision_record, null, 'Unresolved human decision evidence is absent');
+      assert.ok(Array.isArray(decision.blocked_slices) && decision.blocked_slices.length,
+        'An unresolved decision needs a downstream gate');
+    }
+    assert.equal(decision.partial_decision_record, decision.id === 'RD-002' ? crew_decision_record : undefined,
+      'Unsupported partial human decision record');
+    assert.ok(Array.isArray(decision.affected_commands) && decision.affected_commands.length, 'Decision needs affected commands');
     assert.equal(new Set(decision.affected_commands).size, decision.affected_commands.length, 'Command IDs must be unique');
     assert.equal(new Set(decision.blocked_slices).size, decision.blocked_slices.length, 'Slice IDs must be unique');
     assert.ok(decision.affected_commands.every(id => supported_command_ids.has(id)), 'Unsupported command identifier');
     assert.ok(decision.blocked_slices.every(id => supported_slice_ids.has(id)), 'Unsupported slice identifier');
+    if (decision.id === 'RD-007') assert.ok(decision.blocked_slices.includes('S03'), 'RD-007 still gates S03');
     assert.ok(Array.isArray(decision.scenario_ids) && decision.scenario_ids.length, 'Decision needs affected scenarios');
     assert.equal(new Set(decision.scenario_ids).size, decision.scenario_ids.length, 'Affected scenario IDs must be unique');
     for (const id of decision.scenario_ids) assert.ok(id === '*' || scenario_ids.has(id), `Unknown scenario ${id}`);
@@ -264,7 +282,7 @@ function validate_decisions(scenarios, decisions, manifest) {
   }
   for (const scenario of scenarios) {
     assert.match(scenario.id, /^S01-[A-Z0-9]+(?:-[A-Z0-9]+)*$/, 'Unsupported scenario identifier');
-    assert.equal(scenario.approval, 'unapproved_candidate', 'Unsupported candidate scenario approval');
+    assert.equal(scenario.approval, 'unapproved_candidate', 'Unsupported scenario approval');
     assert.ok(Array.isArray(scenario.decision_ids) && scenario.decision_ids.length, 'Scenario needs decision links');
     assert.equal(new Set(scenario.decision_ids).size, scenario.decision_ids.length, 'Scenario decision IDs must be unique');
     for (const id of scenario.decision_ids) {
@@ -288,8 +306,6 @@ function verify_corpus(options = {}) {
     assert.equal(crypto.createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex'), input.git_blob,
       `${input.path}: source Git object differs`);
   }
-  assert.equal(manifest.status, 'characterization_candidate');
-  assert.equal(manifest.prototype_baseline, null, 'Approval must not be inferred by this observation harness');
   const {engine, source} = load_prototype(source_root);
   const inventory = read_json('cards.json');
   const normalized = engine.CARDS.map(card => ({id: card.id, name: card.name, color: card.color,
@@ -299,6 +315,8 @@ function verify_corpus(options = {}) {
   assert.deepEqual(inventory.map(card => card.id), Array.from({length: 36}, (_, id) => id));
   const scenarios = read_json('scenarios.json');
   validate_decisions(scenarios, read_json('rule_decisions.json'), manifest);
+  const decision_record_path = path.resolve(__dirname, '../..', baseline_decision_record.split('#')[0]);
+  assert.ok(fs.readFileSync(decision_record_path, 'utf8').trim().length, 'Baseline human decision record is empty');
   assert.equal(new Set(scenarios.map(scenario => scenario.id)).size, scenarios.length, 'Scenario IDs must be unique');
   for (const area of manifest.required_areas) {
     assert.ok(scenarios.some(scenario => scenario.areas.includes(area)), `Missing area: ${area}`);

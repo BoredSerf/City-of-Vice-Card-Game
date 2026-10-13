@@ -1,8 +1,8 @@
 {
-  "schema_version": 1,
-  "status": "characterization_candidate",
-  "prototype_baseline": null,
-  "human_decision_record": null,
+  "schema_version": 2,
+  "status": "observational_baseline",
+  "prototype_baseline": "4ccb19703d4af1a1c202d922b514a58a17d0e537",
+  "human_decision_record": "docs/decisions/PD-001-reference-and-crews.md#initial-reference",
   "source": {
     "repository": "https://github.com/BoredSerf/City-of-Vice-Card-Game",
     "commit": "4ccb19703d4af1a1c202d922b514a58a17d0e537",
@@ -55,7 +55,7 @@
     "scenarios.json"
   ],
   "rule_decision_register": "rule_decisions.json",
-  "expectation_policy": "Literal expected deltas and visible log entries; unlisted serializable changes fail. This corpus observes a candidate and grants no rule approval.",
+  "expectation_policy": "Literal expected deltas and visible log entries; unlisted serializable changes fail. The initial source reference is approved, but scenario outcomes remain observations and grant no rule or correction approval.",
   "random_policy": "Constant 0.999999 supplied independently per scenario; explicit bottom-to-top deck arrays, with the final element drawn first.",
   "gates": [
     "RD-001",
@@ -73,7 +73,7 @@
   ],
   "approved_golden_scenarios": [],
   "coverage_limitations": [
-    "No approved golden scenarios. The earlier shared crew-resource choice cannot be executed against this candidate; its intended semantics await RD-002.",
+    "No approved golden scenarios. The earlier shared crew-resource choice is outside the accepted MVP direction and cannot execute against this source; detailed eight-crew semantics remain gated by RD-002.",
     "Instrumented source probes, including the two-callback beginAI queue, are not real-browser, elapsed-timing, layout, animation, accessibility or reload acceptance tests.",
     "Controlled states prove local observations, not full-game reachability or exhaustive AI behavior."
   ]
