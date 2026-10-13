@@ -87,8 +87,8 @@ must not silently broaden the accepted MVP.
 
 | Slice | Outcome | Depends on | Priority | Status |
 | --- | --- | --- | --- | --- |
-| S01 | Freeze the behavioral baseline and resolve rule discrepancies | — | P0 | ready |
-| S02 | Establish reproducible OCaml, TypeScript, browser, and CI foundations | — | P0 | ready |
+| S01 | Freeze the behavioral baseline and resolve rule discrepancies | — | P0 | review |
+| S02 | Establish reproducible OCaml, TypeScript, browser, and CI foundations | — | P0 | blocked |
 | S03 | Implement deterministic domain state and game setup | S01, S02 | P0 | planned |
 | S04 | Implement turn economy, payments, drawing, and resource limits | S03 | P0 | planned |
 | S05 | Implement card effects, operators, invariants, and victory | S04 | P0 | planned |
@@ -494,4 +494,4 @@ reason in the linked work item rather than expanding this table.
 
 | Request | Summary | Source | Priority | Disposition |
 | --- | --- | --- | --- | --- |
-| FR-001 | Replace the shared complete-crew resource bonus with eight crew-specific abilities | [request record](docs/feature-requests/FR-001-crew-specific-bonuses.md) | unset | triage |
+| FR-001 | Replace the shared complete-crew resource bonus with eight crew-specific abilities | [request record](docs/feature-requests/FR-001-crew-specific-bonuses.md) | unset | accepted |
