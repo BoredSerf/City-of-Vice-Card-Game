@@ -1,0 +1,4 @@
+(test
+ (name foundation_test)
+ (libraries foundation)
+ (modes native))

@@ -1,0 +1,4 @@
+(library
+ (name foundation)
+ (modules foundation)
+ (modes byte native melange))

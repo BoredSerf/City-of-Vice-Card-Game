@@ -1,0 +1,41 @@
+name: Verify
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  integration:
+    name: integration
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      OPAMJOBS: "1"
+      DUNEJOBS: "1"
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - name: Require resolved dependency locks
+        run: |
+          test -s package-lock.json
+          test -s city_of_vice.opam.locked
+          test -s toolchain/opam-repository.rev
+      # Source-preparation checkpoint: bootstrap is deliberately absent until
+      # the actual solve and sandboxed clean-checkout install have been verified.
+      # Missing inputs or commands must fail; no placeholder success is allowed.
+      - name: Bootstrap locked dependencies
+        run: npm run bootstrap
+      - name: Verify every available foundation check
+        run: npm run verify
