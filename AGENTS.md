@@ -19,6 +19,14 @@ Read the documents above before changing the application. Follow the active slic
 in `IMPLEMENTATION.md`, and route any rule conflict or material scope change to the
 project owner rather than resolving it by assumption.
 
+## Development skills
+
+Read [the development skill setup](docs/DEVELOPMENT_SKILLS.md) before relying on
+`.agents/skills`. Preserve its source pin and selected versions. Compare
+the project's selections with the current runtime inventory, and explicitly read
+the applicable pinned instructions when automatic loading is unverified. A local
+link or readable file does not establish runtime registration.
+
 ## When someone requests a product change
 
 Follow `CONTRIBUTING.md` for any request that changes rules, behavior,
