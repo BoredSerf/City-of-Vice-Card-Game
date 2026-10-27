@@ -24,9 +24,10 @@ This is a playtesting prototype; balance and AI still need playtesting. Reloadin
 
 ## Modular development foundation
 
-The locked bootstrap and full aggregate have been exercised locally on macOS.
-Independent clean-checkout, hosted CI, and required integration-gate evidence
-remain acceptance requirements.
+The prerequisite foundation has independent technical verification, including
+successful hosted bootstrap and aggregate checks. This combined S01/S02 source
+requires current cumulative review; required integration-gate enforcement and
+controlled failure/block/correction/pass acceptance proof remain open.
 
 The separate S02 foundation uses OCaml/Melange, TypeScript, Vite, and real-browser
 smoke tests. With Node 24.22.1 (bundled npm 11.19.1), opam 2.6.1, and the documented
@@ -34,6 +35,11 @@ system prerequisites, run `npm run bootstrap`, explicitly install the test brows
 with `npm run browser:install`, then run `npm run verify`. After Melange compilation,
 `npm run dev` serves the foundation probe and `npm run build:web` produces its
 backend-free static site in `dist/`.
+
+The aggregate includes S01's original/validator tests and explicit
+`npm run test:characterization` corpus check. Its six PD-002 golden cases are
+validated as specifications only, while all 92 historical observations still
+execute against the pinned prototype.
 
 See [the foundation guide](docs/S02_FOUNDATION.md) for prerequisites, architecture,
 locked dependencies, individual checks, and remaining CI/integration acceptance

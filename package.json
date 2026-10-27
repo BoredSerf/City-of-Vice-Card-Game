@@ -19,10 +19,11 @@
     "build:melange": "node scripts/opam.mjs dune build -j 1 @melange",
     "typecheck": "tsc --noEmit",
     "test:prototype": "node --max-old-space-size=128 --test --test-concurrency=1 tests/*.test.cjs",
+    "test:characterization": "node --max-old-space-size=128 tests/characterization/harness.cjs",
     "test:native": "node scripts/opam.mjs dune runtest -j 1",
     "test:contract": "vitest run --config vitest.config.ts",
     "test:browser": "vitest run --config vitest.browser.config.ts",
-    "test": "npm run test:prototype && npm run test:native && npm run test:contract",
+    "test": "npm run test:prototype && npm run test:characterization && npm run test:native && npm run test:contract",
     "build:web": "vite build",
     "verify": "npm run format:check && npm run build:native && npm run build:melange && npm run typecheck && npm test && npm run build:web && npm run test:browser"
   },

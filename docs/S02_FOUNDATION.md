@@ -1,13 +1,23 @@
 # S02 development foundation
 
-The installed dependency locks, bootstrap, and full aggregate have been exercised
-locally on macOS. Independent clean-checkout verification, hosted CI, and required
-integration-gate evidence remain acceptance requirements.
+The prerequisite foundation at `ca648316467c0ae0dba7c8a3a13ff620b70f9ecb`
+has independent technical verification, including a successful locked bootstrap
+and full aggregate in actual hosted CI. This combined source requires fresh
+cumulative validation and independent review. Required integration enforcement
+and controlled failure/block/correction/pass acceptance proof remain open in
+[issue #56](https://github.com/BoredSerf/City-of-Vice-Card-Game/issues/56).
 
 This foundation implements the product-neutral toolchain boundary in the
 [S02 contract](../IMPLEMENTATION.md#s02--reproducible-project-foundation).
 It does not implement game rules or replace the playable root `index.html`.
-S01 remains separate. Rule decisions do not affect this toolchain probe.
+The combined branch also contains the independently verified S01 and bounded
+[PD-002](decisions/PD-002-public-command-boundary.md) checkpoint at exact commit
+`79617046fd45d183983cbbdb6ed35bd498cdc05a`, merged without rebasing either history
+in `860aec8880e59c056070895d3fa7ddd54cf00e30`. S01's
+[reference record](S01_BASELINE.md) and [prior review](S01_PRODUCT_REVIEW.md)
+retain their recorded scopes. These unmerged prerequisites are not accepted,
+integrated or `done`; the combined base must be independently verified before
+dependent implementation relies on it. No S03 implementation is included.
 
 ## Prerequisites
 
@@ -113,32 +123,43 @@ component-test application or simulated DOM.
 ## Verification entry points
 
 `npm run verify` runs every check below in order, stopping at failure. Empty test
-sets do not pass. `npm test` contains prototype, native, and generated-module
+sets do not pass. `npm test` contains prototype, standalone characterization,
+native, and generated-module
 contract tests; build Melange first when running it separately. The browser suite
 requires the production build first.
 
-| Check                                                                | Command                  |
-| -------------------------------------------------------------------- | ------------------------ |
-| OCaml and Dune formatting                                            | `npm run format:ocaml`   |
-| Web, scripts, configuration, and foundation documentation formatting | `npm run format:web`     |
-| Native target compilation                                            | `npm run build:native`   |
-| Melange ES module compilation                                        | `npm run build:melange`  |
-| TypeScript and maintained declaration                                | `npm run typecheck`      |
-| Existing prototype tests                                             | `npm run test:prototype` |
-| Native probe behavior                                                | `npm run test:native`    |
-| Actual generated-module contract                                     | `npm run test:contract`  |
-| Static production build                                              | `npm run build:web`      |
-| Development and built-static browser smoke                           | `npm run test:browser`   |
+| Check                                                                | Command                         |
+| -------------------------------------------------------------------- | ------------------------------- |
+| OCaml and Dune formatting                                            | `npm run format:ocaml`          |
+| Web, scripts, configuration, and foundation documentation formatting | `npm run format:web`            |
+| Native target compilation                                            | `npm run build:native`          |
+| Melange ES module compilation                                        | `npm run build:melange`         |
+| TypeScript and maintained declaration                                | `npm run typecheck`             |
+| Original prototype and S01 validator tests                           | `npm run test:prototype`        |
+| Standalone S01 observation corpus and bounded golden metadata        | `npm run test:characterization` |
+| Native probe behavior                                                | `npm run test:native`           |
+| Actual generated-module contract                                     | `npm run test:contract`         |
+| Static production build                                              | `npm run build:web`             |
+| Development and built-static browser smoke                           | `npm run test:browser`          |
 
 After `npm run build:melange`, `npm run dev` serves the foundation shell on
 loopback. Continue opening root `index.html` to play the current prototype.
 
-The prototype command retains Node's `tests/*.test.cjs` entry point. After S01 is
-independently integrated, that glob also includes its characterization test.
-Integration must additionally add S01's standalone corpus command,
-`node tests/characterization/harness.cjs`, to this aggregate before treating the
-combined gate as complete. S01 is not copied into this independent branch and a
-missing corpus is not silently skipped.
+The prototype command retains Node's `tests/*.test.cjs` entry point and now runs
+the 16 original tests plus 22 S01 validator tests. The separate
+`test:characterization` command explicitly runs
+`node --max-old-space-size=128 tests/characterization/harness.cjs` after those
+tests, before native and contract tests. It is included in `npm test` and thus
+`npm run verify`; a missing or failing corpus stops the aggregate.
+
+The corpus executes all 92 unchanged observations against the source identities
+pinned to `4ccb19703d4af1a1c202d922b514a58a17d0e537`, accounts for all 36 cards,
+and checks the six approved PD-002 golden specifications as
+`golden_execution: specification_only`. It does not execute those golden public
+commands or approve other prototype outcomes. The original observation data and
+prototype baseline remain unchanged. `S01_PROTOTYPE_ROOT` can select a clean
+materialization of that exact baseline as described in the S01 reference record;
+source mismatch or missing evidence fails verification.
 
 ## Locked toolchain
 
@@ -166,8 +187,9 @@ Vitest versions accepts Node 24.22.1.
 
 `.github/workflows/verify.yml` runs the same bootstrap, explicit browser setup,
 and aggregate verification on ordinary `pull_request` events and pushes to
-`main`, using the standard native x64 `macos-15-intel` runner. Its hosted sandbox
-compatibility still requires an observed successful run. Linux developer
+`main`, using the standard native x64 `macos-15-intel` runner. The exact prerequisite
+`ca648316` has an independently examined successful hosted run; that historical
+result does not verify this combined revision or make enforcement configured. Linux developer
 bootstrap prerequisites are separate from this hosted verification path.
 The stable job name is `integration`. It uses read-only contents access,
 no persisted checkout credentials, no secrets, no deployment, no path exclusions,
@@ -184,7 +206,11 @@ implementation and owner/admin evidence that a controlled failing available
 check blocks integration through the required gate. Evidence must identify the
 protected target, required check/app, actual checked-out revision, failing
 run, observed blocked integration, and subsequent passing run. The PR remains a
-Draft until applicable evidence and independent review are established.
+Draft until applicable evidence and independent review are established. Issue #56
+retains the enforcement and controlled failure/block/correction/pass obligations;
+neither stacking nor successful local/hosted execution waives them. Human
+acceptance, dependency-order merges and post-merge tracker reconciliation remain
+separate requirements.
 
 The [historical checkpoint review](S02_REVIEW.md) covers the earlier unfinished
 preparation, not acceptance of this runtime implementation. Game rules, AI,
