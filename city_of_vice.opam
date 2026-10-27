@@ -1,0 +1,15 @@
+opam-version: "2.0"
+name: "city_of_vice"
+version: "0.0.0"
+synopsis: "Product-neutral City of Vice development foundation"
+description: "Development-only OCaml and Melange dependencies for the S02 foundation."
+homepage: "https://github.com/BoredSerf/City-of-Vice-Card-Game"
+depends: [
+  "ocaml" {= "5.5.1"}
+  "dune" {= "3.24.2"}
+  "melange" {= "7.0.1-55"}
+  "ocamlformat" {= "0.29.0"}
+]
+build: [
+  ["dune" "build" "-j" jobs "@all"]
+]

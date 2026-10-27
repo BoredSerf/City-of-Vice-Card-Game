@@ -1,0 +1,38 @@
+{
+  "name": "city-of-vice",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "npm@11.19.1",
+  "engines": {
+    "node": "24.22.1",
+    "npm": "11.19.1"
+  },
+  "scripts": {
+    "bootstrap": "node scripts/bootstrap.mjs",
+    "browser:install": "node scripts/install-browser.mjs",
+    "dev": "vite --host 127.0.0.1",
+    "format:ocaml": "node scripts/opam.mjs dune build -j 1 @fmt",
+    "format:web": "prettier --check package.json tsconfig.json '*config.ts' 'scripts/*.mjs' 'src/**/*.ts' 'web/**/*.{html,ts}' 'tests/contract/**/*.ts' 'tests/browser/**/*.ts' docs/S02_FOUNDATION.md .github/workflows/verify.yml",
+    "format:check": "npm run format:ocaml && npm run format:web",
+    "build:native": "node scripts/opam.mjs dune build -j 1 test/foundation_test.exe",
+    "build:melange": "node scripts/opam.mjs dune build -j 1 @melange",
+    "typecheck": "tsc --noEmit",
+    "test:prototype": "node --max-old-space-size=128 --test --test-concurrency=1 tests/*.test.cjs",
+    "test:characterization": "node --max-old-space-size=128 tests/characterization/harness.cjs",
+    "test:native": "node scripts/opam.mjs dune runtest -j 1",
+    "test:contract": "vitest run --config vitest.config.ts",
+    "test:browser": "vitest run --config vitest.browser.config.ts",
+    "test": "npm run test:prototype && npm run test:characterization && npm run test:native && npm run test:contract",
+    "build:web": "vite build",
+    "verify": "npm run format:check && npm run build:native && npm run build:melange && npm run typecheck && npm test && npm run build:web && npm run test:browser"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "playwright": "1.64.0",
+    "prettier": "3.9.10",
+    "typescript": "7.0.2",
+    "vite": "8.3.4",
+    "vitest": "5.0.4"
+  }
+}

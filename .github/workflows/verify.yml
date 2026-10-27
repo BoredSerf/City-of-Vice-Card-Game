@@ -1,0 +1,70 @@
+name: Verify
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  integration:
+    name: integration
+    runs-on: macos-15-intel
+    timeout-minutes: 60
+    env:
+      OPAMJOBS: "1"
+      DUNEJOBS: "1"
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - name: Require resolved dependency locks
+        run: |
+          test -s package-lock.json
+          test -s city_of_vice.opam.locked
+          test -s toolchain/opam-repository.rev
+          shasum -a 256 package-lock.json city_of_vice.opam.locked toolchain/opam-repository.rev
+      - name: Check native build and sandbox prerequisites
+        run: |
+          test "$(uname -s)" = Darwin
+          test "$(uname -m)" = x86_64
+          test "$(id -u)" -ne 0
+          sw_vers
+          uname -m
+          id -u
+          xcode-select --print-path
+          xcrun --find clang
+          xcrun --show-sdk-path
+          xcodebuild -version
+          node --version
+          npm --version
+          for required_command in git cc make curl tar unzip patch pkg-config rsync sandbox-exec shasum; do
+            command -v "$required_command"
+          done
+      - name: Install verified opam
+        run: |
+          mkdir -p "$RUNNER_TEMP/s02-bin"
+          curl --fail --location --silent --show-error https://github.com/ocaml/opam/releases/download/2.6.1/opam-2.6.1-x86_64-macos --output "$RUNNER_TEMP/s02-bin/opam"
+          echo "c5bb19c813ae9a4317b5ff2845ba52a51c96648c08faa0ecc14900fb61b198c7  $RUNNER_TEMP/s02-bin/opam" | shasum -a 256 --check
+          chmod 755 "$RUNNER_TEMP/s02-bin/opam"
+          "$RUNNER_TEMP/s02-bin/opam" --version
+          echo "$RUNNER_TEMP/s02-bin" >> "$GITHUB_PATH"
+      - name: Bootstrap locked dependencies
+        run: |
+          npm run bootstrap
+          shasum -a 256 package-lock.json city_of_vice.opam.locked toolchain/opam-repository.rev
+      - name: Explicitly install the pinned browser
+        run: npm run browser:install
+      - name: Verify every available foundation check
+        env:
+          DEBUG: pw:browser
+        run: npm run verify

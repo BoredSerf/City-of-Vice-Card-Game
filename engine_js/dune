@@ -1,0 +1,6 @@
+(melange.emit
+ (target generated)
+ (alias melange)
+ (modules adapter)
+ (libraries foundation)
+ (module_systems esm))
