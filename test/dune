@@ -1,4 +1,38 @@
 (test
  (name foundation_test)
+ (modules foundation_test)
  (libraries foundation)
  (modes native))
+
+(library
+ (name native_json)
+ (modules native_json)
+ (libraries city_engine yojson)
+ (modes native))
+
+(test
+ (name setup_test)
+ (modules setup_test)
+ (libraries city_engine native_json yojson)
+ (modes native)
+ (deps
+  ../tests/characterization/cards.json
+  ../tests/characterization/scenarios.json
+  ../tests/characterization/public_command_parity.json))
+
+(executable
+ (name setup_parity)
+ (modules setup_parity)
+ (libraries city_engine native_json)
+ (modes native))
+
+(rule
+ (targets setup_parity.json)
+ (action
+  (with-stdout-to
+   %{targets}
+   (run %{exe:setup_parity.exe}))))
+
+(alias
+ (name runtest)
+ (deps setup_parity.json))

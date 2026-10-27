@@ -2,3 +2,8 @@
  (name foundation)
  (modules foundation)
  (modes byte native melange))
+
+(library
+ (name city_engine)
+ (modules wire_value cards random_source command event state setup engine)
+ (modes byte native melange))

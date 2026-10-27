@@ -1,1 +1,1 @@
-(dirs engine engine_js test)
+(dirs engine engine_js test tests)
