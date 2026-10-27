@@ -68,19 +68,20 @@ independent re-verification of affected behavior before continued reliance.
 
 This exception does not override product or rule-decision gates, unsafe behavior,
 failed applicable checks, or unverified required interfaces. RD-007 still gates
-S03. S02 still requires configured enforcement and actual evidence of failure,
-blocked integration, correction, and a passing run; a green workflow is insufficient.
+S03. S02 still requires passing local and hosted checks for the reviewed revision
+and independent verification. The [CI acceptance amendment](docs/MVP_PLAN.md#ci-acceptance-amendment-2026-10-27)
+removes mandatory GitHub required-status-check enforcement and deliberate
+merge-block proof; a passing workflow alone does not replace independent review.
 Keep pending acceptance and integration obligations explicit without representing
-unmerged prerequisites as
-`done` or integrated. Do not change priorities, dependencies, or slice contracts to
-make a stack eligible.
+unmerged prerequisites as `done` or integrated. Do not change priorities,
+dependencies, or slice contracts to make a stack eligible.
 
 The same roadmap coordinator owns the entire unfinished stack through human merges
 and tracker reconciliation. Update descendant bases and verification after parent
 merges as needed. No automatic merging, merge on the user's behalf, direct `main`
-push, or required-check bypass is permitted. Close out only when the authoritative
-tracker and integration evidence agree and no stack obligations remain; confirmation
-alone does not require a no-op tracker update.
+push, or bypass of existing repository protections is permitted. Close out only
+when the authoritative tracker and integration evidence agree and no stack
+obligations remain; confirmation alone does not require a no-op tracker update.
 
 ### Prototype baseline and change intake
 
@@ -146,8 +147,10 @@ A slice is `done` only when all of the following are true:
   behavior and no-mutation checks where applicable;
 - applicable formatting, compilation, type, test, and build checks pass from the
   documented developer workflow;
-- after S02, every new test or build command is added to the required integration
-  gate before the slice that introduced it can be `done`;
+- after S02, every new test or build command is added to the automated verification
+  workflow before the slice that introduced it can be `done`, applicable local and
+  hosted checks pass for the reviewed revision, and a human inspects those results
+  before acceptance and merge;
 - generated and source artifacts have not become parallel hand-edited
   implementations;
 - the change has been reviewed against the current slice contract and the MVP
@@ -209,20 +212,23 @@ dependencies, run both toolchains, test, and build.
 
 **Deliver:** Add the approved OCaml, Dune, Melange, TypeScript, Vite, Vitest, and
 real-browser foundations; establish the required domain and adapter boundaries;
-add formatting, type-check, test, and build entry points; and establish required
-branch or integration checks for every check then available. Make the workflow
-incremental so each later slice can add its new test or build command to the same
-required gate. Keep the shipped website backend-free and free of runtime package
+add formatting, type-check, test, and build entry points; and establish automated
+CI execution for every check then available. Make the workflow incremental so each
+later slice can add its new test or build command to the same verification
+workflow. Keep the shipped website backend-free and free of runtime package
 downloads.
 
 **Accept when:** Dependency versions are locked; empty or minimal OCaml and browser
 targets compile; a generated Melange ES module is consumable by TypeScript; the
-thin application shell builds; the initial checks run locally and in CI; and a
-failing available check prevents integration through the configured required gate.
+thin application shell builds; every initial check passes locally and in hosted
+CI for the reviewed revision; and a human inspects those results before acceptance
+and merge. Mandatory GitHub required-status-check enforcement and a deliberate
+failing-check merge-block demonstration are not acceptance prerequisites.
 
 **Verify:** Follow the documented bootstrap from a clean checkout, run every
-initial check, and demonstrate that a failing required check blocks integration.
-This is the foundation for MVP-001, MVP-006A, MVP-009, and MVP-012.
+initial check, inspect a successful hosted run for the same reviewed revision,
+and record independent review of the source and results before human acceptance
+and merge. This is the foundation for MVP-001, MVP-006A, MVP-009, and MVP-012.
 
 ### S03 — Deterministic state and game setup
 
@@ -419,20 +425,22 @@ served outputs. Satisfies MVP-009 and MVP-010.
 **Outcome:** Only a fully verified artifact from an approved production revision is
 deployed to Cloudflare Pages.
 
-**Deliver:** Audit that the required integration gate accumulated formatting,
+**Deliver:** Audit that the automated verification workflow accumulated formatting,
 OCaml compilation and tests, Melange generation, TypeScript checking and contracts,
 browser smoke tests, and both builds as those checks were introduced. Add artifact
 identity verification and the owner-authorized workflow that uploads the
 already-built `dist/` artifact and performs a post-deployment smoke check.
 
-**Accept when:** The accumulated required checks already block integration on
-failure; deployment does not rebuild on Cloudflare; the deployed artifact is the
+**Accept when:** The accumulated checks pass locally and in hosted CI for the
+reviewed revision, and a human inspects their results before acceptance and merge;
+deployment does not rebuild on Cloudflare; the deployed artifact is the
 verified CI artifact; credentials remain in repository secrets with least
 privilege; and an authorized production deployment passes against its resulting
 URL.
 
-**Verify:** Exercise a failing gate, a successful clean run, artifact identity, and
-the production smoke check. Production setup stops until the authorized repository,
+**Verify:** Review the accumulated workflow and successful clean local and hosted
+runs for the reviewed revision, verify artifact identity, and run the production
+smoke check. Production setup stops until the authorized repository,
 Pages project, and secret-management path are confirmed. Satisfies MVP-009A and
 MVP-012.
 
@@ -497,7 +505,7 @@ supporting coverage without changing this mapping.
 | MVP-009A — Cloudflare deployment | S13 |
 | MVP-010 — Standalone export | S12 |
 | MVP-011 — Responsive access | S11 |
-| MVP-012 — CI gate | S13 |
+| MVP-012 — CI verification | S13 |
 | MVP-013 — Documentation | S14 |
 | MVP-014 — Legacy retirement | S15 |
 
