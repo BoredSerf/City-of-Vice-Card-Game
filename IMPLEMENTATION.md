@@ -120,9 +120,9 @@ must not silently broaden the accepted MVP.
 
 | Slice | Outcome | Depends on | Priority | Status |
 | --- | --- | --- | --- | --- |
-| S01 | Freeze the behavioral baseline and resolve rule discrepancies | — | P0 | review |
+| S01 | Freeze the behavioral baseline and resolve rule discrepancies | — | P0 | done |
 | S02 | Establish reproducible OCaml, TypeScript, browser, and CI foundations | — | P0 | blocked |
-| S03 | Implement deterministic domain state and game setup | S01, S02 | P0 | planned |
+| S03 | Implement deterministic domain state and game setup | S01, S02 | P0 | in_progress |
 | S04 | Implement turn economy, payments, drawing, and resource limits | S03 | P0 | planned |
 | S05 | Implement card effects, operators, invariants, and victory | S04 | P0 | planned |
 | S06 | Put the heuristic rival behind the neutral player boundary | S05 | P0 | planned |
