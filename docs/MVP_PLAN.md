@@ -10,6 +10,24 @@ Later semantic amendments require their own product-owner decision record.
 
 Scope: Convert the existing browser prototype into a tested, modular web application without changing the base game's intended rules.
 
+## Accepted amendment 2026-10-13
+
+The product owner accepted [PD-001](decisions/PD-001-reference-and-crews.md):
+
+- Use exact prototype commit `4ccb19703d4af1a1c202d922b514a58a17d0e537`
+  as the initial comparison reference while keeping documented defects open.
+- Retain eight distinct crew bonuses in the MVP rather than reverting to the
+  older shared complete-crew resource bonus. This accepts the high-level direction
+  of [FR-001](feature-requests/FR-001-crew-specific-bonuses.md).
+
+This amendment does not approve all observed outcomes or settle detailed timing,
+consent, mandatory-choice order, overflow or save semantics. RD-002 through RD-012
+in the [S01 decision register](../tests/characterization/rule_decisions.json) remain
+unresolved and gate their mapped commands and slices; RD-007 still gates S03.
+Characterization expectations remain observations until a specific intended rule
+or correction is approved. FR-001 priority remains `unset`; architecture,
+platform scope and the remaining acceptance criteria are unchanged.
+
 ## 1. Outcome
 
 The MVP will turn the single-file prototype into a maintainable application with:

@@ -1,0 +1,452 @@
+[
+  {
+    "id": 0,
+    "name": "Ishmael Kelp",
+    "color": "Green",
+    "business": "Dockside",
+    "type": "illegal",
+    "crew": "The Docks",
+    "activation_cost": [
+      "Green"
+    ],
+    "flavor": ""
+  },
+  {
+    "id": 1,
+    "name": "Slick Panzer",
+    "color": "Black",
+    "business": "Waterfront",
+    "type": "illegal",
+    "crew": "The Docks",
+    "activation_cost": [
+      "Black"
+    ],
+    "flavor": ""
+  },
+  {
+    "id": 2,
+    "name": "Ivory Crane",
+    "color": "White",
+    "business": "Shipping Office",
+    "type": "illegal",
+    "crew": "The Docks",
+    "activation_cost": [
+      "White"
+    ],
+    "flavor": ""
+  },
+  {
+    "id": 3,
+    "name": "Fizzy Sparks",
+    "color": "Yellow",
+    "business": "Nightclub Bar",
+    "type": "illegal",
+    "crew": "Club Circuit",
+    "activation_cost": [
+      "Yellow"
+    ],
+    "flavor": ""
+  },
+  {
+    "id": 4,
+    "name": "Colby Dunn",
+    "color": "Blue",
+    "business": "Club Entrance",
+    "type": "illegal",
+    "crew": "Club Circuit",
+    "activation_cost": [
+      "Blue"
+    ],
+    "flavor": ""
+  },
+  {
+    "id": 5,
+    "name": "Bianca Starr",
+    "color": "White",
+    "business": "Dance Floor",
+    "type": "illegal",
+    "crew": "Club Circuit",
+    "activation_cost": [
+      "White"
+    ],
+    "flavor": ""
+  },
+  {
+    "id": 6,
+    "name": "Velvet Zizek",
+    "color": "Purple",
+    "business": "Trailer Door",
+    "type": "illegal",
+    "crew": "Trailer Park",
+    "activation_cost": [
+      "Purple"
+    ],
+    "flavor": ""
+  },
+  {
+    "id": 7,
+    "name": "Skeeter Rash",
+    "color": "Black",
+    "business": "Back Window",
+    "type": "illegal",
+    "crew": "Trailer Park",
+    "activation_cost": [
+      "Black"
+    ],
+    "flavor": ""
+  },
+  {
+    "id": 8,
+    "name": "Clover Gaines",
+    "color": "Green",
+    "business": "Front Porch",
+    "type": "illegal",
+    "crew": "Trailer Park",
+    "activation_cost": [
+      "Green"
+    ],
+    "flavor": ""
+  },
+  {
+    "id": 9,
+    "name": "Nero Lombardy",
+    "color": "Black",
+    "business": "Poolside",
+    "type": "illegal",
+    "crew": "The Burbs",
+    "activation_cost": [
+      "Black"
+    ],
+    "flavor": ""
+  },
+  {
+    "id": 10,
+    "name": "Mavis Marlow",
+    "color": "Purple",
+    "business": "Over the Hedge",
+    "type": "illegal",
+    "crew": "The Burbs",
+    "activation_cost": [
+      "Purple"
+    ],
+    "flavor": ""
+  },
+  {
+    "id": 11,
+    "name": "Whitney Whitlock",
+    "color": "White",
+    "business": "Open House",
+    "type": "illegal",
+    "crew": "The Burbs",
+    "activation_cost": [
+      "White"
+    ],
+    "flavor": ""
+  },
+  {
+    "id": 12,
+    "name": "Cinder Briggs",
+    "color": "Black",
+    "business": "Scrapyard",
+    "type": "illegal",
+    "crew": "Pipeline",
+    "activation_cost": [
+      "Black"
+    ],
+    "flavor": ""
+  },
+  {
+    "id": 13,
+    "name": "Dwight Waters",
+    "color": "Blue",
+    "business": "Car Wash",
+    "type": "illegal",
+    "crew": "Pipeline",
+    "activation_cost": [
+      "Blue"
+    ],
+    "flavor": ""
+  },
+  {
+    "id": 14,
+    "name": "Dizzy Diesel",
+    "color": "Yellow",
+    "business": "Repo & Towing",
+    "type": "illegal",
+    "crew": "Pipeline",
+    "activation_cost": [
+      "Yellow"
+    ],
+    "flavor": ""
+  },
+  {
+    "id": 15,
+    "name": "Vera Veil",
+    "color": "Purple",
+    "business": "Coat Check",
+    "type": "illegal",
+    "crew": "Night Shift",
+    "activation_cost": [
+      "Purple"
+    ],
+    "flavor": ""
+  },
+  {
+    "id": 16,
+    "name": "Iggy Static",
+    "color": "Blue",
+    "business": "Backstage",
+    "type": "illegal",
+    "crew": "Night Shift",
+    "activation_cost": [
+      "Blue"
+    ],
+    "flavor": ""
+  },
+  {
+    "id": 17,
+    "name": "Gigi Watts",
+    "color": "Yellow",
+    "business": "Drum Kit",
+    "type": "illegal",
+    "crew": "Night Shift",
+    "activation_cost": [
+      "Yellow"
+    ],
+    "flavor": ""
+  },
+  {
+    "id": 18,
+    "name": "Lyla Plum",
+    "color": "Purple",
+    "business": "New Age Store",
+    "type": "illegal",
+    "crew": "Arts District",
+    "activation_cost": [
+      "Purple"
+    ],
+    "flavor": ""
+  },
+  {
+    "id": 19,
+    "name": "Drew Moss",
+    "color": "Green",
+    "business": "Mural Studio",
+    "type": "illegal",
+    "crew": "Arts District",
+    "activation_cost": [
+      "Green"
+    ],
+    "flavor": ""
+  },
+  {
+    "id": 20,
+    "name": "Sterling Starch",
+    "color": "White",
+    "business": "Stage Door",
+    "type": "illegal",
+    "crew": "Arts District",
+    "activation_cost": [
+      "White"
+    ],
+    "flavor": ""
+  },
+  {
+    "id": 21,
+    "name": "Sunny Rattle",
+    "color": "Yellow",
+    "business": "Roadside Stand",
+    "type": "illegal",
+    "crew": "Hill Country",
+    "activation_cost": [
+      "Yellow"
+    ],
+    "flavor": ""
+  },
+  {
+    "id": 22,
+    "name": "Flint Wheeler",
+    "color": "Blue",
+    "business": "Trucking Route",
+    "type": "illegal",
+    "crew": "Hill Country",
+    "activation_cost": [
+      "Blue"
+    ],
+    "flavor": ""
+  },
+  {
+    "id": 23,
+    "name": "Bud Bramble",
+    "color": "Green",
+    "business": "Country Acreage",
+    "type": "illegal",
+    "crew": "Hill Country",
+    "activation_cost": [
+      "Green"
+    ],
+    "flavor": ""
+  },
+  {
+    "id": 24,
+    "name": "Records & Games",
+    "color": "Green",
+    "business": "Records & Games",
+    "type": "legit",
+    "crew": "Independent",
+    "activation_cost": [
+      "Green",
+      "Any"
+    ],
+    "flavor": ""
+  },
+  {
+    "id": 25,
+    "name": "Auto Shop",
+    "color": "Blue",
+    "business": "Auto Shop",
+    "type": "legit",
+    "crew": "Independent",
+    "activation_cost": [
+      "Blue",
+      "Any"
+    ],
+    "flavor": ""
+  },
+  {
+    "id": 26,
+    "name": "Budget Motel",
+    "color": "Black",
+    "business": "Budget Motel",
+    "type": "legit",
+    "crew": "Independent",
+    "activation_cost": [
+      "Black",
+      "Any"
+    ],
+    "flavor": ""
+  },
+  {
+    "id": 27,
+    "name": "Cocktail Bar",
+    "color": "White",
+    "business": "Cocktail Bar",
+    "type": "legit",
+    "crew": "Independent",
+    "activation_cost": [
+      "White",
+      "Any"
+    ],
+    "flavor": ""
+  },
+  {
+    "id": 28,
+    "name": "Festival Grounds",
+    "color": "Yellow",
+    "business": "Festival Grounds",
+    "type": "legit",
+    "crew": "Independent",
+    "activation_cost": [
+      "Yellow",
+      "Any"
+    ],
+    "flavor": ""
+  },
+  {
+    "id": 29,
+    "name": "Clinic",
+    "color": "Purple",
+    "business": "Clinic",
+    "type": "legit",
+    "crew": "Independent",
+    "activation_cost": [
+      "Purple",
+      "Any"
+    ],
+    "flavor": ""
+  },
+  {
+    "id": 30,
+    "name": "Wade Haskett",
+    "color": "Green",
+    "business": "Hitman",
+    "type": "operator",
+    "crew": "Independent",
+    "activation_cost": [
+      "Green"
+    ],
+    "ability": "kill",
+    "ability_cost": [],
+    "flavor": ""
+  },
+  {
+    "id": 31,
+    "name": "Ellis Voss",
+    "color": "Blue",
+    "business": "Hitman",
+    "type": "operator",
+    "crew": "Independent",
+    "activation_cost": [
+      "Blue"
+    ],
+    "ability": "kill",
+    "ability_cost": [],
+    "flavor": ""
+  },
+  {
+    "id": 32,
+    "name": "Eddie Pruitt",
+    "color": "Yellow",
+    "business": "Ruffian",
+    "type": "operator",
+    "crew": "Independent",
+    "activation_cost": [
+      "Yellow"
+    ],
+    "ability": "coerce",
+    "ability_cost": [],
+    "flavor": ""
+  },
+  {
+    "id": 33,
+    "name": "Dottie Bellini",
+    "color": "Purple",
+    "business": "Ruffian",
+    "type": "operator",
+    "crew": "Independent",
+    "activation_cost": [
+      "Purple"
+    ],
+    "ability": "coerce",
+    "ability_cost": [],
+    "flavor": ""
+  },
+  {
+    "id": 34,
+    "name": "Leonard Huff",
+    "color": "Black",
+    "business": "Fixer",
+    "type": "operator",
+    "crew": "Independent",
+    "activation_cost": [
+      "Black"
+    ],
+    "ability": "buy",
+    "ability_cost": [],
+    "flavor": ""
+  },
+  {
+    "id": 35,
+    "name": "Simone Mercer",
+    "color": "White",
+    "business": "Fixer",
+    "type": "operator",
+    "crew": "Independent",
+    "activation_cost": [
+      "White"
+    ],
+    "ability": "buy",
+    "ability_cost": [],
+    "flavor": ""
+  }
+]
