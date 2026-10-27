@@ -22,11 +22,19 @@ All game code, styling, and artwork are embedded in `index.html`. No installatio
 
 This is a playtesting prototype; balance and AI still need playtesting. Reloading returns to the main menu, where an unfinished saved game can be resumed. Starting a new game replaces that saved game, while earned achievements and the win streak remain stored in the browser. No open-source license is assigned by this package.
 
-## Modular foundation preparation
+## Modular development foundation
 
-S02 development scaffolding is being prepared separately from the playable
-prototype. It is not yet runnable: dependency locks, bootstrap, implementation,
-and toolchain/browser verification remain pending. See
-[the foundation preparation notes](docs/S02_FOUNDATION.md) for the intended
-commands, boundaries, and remaining acceptance gates. Continue to use the root
-`index.html` for the current prototype.
+Recovery checkpoint: the installed opam lock and complete bootstrap validation are
+still pending. The commands below describe the intended complete workflow.
+
+The separate S02 foundation uses OCaml/Melange, TypeScript, Vite, and real-browser
+smoke tests. With Node 24.19.0 (bundled npm 11.17.0), opam 2.6.1, and the documented
+system prerequisites, run `npm run bootstrap`, explicitly install the test browser
+with `npm run browser:install`, then run `npm run verify`. After Melange compilation,
+`npm run dev` serves the foundation probe and `npm run build:web` produces its
+backend-free static site in `dist/`.
+
+See [the foundation guide](docs/S02_FOUNDATION.md) for prerequisites, architecture,
+locked dependencies, individual checks, and remaining CI/integration acceptance
+gates. The foundation does not implement gameplay; continue using root `index.html`
+for the current prototype. No open-source license has been assigned.

@@ -1,5 +1,5 @@
 import { defineConfig } from "vitest/config";
-import { generated_adapter } from "./vite.config";
+import { generated_adapter } from "./vite.config.ts";
 
 export default defineConfig({
   resolve: {

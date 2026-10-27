@@ -1,182 +1,176 @@
-# S02 foundation source preparation
+# S02 development foundation
 
-This is a partial implementation of the existing
-[S02 contract](../IMPLEMENTATION.md#s02--reproducible-project-foundation), based on
-commit `4ccb19703d4af1a1c202d922b514a58a17d0e537`. It is not a runnable foundation
-or a completed slice. The roadmap coordinator owns `IMPLEMENTATION.md`.
+Recovery checkpoint: runtime and npm lock are present. The final installed opam
+lock, full aggregate, and clean-checkout bootstrap verification remain pending.
+The commands below describe the intended complete workflow.
 
-## Current boundary
+This foundation implements the product-neutral toolchain boundary in the
+[S02 contract](../IMPLEMENTATION.md#s02--reproducible-project-foundation).
+It does not implement game rules or replace the playable root `index.html`.
+S01 remains separate. Rule decisions do not affect this toolchain probe.
 
-Prepared here: dependency constraints, Dune/Vite/TypeScript/Vitest configuration,
-test expectations, a maintained declaration, and a fail-closed CI draft.
+## Prerequisites
 
-Still absent: runtime implementation, dependency installation, transitive locks,
-a tested bootstrap command, generated JavaScript, and browser/build evidence.
-The new tests have not run. Missing tools or missing modules are not observed
-test-first assertion failures. Implement runtime bodies only after the relevant
-tests can run and fail for the intended missing behavior.
+Install these exact developer tools before bootstrapping:
 
-The existing root `index.html` and `tests/prototype-rules.test.cjs` stay unchanged.
-Their source identities are respectively:
+| Tool                                     | Version |
+| ---------------------------------------- | ------- |
+| Node                                     | 24.19.0 |
+| npm, bundled with that Node distribution | 11.17.0 |
+| opam                                     | 2.6.1   |
 
-- SHA-256 `f01755c9c82c3f871fafc7f8b5b1b078ad05ddb6421a15425a0e824ebc6fac15`
-- SHA-256 `1f635a4a2852ca08fefecaaa8b98460eaf49e5144735a734fbce0334d6d19469`
+The [official Node distribution index](https://nodejs.org/dist/index.json) records
+the Node/npm pairing. Verify downloaded Node archives against their
+[official checksums](https://nodejs.org/dist/v24.19.0/SHASUMS256.txt).
+The [opam release](https://github.com/ocaml/opam/releases/tag/2.6.1) includes native
+macOS and Linux binaries; verify their digests from the official release metadata.
+The workflow pins and checks the Linux binary's SHA-256 before execution.
 
-S01 remains separate, unfinished work. Product-owner decision PD-001 (2026-10-13)
-approves exact commit `4ccb19703d4af1a1c202d922b514a58a17d0e537` as the initial
-prototype reference and retaining eight distinct crew bonuses as the high-level
-MVP direction. Eleven rule decisions remain open, including detailed crew
-semantics; prototype observations do not approve those outcomes. None blocks this
-product-neutral foundation. S01's updated decision record is awaiting independent
-re-review and publication; this approval does not complete S01.
+macOS requires Xcode Command Line Tools and the standard `sandbox-exec` command.
+Linux requires a C build toolchain, `bubblewrap`, `curl`, `git`, `make`, `patch`,
+`pkg-config`, `rsync`, `tar`, and `unzip`. The committed workflow installs these
+prerequisites on Ubuntu 24.04. Bootstrap supports macOS and Linux; other platforms
+have not been established. It fails when required commands or exact tool versions
+are missing. It does not install system packages or change shell startup files.
+Missing system dependencies must be installed separately.
 
-Source-stage verification on 2026-10-13 ran the unchanged original suite with
-`timeout 30s node --max-old-space-size=128 --test --test-concurrency=1 tests/prototype-rules.test.cjs`:
-16 passed, 0 failed, 0 skipped. Both recorded source hashes still matched.
-`package.json` and `tsconfig.json` parsed as JSON. No OCaml, TypeScript, formatting,
-build, browser, clean-bootstrap, or CI result is claimed.
+## Clean-checkout workflow
 
-## Smallest complete path
+From a clean checkout, with the prerequisites on `PATH`:
 
-The implementation will have one pure OCaml library in `engine/`, one thin
-Melange adapter in `engine_js/`, and one framework-free browser entry at
-`web/index.html` with `web/main.ts`. The source prototype is neither imported nor
-bundled. `dist/` will contain only the generated foundation website.
+```sh
+npm run bootstrap
+npm run browser:install
+npm run verify
+```
 
-The temporary `Foundation.probe` operation carries a supplied label into a
-string, demonstrated by `S02` becoming `OCaml / S02`. It establishes toolchain
-plumbing only. It is not a game-session API, state model, or product-copy decision.
-The maintained declaration in `src/engine/generated-engine.d.ts` exposes only
-`probe(label: string): string`. The contract suite imports actual Melange output;
-there is no handwritten substitute for that output.
+`bootstrap` installs complete locked development dependencies. It uses
+`npm ci --ignore-scripts`, validates the lock inputs, and keeps their bytes
+unchanged. It creates a private opam root under `.tools/opam-root` and a local
+switch in `_opam/`; existing user roots and switches are not used. The wrapper
+clears inherited opam overrides and uses one compilation job with source checksum
+verification required. The opam repository is fixed to the exact commit in
+`toolchain/opam-repository.rev`. Default build, install, and remove sandbox hooks
+must remain enabled; a failed sandbox is a failure to resolve, never a reason to
+disable it. Re-running bootstrap uses the same root and locked solution.
 
-Dune emits ES modules under `_build/`. The Vite alias points at the documented
-nested emit layout, `_build/default/engine_js/generated/engine_js/adapter.js`;
-the first real compilation must confirm that exact path. Generated artifacts
-remain ignored and are regenerated rather than copied or edited manually.
-See the official [Dune Melange reference](https://dune.readthedocs.io/en/stable/melange.html).
+Both locks are required: `package-lock.json` contains transitive versions and
+integrity values, and `city_of_vice.opam.locked` is generated by `opam lock`
+from an installed solution, including transitive dependencies. The repository
+revision fixes opam package definitions and source checksums. Normal bootstrap
+does not update these inputs. Deliberate dependency updates need a fresh solve,
+full lock generation, and clean-checkout verification.
 
-The browser smoke uses Vitest's Node runner and Playwright to open both the real
-Vite development entry and the actual built static output. A single browser runs
-the same visible probe assertion for each, sequentially, with fresh contexts.
-This avoids a second component-test application and does not use jsdom. The
-optional `@vitest/browser-playwright` provider is unnecessary for this narrow
-end-to-end check; no provider wrapper or browser-context unit suite is introduced.
+Browser installation is an explicit separate command. `browser:install` installs
+only headless Chromium and FFmpeg from the pinned Playwright release into
+`.cache/ms-playwright`. Bootstrap does not download a browser. Linux users must
+separately install browser system libraries, as CI does with
+`node node_modules/playwright/cli.js install-deps chromium`, before browser setup.
+The pinned browser is Chrome Headless Shell 156.0.8078.4, revision 1248, from
+Playwright 1.64.0. Tests launch with `chromiumSandbox: true`; sandbox failure stops
+verification. An explicit `CITY_CHROMIUM_EXECUTABLE` can select an existing browser
+for diagnostics, but establishes compatibility only for that executable.
 
-Both flows must display the OCaml result through TypeScript and the real DOM,
-have no uncaught page errors, and make no external HTTP requests. Non-local
-requests are blocked and recorded. Playwright launches with
-`chromiumSandbox: true`; sandbox failure is a stop, not a reason to disable it.
+Generated files and local tools live under ignored `_build/`, `_opam/`, `.tools/`,
+`.cache/`, `node_modules/`, and `dist/`. They are regenerated from committed sources
+and locks. No generated JavaScript is copied or edited by hand.
 
-## Dependency resolution still required
+## Source boundaries
 
-These are exact direct constraints, not solved dependency locks:
+`engine/foundation.ml` and its interface form a pure OCaml library. The temporary
+`probe` carries a caller-supplied label into a string: `S02` becomes
+`OCaml / S02`. It is a toolchain probe, not a game-session API, state model, or
+product-copy decision. It imports no browser, storage, timer, network, UI, or
+Melange APIs.
 
-| Tool | Candidate |
-| --- | --- |
-| Node / npm | 24.19.0 / 11.9.0 |
-| opam | 2.6.1 |
-| OCaml | 5.5.1 |
-| Dune | 3.24.2 |
-| Melange | 7.0.1-55 |
-| ocamlformat | 0.29.0 |
-| TypeScript | 7.0.2 |
-| Vite | 8.3.4 |
-| Vitest | 5.0.4 |
-| Playwright | 1.64.0 |
-| Prettier | 3.9.10 |
-| Node declarations | 24.19.2 |
+`engine_js/adapter.ml` exports that operation through Melange. Dune emits actual ES
+modules at `_build/default/engine_js/generated/engine_js/adapter.js`; Vite and
+Vitest aliases resolve to that output. The maintained declaration in
+`src/engine/generated-engine.d.ts` exposes only `probe(label: string): string`.
+The contract suite checks ordinary string values and supplied labels using
+the generated module.
 
-Before installation, verify the selected official release metadata and required
-system packages. Melange's OCaml and Dune constraints must be satisfied by the
-actual solve. Relevant primary records include
-[Melange](https://opam.ocaml.org/packages/melange/melange.7.0.1-55/),
-[Dune](https://opam.ocaml.org/packages/dune/dune.3.24.2/),
-[ocamlformat](https://opam.ocaml.org/packages/ocamlformat/ocamlformat.0.29.0/),
-[Vite](https://github.com/vitejs/vite/blob/v8.3.4/packages/vite/package.json),
-[Vitest](https://github.com/vitest-dev/vitest/blob/v5.0.4/packages/vitest/package.json),
-and [Playwright](https://github.com/microsoft/playwright/blob/v1.64.0/packages/playwright/package.json).
+The framework-free `web/index.html` and `web/main.ts` display the result through
+TypeScript and the real DOM. Vite builds only that separate shell into `dist/`.
+Neither the playable prototype nor its artwork is imported. The output has no
+backend or runtime package download.
 
-The authorized resolution stage must generate and review:
+The browser smoke uses Vitest's Node runner and Playwright against the actual
+development entry and production static build, sequentially with fresh contexts.
+Both must display the OCaml result without uncaught page errors or non-local
+requests. Non-local requests are recorded and blocked. There is no second
+component-test application or simulated DOM.
 
-- `package-lock.json`, including exact transitive packages and integrity fields;
-- `city_of_vice.opam.locked`, from a real installed solution, without
-  `--direct-only` or machine-local dependency pins;
-- `toolchain/opam-repository.rev`, recording the exact repository commit used for
-  the solve, with package source checksums verified against that revision; and
-- a single documented `npm run bootstrap` path, verified in a clean checkout with
-  that repository revision and both lockfiles, without silently updating them.
+## Verification entry points
 
-The planned bootstrap must check prerequisite versions, keep opam's sandbox
-enabled, use one compiler job, and fail on missing locks, unsupported prerequisites,
-or integrity failures. It must neither change system/security configuration nor
-implicitly download browsers. This checkpoint deliberately has no bootstrap
-script or fabricated lockfiles. Do not use an unlocked install as its replacement.
-The official [opam lock command](https://opam.ocaml.org/doc/man/opam-lock.html)
-requires installed dependencies; constraints alone cannot provide its evidence.
+`npm run verify` runs every check below in order, stopping at failure. Empty test
+sets do not pass. `npm test` contains prototype, native, and generated-module
+contract tests; build Melange first when running it separately. The browser suite
+requires the production build first.
 
-Browser installation and execution are separate stages. A developer may later
-set `CITY_CHROMIUM_EXECUTABLE` to an explicitly approved existing executable.
-That proves only that browser's compatibility. System Chromium 154 is not the
-Chromium 156/revision 1248 expected by the Playwright 1.64.0 candidate. A pinned
-browser download needs its own approval and must be recorded; none is performed
-by these test files or package scripts.
+| Check                                                                | Command                  |
+| -------------------------------------------------------------------- | ------------------------ |
+| OCaml and Dune formatting                                            | `npm run format:ocaml`   |
+| Web, scripts, configuration, and foundation documentation formatting | `npm run format:web`     |
+| Native target compilation                                            | `npm run build:native`   |
+| Melange ES module compilation                                        | `npm run build:melange`  |
+| TypeScript and maintained declaration                                | `npm run typecheck`      |
+| Existing prototype tests                                             | `npm run test:prototype` |
+| Native probe behavior                                                | `npm run test:native`    |
+| Actual generated-module contract                                     | `npm run test:contract`  |
+| Static production build                                              | `npm run build:web`      |
+| Development and built-static browser smoke                           | `npm run test:browser`   |
 
-## Verification commands after bootstrap
+After `npm run build:melange`, `npm run dev` serves the foundation shell on
+loopback. Continue opening root `index.html` to play the current prototype.
 
-The intended aggregate is `npm run verify`. It runs every command below in order
-and stops on any failure; no command accepts an empty test set as success.
+The prototype command retains Node's `tests/*.test.cjs` entry point. After S01 is
+independently integrated, that glob also includes its characterization test.
+Integration must additionally add S01's standalone corpus command,
+`node tests/characterization/harness.cjs`, to this aggregate before treating the
+combined gate as complete. S01 is not copied into this independent branch and a
+missing corpus is not silently skipped.
 
-| Check | Command |
-| --- | --- |
-| OCaml/Dune formatting | `npm run format:ocaml` |
-| New web/config/document formatting | `npm run format:web` |
-| Native target compilation | `npm run build:native` |
-| Generated Melange ES modules | `npm run build:melange` |
-| TypeScript and maintained declaration | `npm run typecheck` |
-| Existing prototype tests | `npm run test:prototype` |
-| Native probe behavior | `npm run test:native` |
-| Actual generated-module contract | `npm run test:contract` |
-| Static production build | `npm run build:web` |
-| Development and built-static browser smoke | `npm run test:browser` |
+## Locked toolchain
 
-`npm test` includes prototype, native, and generated-module contract tests. Build
-the generated modules first when running it individually. Browser tests need the
-production build first. `npm run dev` will serve only the separate foundation
-entry after Melange compilation; it is not the playable prototype.
+| Dependency        | Version  |
+| ----------------- | -------- |
+| OCaml             | 5.5.1    |
+| Dune              | 3.24.2   |
+| Melange           | 7.0.1-55 |
+| ocamlformat       | 0.29.0   |
+| TypeScript        | 7.0.2    |
+| Vite              | 8.3.4    |
+| Vitest            | 5.0.4    |
+| Playwright        | 1.64.0   |
+| Prettier          | 3.9.10   |
+| Node declarations | 24.19.2  |
 
-The prototype command retains Node's `tests/*.test.cjs` entry point. After S01
-is independently integrated, that glob will also include its characterization
-test. The integration change must additionally add its standalone corpus command
-(`node tests/characterization/harness.cjs`) to the same aggregate before calling
-the combined gate complete. Do not copy S01 into this independent branch or
-conditionally skip a missing corpus while claiming it was checked.
+The selected [Melange package](https://opam.ocaml.org/packages/melange/melange.7.0.1-55/)
+requires OCaml >=5.5 and <5.6, and Dune >=3.21. The selected
+[Dune](https://opam.ocaml.org/packages/dune/dune.3.24.2/) and
+[ocamlformat](https://opam.ocaml.org/packages/ocamlformat/ocamlformat.0.29.0/)
+versions satisfy the installed solution. Registry metadata for exact Vite and
+Vitest versions accepts Node 24.19.0.
 
-## CI and enforcement
+## CI and remaining acceptance gates
 
-The draft `.github/workflows/verify.yml` uses ordinary `pull_request` events and
-pushes to `main`, `contents: read`, no persisted checkout credentials, no secrets,
-no deployment, no path exclusions, and one stable aggregate job named
-`integration`. It fails while lock inputs or bootstrap are missing. It contains
-no placeholder success, `continue-on-error`, or failure-masking final job.
+`.github/workflows/verify.yml` runs the same bootstrap, explicit browser setup,
+and aggregate verification on ordinary `pull_request` events and pushes to
+`main`. The stable job name is `integration`. It uses read-only contents access,
+no persisted checkout credentials, no secrets, no deployment, no path exclusions,
+and no failure-masking final job. Checkout and setup-node are pinned to full
+upstream release commits.
 
-Official action tags were resolved on 2026-10-13:
+Workflow source alone does not make a check required or prove it has passed.
+S02 acceptance additionally requires a successful hosted run for the current
+implementation and owner/admin evidence that a controlled failing available
+check blocks integration through the required gate. Evidence must identify the
+protected target, required check/app, actual checked-out revision, failing
+run, observed blocked integration, and subsequent passing run. The PR remains a
+Draft until applicable evidence and independent review are established.
 
-- [checkout v7.0.1](https://github.com/actions/checkout/releases/tag/v7.0.1):
-  `3d3c42e5aac5ba805825da76410c181273ba90b1`
-- [setup-node v7.1.0](https://github.com/actions/setup-node/releases/tag/v7.1.0):
-  `949feb2413d6458794dcd2491c4babbbce0c15c1`
-
-The final clean CI runner still needs the verified bootstrap's opam and browser
-prerequisites. The source draft is not evidence that GitHub Actions has run.
-
-Repository enforcement is separately pending owner/admin action. Workflow YAML
-does not make a check required. S02 cannot satisfy acceptance until an authorized
-owner/admin configures the emitted aggregate check as required for integration
-and demonstrates, on a controlled failing change, that integration is blocked.
-Record the check name/app identity, protected target, failing run/commit, observed
-block, and subsequent passing run. Do not merge or alter repository permissions
-to manufacture that evidence.
-
-Rules, AI, persistence, gameplay UI, artwork extraction, standalone export,
-deployment, licensing changes, and prototype retirement remain outside S02.
+The [historical checkpoint review](S02_REVIEW.md) covers the earlier unfinished
+preparation, not acceptance of this runtime implementation. Game rules, AI,
+persistence, gameplay UI, artwork extraction, standalone export, deployment,
+licensing changes, and prototype retirement remain outside S02.

@@ -3,4 +3,4 @@
  (alias melange)
  (modules adapter)
  (libraries foundation)
- (module_systems es6))
+ (module_systems esm))

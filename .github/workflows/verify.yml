@@ -32,10 +32,22 @@ jobs:
           test -s package-lock.json
           test -s city_of_vice.opam.locked
           test -s toolchain/opam-repository.rev
-      # Source-preparation checkpoint: bootstrap is deliberately absent until
-      # the actual solve and sandboxed clean-checkout install have been verified.
-      # Missing inputs or commands must fail; no placeholder success is allowed.
+      - name: Install Linux build and sandbox prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes bubblewrap build-essential curl git patch pkg-config rsync unzip
+      - name: Install verified opam
+        run: |
+          mkdir -p "$RUNNER_TEMP/s02-bin"
+          curl --fail --location --silent --show-error https://github.com/ocaml/opam/releases/download/2.6.1/opam-2.6.1-x86_64-linux --output "$RUNNER_TEMP/s02-bin/opam"
+          echo "b533d393a6967150d6ef41cb3d71e147e93ecbabeb59e921aa412c0ae79ebe3d  $RUNNER_TEMP/s02-bin/opam" | sha256sum --check
+          chmod 755 "$RUNNER_TEMP/s02-bin/opam"
+          echo "$RUNNER_TEMP/s02-bin" >> "$GITHUB_PATH"
       - name: Bootstrap locked dependencies
         run: npm run bootstrap
+      - name: Install browser system prerequisites
+        run: node node_modules/playwright/cli.js install-deps chromium
+      - name: Explicitly install the pinned browser
+        run: npm run browser:install
       - name: Verify every available foundation check
         run: npm run verify

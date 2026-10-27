@@ -7,8 +7,11 @@ test.each([
   ["S02", "OCaml / S02"],
   ["", "OCaml / "],
   ["<strong>probe</strong>", "OCaml / <strong>probe</strong>"],
-])("the generated facade carries %j as an ordinary string", (label, expected) => {
-  const result: string = probe(label);
-  expect(typeof result).toBe("string");
-  expect(result).toBe(expected);
-});
+])(
+  "the generated facade carries %j as an ordinary string",
+  (label, expected) => {
+    const result: string = probe(label);
+    expect(typeof result).toBe("string");
+    expect(result).toBe(expected);
+  },
+);
