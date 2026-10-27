@@ -28,11 +28,11 @@ command discovery and execution. Player 1 has no opening commands. After a valid
 start, neither player has an executable S03 command to discover. New games use a
 new session; repeating `start_game` on a started session rejects unchanged.
 
-Snapshots have `schema_version: 1`, `rules_version: "prototype_4ccb197_pd002"`,
-ordered zones, resources, phase/turn/player, RNG cursor and structured event
-history. Outcome and pending decision fields are null in this slice. Only
-`awaiting_opening` and the initial `ready` state are supported; later slices must
-extend the decoder and its tests deliberately. These snapshots are trusted full
+The original interim S03 rules ID was `prototype_4ccb197_pd002`. The current engine
+uses the explicit [S04 working identifier](S04_ECONOMY.md) and rejects that old ID.
+Schema remains 1, with ordered zones, resources, phase/turn/player, RNG cursor and
+structured history. S03 awaiting/initial-ready constraints remain strict; S04
+adds its documented economy/pending states. These snapshots are trusted full
 engine data, not redacted player-policy views. S06 owns the player boundary.
 
 The shared `Wire_value` representation is ordinary pure JSON-shaped data.
@@ -46,7 +46,7 @@ an input JSON object repeats a name; both then use the same state decoder.
 Validation rejects unsupported versions/RNG algorithms, malformed fields, unknown
 phases, wrong player count, missing/duplicate/out-of-range cards, invalid initial
 resources/draw prices/suspension, inconsistent turns/starters/history, and non-null
-outcomes/pending choices. It validates this slice's emitted states rather than
+outcomes or invalid pending choices. It validates the documented emitted states rather than
 claiming support for arbitrary future midgame or prototype saves. There is no
 reachability solver or migration promise.
 
@@ -124,8 +124,8 @@ if (created.status === "accepted") {
 
 `legal_commands(state_json, "0")` supplies the numeric actor as JSON. Commands
 require the actor plus the advertised command fields. Unknown commands and
-malformed external values reject safely. No S04 command is advertised or executed.
-The complete production/development facade stabilization remains S07.
+malformed external values reject safely. S04 adds its documented command/event/state
+unions to these same exports. Complete facade stabilization remains S07.
 
 ## Verification and evidence
 

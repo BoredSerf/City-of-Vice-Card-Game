@@ -141,7 +141,7 @@ test("legal discovery offers only executable setup commands", () => {
         JSON.parse(legal_commands(started.state_json, String(player))),
       ).toStrictEqual({
         status: "accepted",
-        commands: [],
+        commands: player === 0 ? [{ command: "collect_income" }] : [],
       });
     }
   }
@@ -230,6 +230,7 @@ test("malformed, unsupported and impossible snapshots fail typed validation", ()
   }
   for (const invalid of [
     { ...state, deck: [] },
+    { ...state, phase: "play" },
     { ...state, deck: [0, ...state.deck] },
     { ...state, active_player: 1 },
     { ...state, history: [] },
@@ -248,7 +249,7 @@ test("malformed, unsupported and impossible snapshots fail typed validation", ()
     rejected(validate_state(encoded), encoded, "invalid_state");
   }
   for (const invalid of [
-    { ...state, phase: "play" },
+    { ...state, phase: "over" },
     { ...state, winner: 0 },
     { ...state, pending_decision: {} },
     { ...state, turn_number: 0.5 },

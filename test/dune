@@ -35,4 +35,33 @@
 
 (alias
  (name runtest)
- (deps setup_parity.json))
+ (deps setup_parity.json economy_parity.json))
+
+(library
+ (name economy_fixture)
+ (modules economy_fixture)
+ (libraries city_engine native_json yojson)
+ (modes native))
+
+(test
+ (name economy_test)
+ (modules economy_test)
+ (libraries city_engine native_json economy_fixture yojson)
+ (modes native)
+ (deps
+  ../tests/economy/scenarios.json
+  ../tests/characterization/scenarios.json))
+
+(executable
+ (name economy_parity)
+ (modules economy_parity)
+ (libraries economy_fixture yojson)
+ (modes native))
+
+(rule
+ (targets economy_parity.json)
+ (deps ../tests/economy/scenarios.json)
+ (action
+  (with-stdout-to
+   %{targets}
+   (run %{exe:economy_parity.exe}))))

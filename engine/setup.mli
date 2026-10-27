@@ -6,6 +6,12 @@ type 'random opening = {
   random_source : 'random;
 }
 
+val shuffle :
+  draw_index:(bound:int -> 'random -> int * 'random) ->
+  random_source:'random ->
+  int list ->
+  int list * 'random
+
 val deal :
   draw_index:(bound:int -> 'random -> int * 'random) ->
   random_source:'random ->

@@ -1,4 +1,12 @@
-type t = Start_game of { opening_distributor : int }
+type t =
+  | Start_game of { opening_distributor : int }
+  | Collect_income
+  | Draw_card of { payment : Cards.color list; use_docks_bonus : bool }
+  | Discard_draw_choice of { card_id : int }
+  | Cash_card of { card_id : int; color : Cards.color }
+  | Trim_resource of { color : Cards.color }
+  | Trade_resources of { from_color : Cards.color; to_color : Cards.color }
+  | End_turn
 
 type rejection_code =
   | Invalid_seed
@@ -9,6 +17,14 @@ type rejection_code =
   | Malformed_state
   | Unsupported_version
   | Invalid_state
+  | Invalid_card
+  | Invalid_choice
+  | Hand_full
+  | Resource_limit
+  | Insufficient_cards
+  | Invalid_payment
+  | Insufficient_resources
+  | Crew_unavailable
 
 type rejection = { code : rejection_code; field : string }
 

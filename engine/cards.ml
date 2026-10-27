@@ -127,3 +127,17 @@ let opening_ids =
   List.filter_map
     (fun card -> if is_distributor card.id then Some card.id else None)
     all
+
+let color_of_key = function
+  | "green" -> Some Green
+  | "blue" -> Some Blue
+  | "black" -> Some Black
+  | "white" -> Some White
+  | "yellow" -> Some Yellow
+  | "purple" -> Some Purple
+  | _ -> None
+
+let complete_crew active crew =
+  List.for_all
+    (fun card -> card.crew <> Some crew || List.mem card.id active)
+    all
