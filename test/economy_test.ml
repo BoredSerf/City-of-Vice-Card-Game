@@ -16,12 +16,19 @@ let () =
     (fun record ->
       let value = Native_json.of_json (member "state" record) in
       match State.of_value value with
-      | Error rejection ->
+      | Error rejection -> (
           check
             (Command.rejection_name rejection.code
             = Json.to_string (member "expected_code" record))
-            "wrong invalid-snapshot code"
-      | Ok _ -> failwith "crafted invalid snapshot accepted")
+            "wrong invalid-snapshot code";
+          match member "expected_field" record with
+          | `String field ->
+              check (rejection.field = field) "wrong invalid-snapshot field"
+          | _ -> ())
+      | Ok _ ->
+          failwith
+            (Json.to_string (member "id" record)
+            ^ ": crafted invalid snapshot accepted"))
     (Json.to_list (member "invalid_states" document));
   List.iter
     (fun record ->

@@ -17123,6 +17123,790 @@
           }
         }
       ]
+    },
+    {
+      "id": "S04-V-001/three-old-legits/discard-27",
+      "contract_id": "S04-DERIVED-CODEC-001",
+      "authority_class": "provisional",
+      "authority_record": "issues61-63",
+      "source_refs": [
+        {
+          "scenario_id": "S01-LEGIT-001",
+          "steps": [1],
+          "use": "bounded source comparison/projection; exclusions recorded in ledger"
+        }
+      ],
+      "projection": "Issue76 AC11/12 local pending-admission control. Initial pending zones/context come from the existing literal first-draw expectation; each resolution and continuation is an explicit contract-derived literal. Synthetic context, not a claimed full-game transcript. Pending Green10 is an explicit live-cap bank projection to prove cash11->trim10 closure; no historical debit reconstruction is asserted.",
+      "random_source_kind": "seeded",
+      "facade": true,
+      "initial_state": {
+        "schema_version": 1,
+        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "phase": "draw_discard",
+        "turn_number": 1,
+        "active_player": 0,
+        "deck": [
+          4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
+          23, 29, 30, 31, 32, 33, 34, 35
+        ],
+        "discard": [],
+        "players": [
+          {
+            "resources": {
+              "green": 10,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [25, 26, 27, 28],
+            "active_card_ids": [0, 1, 2, 24],
+            "suspended_card_ids": [],
+            "draw_price": 2
+          },
+          {
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [],
+            "active_card_ids": [3],
+            "suspended_card_ids": [],
+            "draw_price": 1
+          }
+        ],
+        "random_source": {
+          "algorithm": "xorshift32_v1",
+          "cursor": "00000001"
+        },
+        "history": [
+          {
+            "event": "game_started",
+            "turn_number": 1,
+            "active_player": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 0,
+            "card_id": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 1,
+            "card_id": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 0,
+            "count": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 1,
+            "count": 3
+          },
+          {
+            "event": "income_collected",
+            "player_id": 0,
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            }
+          },
+          {
+            "event": "payment_made",
+            "player_id": 0,
+            "resources": {
+              "green": 1,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            }
+          },
+          {
+            "event": "cards_drawn",
+            "player_id": 0,
+            "card_ids": [27, 28],
+            "source": "paid",
+            "price": 1
+          },
+          {
+            "event": "decision_required",
+            "player_id": 0,
+            "decision": "draw_discard"
+          }
+        ],
+        "winner": null,
+        "win_reason": null,
+        "pending_decision": {
+          "decision": "draw_discard",
+          "player_id": 0,
+          "card_ids": [27, 28]
+        }
+      },
+      "steps": [
+        {
+          "command": {
+            "player_id": 0,
+            "command": "discard_draw_choice",
+            "card_id": 27
+          },
+          "expected_changes": {
+            "players.0.hand": [25, 26, 28],
+            "discard": [27],
+            "phase": "legit_cash",
+            "pending_decision": {
+              "decision": "legit_cash",
+              "player_id": 0,
+              "drawn_card_id": 28
+            }
+          },
+          "expected_events": [
+            {
+              "event": "card_discarded",
+              "player_id": 0,
+              "card_id": 27,
+              "reason": "docks"
+            },
+            {
+              "event": "decision_resolved",
+              "player_id": 0,
+              "decision": "draw_discard"
+            },
+            {
+              "event": "decision_required",
+              "player_id": 0,
+              "decision": "legit_cash"
+            }
+          ]
+        },
+        {
+          "command": {
+            "player_id": 0,
+            "command": "cash_card",
+            "card_id": 28,
+            "color": "blue"
+          },
+          "expected_changes": {
+            "players.0.hand": [25, 26],
+            "players.0.resources.blue": 1,
+            "discard": [27, 28],
+            "phase": "trim",
+            "pending_decision": {
+              "decision": "trim",
+              "player_id": 0
+            }
+          },
+          "expected_events": [
+            {
+              "event": "card_cashed",
+              "player_id": 0,
+              "card_id": 28,
+              "color": "blue",
+              "amount": 1,
+              "mandatory": true
+            },
+            {
+              "event": "decision_resolved",
+              "player_id": 0,
+              "decision": "legit_cash"
+            },
+            {
+              "event": "decision_required",
+              "player_id": 0,
+              "decision": "trim"
+            }
+          ]
+        },
+        {
+          "command": {
+            "player_id": 0,
+            "command": "trim_resource",
+            "color": "blue"
+          },
+          "expected_changes": {
+            "players.0.resources.blue": 0,
+            "phase": "play",
+            "pending_decision": null
+          },
+          "expected_events": [
+            {
+              "event": "resource_trimmed",
+              "player_id": 0,
+              "color": "blue",
+              "amount": 1
+            },
+            {
+              "event": "decision_resolved",
+              "player_id": 0,
+              "decision": "trim"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S04-V-001/three-old-legits/discard-28",
+      "contract_id": "S04-DERIVED-CODEC-001",
+      "authority_class": "provisional",
+      "authority_record": "issues61-63",
+      "source_refs": [
+        {
+          "scenario_id": "S01-LEGIT-001",
+          "steps": [1],
+          "use": "bounded source comparison/projection; exclusions recorded in ledger"
+        }
+      ],
+      "projection": "Issue76 AC11/12 local pending-admission control. Initial pending zones/context come from the existing literal first-draw expectation; each resolution and continuation is an explicit contract-derived literal. Synthetic context, not a claimed full-game transcript. Pending Green10 is an explicit live-cap bank projection to prove cash11->trim10 closure; no historical debit reconstruction is asserted.",
+      "random_source_kind": "seeded",
+      "facade": true,
+      "initial_state": {
+        "schema_version": 1,
+        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "phase": "draw_discard",
+        "turn_number": 1,
+        "active_player": 0,
+        "deck": [
+          4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
+          23, 29, 30, 31, 32, 33, 34, 35
+        ],
+        "discard": [],
+        "players": [
+          {
+            "resources": {
+              "green": 10,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [25, 26, 27, 28],
+            "active_card_ids": [0, 1, 2, 24],
+            "suspended_card_ids": [],
+            "draw_price": 2
+          },
+          {
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [],
+            "active_card_ids": [3],
+            "suspended_card_ids": [],
+            "draw_price": 1
+          }
+        ],
+        "random_source": {
+          "algorithm": "xorshift32_v1",
+          "cursor": "00000001"
+        },
+        "history": [
+          {
+            "event": "game_started",
+            "turn_number": 1,
+            "active_player": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 0,
+            "card_id": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 1,
+            "card_id": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 0,
+            "count": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 1,
+            "count": 3
+          },
+          {
+            "event": "income_collected",
+            "player_id": 0,
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            }
+          },
+          {
+            "event": "payment_made",
+            "player_id": 0,
+            "resources": {
+              "green": 1,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            }
+          },
+          {
+            "event": "cards_drawn",
+            "player_id": 0,
+            "card_ids": [27, 28],
+            "source": "paid",
+            "price": 1
+          },
+          {
+            "event": "decision_required",
+            "player_id": 0,
+            "decision": "draw_discard"
+          }
+        ],
+        "winner": null,
+        "win_reason": null,
+        "pending_decision": {
+          "decision": "draw_discard",
+          "player_id": 0,
+          "card_ids": [27, 28]
+        }
+      },
+      "steps": [
+        {
+          "command": {
+            "player_id": 0,
+            "command": "discard_draw_choice",
+            "card_id": 28
+          },
+          "expected_changes": {
+            "players.0.hand": [25, 26, 27],
+            "discard": [28],
+            "phase": "legit_cash",
+            "pending_decision": {
+              "decision": "legit_cash",
+              "player_id": 0,
+              "drawn_card_id": 27
+            }
+          },
+          "expected_events": [
+            {
+              "event": "card_discarded",
+              "player_id": 0,
+              "card_id": 28,
+              "reason": "docks"
+            },
+            {
+              "event": "decision_resolved",
+              "player_id": 0,
+              "decision": "draw_discard"
+            },
+            {
+              "event": "decision_required",
+              "player_id": 0,
+              "decision": "legit_cash"
+            }
+          ]
+        },
+        {
+          "command": {
+            "player_id": 0,
+            "command": "cash_card",
+            "card_id": 27,
+            "color": "blue"
+          },
+          "expected_changes": {
+            "players.0.hand": [25, 26],
+            "players.0.resources.blue": 1,
+            "discard": [28, 27],
+            "phase": "trim",
+            "pending_decision": {
+              "decision": "trim",
+              "player_id": 0
+            }
+          },
+          "expected_events": [
+            {
+              "event": "card_cashed",
+              "player_id": 0,
+              "card_id": 27,
+              "color": "blue",
+              "amount": 1,
+              "mandatory": true
+            },
+            {
+              "event": "decision_resolved",
+              "player_id": 0,
+              "decision": "legit_cash"
+            },
+            {
+              "event": "decision_required",
+              "player_id": 0,
+              "decision": "trim"
+            }
+          ]
+        },
+        {
+          "command": {
+            "player_id": 0,
+            "command": "trim_resource",
+            "color": "blue"
+          },
+          "expected_changes": {
+            "players.0.resources.blue": 0,
+            "phase": "play",
+            "pending_decision": null
+          },
+          "expected_events": [
+            {
+              "event": "resource_trimmed",
+              "player_id": 0,
+              "color": "blue",
+              "amount": 1
+            },
+            {
+              "event": "decision_resolved",
+              "player_id": 0,
+              "decision": "trim"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S04-V-001/six-old-hand/discard-31",
+      "contract_id": "S04-DERIVED-CODEC-001",
+      "authority_class": "provisional",
+      "authority_record": "issues61-63",
+      "source_refs": [
+        {
+          "scenario_id": "S01-CREW-DOCKS-001",
+          "steps": [1, 2, 3],
+          "use": "bounded source comparison/projection; exclusions recorded in ledger"
+        }
+      ],
+      "projection": "Issue76 AC11/12 local pending-admission control. Initial pending zones/context come from the existing literal first-draw expectation; each resolution and continuation is an explicit contract-derived literal. Synthetic context, not a claimed full-game transcript.",
+      "random_source_kind": "seeded",
+      "facade": true,
+      "initial_state": {
+        "schema_version": 1,
+        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "phase": "draw_discard",
+        "turn_number": 1,
+        "active_player": 0,
+        "deck": [
+          10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 27,
+          28, 29, 30, 32, 33, 34, 35
+        ],
+        "discard": [],
+        "players": [
+          {
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [4, 5, 6, 7, 8, 9, 31, 25],
+            "active_card_ids": [0, 1, 2],
+            "suspended_card_ids": [],
+            "draw_price": 2
+          },
+          {
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [],
+            "active_card_ids": [3],
+            "suspended_card_ids": [],
+            "draw_price": 1
+          }
+        ],
+        "random_source": {
+          "algorithm": "xorshift32_v1",
+          "cursor": "00000001"
+        },
+        "history": [
+          {
+            "event": "game_started",
+            "turn_number": 1,
+            "active_player": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 0,
+            "card_id": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 1,
+            "card_id": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 0,
+            "count": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 1,
+            "count": 3
+          },
+          {
+            "event": "income_collected",
+            "player_id": 0,
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            }
+          },
+          {
+            "event": "payment_made",
+            "player_id": 0,
+            "resources": {
+              "green": 1,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            }
+          },
+          {
+            "event": "cards_drawn",
+            "player_id": 0,
+            "card_ids": [31, 25],
+            "source": "paid",
+            "price": 1
+          },
+          {
+            "event": "decision_required",
+            "player_id": 0,
+            "decision": "draw_discard"
+          }
+        ],
+        "winner": null,
+        "win_reason": null,
+        "pending_decision": {
+          "decision": "draw_discard",
+          "player_id": 0,
+          "card_ids": [31, 25]
+        }
+      },
+      "steps": [
+        {
+          "command": {
+            "player_id": 0,
+            "command": "discard_draw_choice",
+            "card_id": 31
+          },
+          "expected_changes": {
+            "players.0.hand": [4, 5, 6, 7, 8, 9, 25],
+            "discard": [31],
+            "phase": "play",
+            "pending_decision": null
+          },
+          "expected_events": [
+            {
+              "event": "card_discarded",
+              "player_id": 0,
+              "card_id": 31,
+              "reason": "docks"
+            },
+            {
+              "event": "decision_resolved",
+              "player_id": 0,
+              "decision": "draw_discard"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S04-V-001/six-old-hand/discard-25",
+      "contract_id": "S04-DERIVED-CODEC-001",
+      "authority_class": "provisional",
+      "authority_record": "issues61-63",
+      "source_refs": [
+        {
+          "scenario_id": "S01-CREW-DOCKS-001",
+          "steps": [1, 2, 3],
+          "use": "bounded source comparison/projection; exclusions recorded in ledger"
+        }
+      ],
+      "projection": "Issue76 AC11/12 local pending-admission control. Initial pending zones/context come from the existing literal first-draw expectation; each resolution and continuation is an explicit contract-derived literal. Synthetic context, not a claimed full-game transcript.",
+      "random_source_kind": "seeded",
+      "facade": true,
+      "initial_state": {
+        "schema_version": 1,
+        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "phase": "draw_discard",
+        "turn_number": 1,
+        "active_player": 0,
+        "deck": [
+          10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 27,
+          28, 29, 30, 32, 33, 34, 35
+        ],
+        "discard": [],
+        "players": [
+          {
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [4, 5, 6, 7, 8, 9, 31, 25],
+            "active_card_ids": [0, 1, 2],
+            "suspended_card_ids": [],
+            "draw_price": 2
+          },
+          {
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [],
+            "active_card_ids": [3],
+            "suspended_card_ids": [],
+            "draw_price": 1
+          }
+        ],
+        "random_source": {
+          "algorithm": "xorshift32_v1",
+          "cursor": "00000001"
+        },
+        "history": [
+          {
+            "event": "game_started",
+            "turn_number": 1,
+            "active_player": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 0,
+            "card_id": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 1,
+            "card_id": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 0,
+            "count": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 1,
+            "count": 3
+          },
+          {
+            "event": "income_collected",
+            "player_id": 0,
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            }
+          },
+          {
+            "event": "payment_made",
+            "player_id": 0,
+            "resources": {
+              "green": 1,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            }
+          },
+          {
+            "event": "cards_drawn",
+            "player_id": 0,
+            "card_ids": [31, 25],
+            "source": "paid",
+            "price": 1
+          },
+          {
+            "event": "decision_required",
+            "player_id": 0,
+            "decision": "draw_discard"
+          }
+        ],
+        "winner": null,
+        "win_reason": null,
+        "pending_decision": {
+          "decision": "draw_discard",
+          "player_id": 0,
+          "card_ids": [31, 25]
+        }
+      },
+      "steps": [
+        {
+          "command": {
+            "player_id": 0,
+            "command": "discard_draw_choice",
+            "card_id": 25
+          },
+          "expected_changes": {
+            "players.0.hand": [4, 5, 6, 7, 8, 9, 31],
+            "discard": [25],
+            "phase": "play",
+            "pending_decision": null
+          },
+          "expected_events": [
+            {
+              "event": "card_discarded",
+              "player_id": 0,
+              "card_id": 25,
+              "reason": "docks"
+            },
+            {
+              "event": "decision_resolved",
+              "player_id": 0,
+              "decision": "draw_discard"
+            }
+          ]
+        }
+      ]
     }
   ],
   "payments": [
@@ -20828,6 +21612,375 @@
         "pending_decision": null
       },
       "expected_code": "malformed_state"
+    },
+    {
+      "id": "S04-V-001/four-old-legits",
+      "authority_record": "issue76; existing contract AC11/12",
+      "projection": "Local mutation of a literal pending state; full36 partition and recorded two-card draw retained.",
+      "state": {
+        "schema_version": 1,
+        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "phase": "draw_discard",
+        "turn_number": 1,
+        "active_player": 0,
+        "deck": [
+          4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
+          23, 29, 30, 32, 33, 34, 35
+        ],
+        "discard": [],
+        "players": [
+          {
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [25, 26, 27, 28, 31],
+            "active_card_ids": [0, 1, 2, 24],
+            "suspended_card_ids": [],
+            "draw_price": 2
+          },
+          {
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [],
+            "active_card_ids": [3],
+            "suspended_card_ids": [],
+            "draw_price": 1
+          }
+        ],
+        "random_source": {
+          "algorithm": "xorshift32_v1",
+          "cursor": "00000001"
+        },
+        "history": [
+          {
+            "event": "game_started",
+            "turn_number": 1,
+            "active_player": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 0,
+            "card_id": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 1,
+            "card_id": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 0,
+            "count": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 1,
+            "count": 3
+          },
+          {
+            "event": "income_collected",
+            "player_id": 0,
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            }
+          },
+          {
+            "event": "payment_made",
+            "player_id": 0,
+            "resources": {
+              "green": 1,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            }
+          },
+          {
+            "event": "cards_drawn",
+            "player_id": 0,
+            "card_ids": [27, 31],
+            "source": "paid",
+            "price": 1
+          },
+          {
+            "event": "decision_required",
+            "player_id": 0,
+            "decision": "draw_discard"
+          }
+        ],
+        "winner": null,
+        "win_reason": null,
+        "pending_decision": {
+          "decision": "draw_discard",
+          "player_id": 0,
+          "card_ids": [27, 31]
+        }
+      },
+      "expected_code": "invalid_state",
+      "expected_field": "pending_decision"
+    },
+    {
+      "id": "S04-V-001/five-old-legits",
+      "authority_record": "issue76; existing contract AC11/12",
+      "projection": "Local mutation of a literal pending state; full36 partition and recorded two-card draw retained.",
+      "state": {
+        "schema_version": 1,
+        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "phase": "draw_discard",
+        "turn_number": 1,
+        "active_player": 0,
+        "deck": [
+          4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
+          23, 29, 30, 33, 34, 35
+        ],
+        "discard": [],
+        "players": [
+          {
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [25, 26, 27, 28, 31, 32],
+            "active_card_ids": [0, 1, 2, 24],
+            "suspended_card_ids": [],
+            "draw_price": 2
+          },
+          {
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [],
+            "active_card_ids": [3],
+            "suspended_card_ids": [],
+            "draw_price": 1
+          }
+        ],
+        "random_source": {
+          "algorithm": "xorshift32_v1",
+          "cursor": "00000001"
+        },
+        "history": [
+          {
+            "event": "game_started",
+            "turn_number": 1,
+            "active_player": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 0,
+            "card_id": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 1,
+            "card_id": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 0,
+            "count": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 1,
+            "count": 3
+          },
+          {
+            "event": "income_collected",
+            "player_id": 0,
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            }
+          },
+          {
+            "event": "payment_made",
+            "player_id": 0,
+            "resources": {
+              "green": 1,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            }
+          },
+          {
+            "event": "cards_drawn",
+            "player_id": 0,
+            "card_ids": [31, 32],
+            "source": "paid",
+            "price": 1
+          },
+          {
+            "event": "decision_required",
+            "player_id": 0,
+            "decision": "draw_discard"
+          }
+        ],
+        "winner": null,
+        "win_reason": null,
+        "pending_decision": {
+          "decision": "draw_discard",
+          "player_id": 0,
+          "card_ids": [31, 32]
+        }
+      },
+      "expected_code": "invalid_state",
+      "expected_field": "pending_decision"
+    },
+    {
+      "id": "S04-V-001/seven-old-hand",
+      "authority_record": "issue76; existing contract AC11/12",
+      "projection": "Local mutation of a literal pending state; full36 partition and recorded two-card draw retained.",
+      "state": {
+        "schema_version": 1,
+        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "phase": "draw_discard",
+        "turn_number": 1,
+        "active_player": 0,
+        "deck": [
+          11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 27, 28,
+          29, 30, 32, 33, 34, 35
+        ],
+        "discard": [],
+        "players": [
+          {
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [4, 5, 6, 7, 8, 9, 31, 25, 10],
+            "active_card_ids": [0, 1, 2],
+            "suspended_card_ids": [],
+            "draw_price": 2
+          },
+          {
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [],
+            "active_card_ids": [3],
+            "suspended_card_ids": [],
+            "draw_price": 1
+          }
+        ],
+        "random_source": {
+          "algorithm": "xorshift32_v1",
+          "cursor": "00000001"
+        },
+        "history": [
+          {
+            "event": "game_started",
+            "turn_number": 1,
+            "active_player": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 0,
+            "card_id": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 1,
+            "card_id": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 0,
+            "count": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 1,
+            "count": 3
+          },
+          {
+            "event": "income_collected",
+            "player_id": 0,
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            }
+          },
+          {
+            "event": "payment_made",
+            "player_id": 0,
+            "resources": {
+              "green": 1,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            }
+          },
+          {
+            "event": "cards_drawn",
+            "player_id": 0,
+            "card_ids": [31, 25],
+            "source": "paid",
+            "price": 1
+          },
+          {
+            "event": "decision_required",
+            "player_id": 0,
+            "decision": "draw_discard"
+          }
+        ],
+        "winner": null,
+        "win_reason": null,
+        "pending_decision": {
+          "decision": "draw_discard",
+          "player_id": 0,
+          "card_ids": [31, 25]
+        }
+      },
+      "expected_code": "invalid_state",
+      "expected_field": "players"
     }
   ],
   "valid_states": [

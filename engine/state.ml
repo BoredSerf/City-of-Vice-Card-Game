@@ -335,9 +335,20 @@ let of_snapshot state =
                             (Pending_draw_discard
                                { player_id; card_ids = [ first_id; second_id ] })
                         ) ->
+                          let before_draw =
+                            {
+                              player with
+                              hand =
+                                List.filter
+                                  (fun id -> id <> first_id && id <> second_id)
+                                  player.hand;
+                            }
+                          in
                           player_id = actor && first_id <> second_id
                           && List.mem first_id player.hand
                           && List.mem second_id player.hand
+                          && List.length before_draw.hand < 7
+                          && possessed_legits before_draw <= 3
                           && context.last_draw
                              = Some ([ first_id; second_id ], Event.Paid)
                           && not context.choice_made

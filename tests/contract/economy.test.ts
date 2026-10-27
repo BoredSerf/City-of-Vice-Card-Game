@@ -258,6 +258,65 @@ test("pending phase/owner/provenance and bounds cannot be forged", () => {
   }
 });
 
+test("issue76 rejects illegal pre-draw possession and preserves both boundary continuations", () => {
+  const invalid = fixtures.invalid_states.filter((record) =>
+    record.id.startsWith("S04-V-001/"),
+  );
+  expect(invalid).toHaveLength(3);
+  for (const record of invalid) {
+    const encoded = "\n" + JSON.stringify(record.state) + "\n";
+    rejected(validate_state(encoded), encoded, "invalid_state");
+    expect(JSON.parse(legal_commands(encoded, "0"))).toStrictEqual({
+      status: "rejected",
+      state_json: null,
+      events: [],
+      rejection: { code: "invalid_state", field: expect.any(String) },
+    });
+    const pending = record.state.pending_decision;
+    if (pending?.decision !== "draw_discard")
+      throw new Error("Docks admission fixture missing two new IDs");
+    for (const card_id of pending.card_ids)
+      rejected(
+        perform_command(
+          encoded,
+          JSON.stringify({
+            command: "discard_draw_choice",
+            player_id: 0,
+            card_id,
+          }),
+        ),
+        encoded,
+        "invalid_state",
+      );
+  }
+  const boundaries = traces.filter((trace) =>
+    trace.id.startsWith("S04-V-001/"),
+  );
+  expect(boundaries).toHaveLength(4);
+  for (const trace of boundaries) {
+    let encoded = trace.initial_state_json;
+    expect(accepted(validate_state(encoded)).status, trace.id).toBe("accepted");
+    expect(legal(encoded, 0), trace.id).toHaveLength(2);
+    for (const step of trace.steps) {
+      for (const command of legal(encoded, 0)) {
+        const next = accepted(
+          perform_command(
+            encoded,
+            JSON.stringify({ ...command, player_id: 0 }),
+          ),
+        );
+        expect(accepted(validate_state(next.state_json)).status, trace.id).toBe(
+          "accepted",
+        );
+      }
+      const result = accepted(perform_command(encoded, step.command_json));
+      expect(result, trace.id).toStrictEqual(step.result);
+      encoded = result.state_json;
+    }
+    expect((JSON.parse(encoded) as Engine_state).phase, trace.id).toBe("play");
+  }
+});
+
 test("actual setup, first income and two relative handoffs preserve the protocol", () => {
   const session = accepted(create_session("00000001"));
   const ready = accepted(

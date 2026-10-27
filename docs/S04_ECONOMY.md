@@ -19,7 +19,7 @@ are recorded in #58/#72. Individual rule/PR acceptance remains pending.
 
 [tests/economy/scenarios.json](../tests/economy/scenarios.json) is the separate
 intended-expectation ledger: 43 unchanged original source records with partial-use
-and exclusion notes, 75 literal command cases, 9 pure-payment cases, 30 invalid
+and exclusion notes, 79 literal command cases, 9 pure-payment cases, 33 invalid
 snapshots and 2 admitted history-context controls. Expected deltas and ordered
 facts come from source literals and the reviewed contract, never from the
 replacement engine's resulting states. The original 92 observations and approval
@@ -74,6 +74,13 @@ controlled synthetic actor/round; subsequent handoffs count relatively. Anchorin
 is not a wire operation or production counter exception. A phase-only flip cannot
 skip income. Unsupported terminal-shaped data rejects; native outcomes are S05.
 
+Docks admission also removes the two recorded new IDs locally and requires the
+remaining pre-draw hand to contain fewer than seven cards and possess at most
+three legits. The temporary eight-card/five-legit allowance applies only to those
+two new cards. [Issue #76](https://github.com/BoredSerf/City-of-Vice-Card-Game/issues/76)
+records the original failed checkpoint and this bounded correction; it adds no
+full-history replay or repair action.
+
 The existing five facade exports and JSON result envelopes remain. See
 [generated-engine.d.ts](../src/engine/generated-engine.d.ts) for command/event/state
 unions. Rejections preserve exact supplied state bytes and emit no success facts.
@@ -101,10 +108,19 @@ An admitted max-counter fixture uses a failing RNG callback to prove overflow
 rejects before an incoming Burbs reshuffle.
 
 `dune runtest` produces `_build/default/test/economy_parity.json`. The actual
-generated-module suite imports it unconditionally and compares all 73 seeded
+generated-module suite imports it unconditionally and compares all 77 seeded
 traces, legal choices and every new command/event/phase/rejection. Two historical
 constant-source cases stay native-only; seeded and one-card controls cover the
 generated reshuffle path. Setup regressions remain in the cumulative gate.
+
+The issue #76 controls reject the exact four-old-legit counterexample and a
+five-old-legit variant with a complete physical partition, plus a seven-old-card
+hand. Both new-card choices remain executable at the valid three-old-legit and
+six-old-card boundaries. The three-legit controls explicitly project the admitted
+pending bank to its live cap, then assert literal discard→cash→trim→play results;
+they do not claim reconstruction of the earlier payment. Native and actual
+generated tests consume these same literals and check every advertised pending
+resolution. Malformed facade inputs preserve their exact supplied bytes.
 
 The required local failure control changes the first `S01-CASH-001` expected Black
 credit 1→2 without changing formatting. `npm run verify` must reach the S04
