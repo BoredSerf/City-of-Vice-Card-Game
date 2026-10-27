@@ -42,10 +42,12 @@ execute against the pinned prototype. The six PD-002 golden cases retain their
 specification-only status in that legacy runner; S03's separate native and
 generated-module tests now execute the applicable invalid-opening correction.
 
-The S03 pure OCaml engine implements deterministic setup only: create a seeded
-session, discover opening distributors, and start a game at its first income-ready
-state. It includes a versioned snapshot codec and a narrow JSON facade; it does
-not yet implement turns, AI, storage, or a playable modular UI. See
+The pure OCaml engine implements deterministic setup and bounded S04 turn economy:
+income, paid draw, cash, resource trades, mandatory choices and handoff. Crew,
+draw-admission and cash-order corrections remain provisional pending human
+acceptance. See [the economy guide](docs/S04_ECONOMY.md) for authority, commands
+and the separate intended-expectation ledger. Activation, operators, victory,
+AI, storage and a playable modular UI remain later work. See
 [the setup guide](docs/S03_SETUP.md) for the API, native/scenario and generated
 fixtures, exact randomness contract, and scope limits. The web shell still shows
 the S02 probe; continue using root `index.html` to play.

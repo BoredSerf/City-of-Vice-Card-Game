@@ -320,9 +320,10 @@ let sweep_test () =
             (ok (State.of_value (State.to_value first.state)) = first.state)
             "setup invariant audit";
           check
-            (Engine.legal_commands first.state ~player_id:0 = []
+            (Engine.legal_commands first.state ~player_id:0
+             = [ Command.Collect_income ]
             && Engine.legal_commands first.state ~player_id:1 = [])
-            "unimplemented commands advertised";
+            "initial ready must advertise only collect_income";
           check
             (ok (Native_json.decode_state (Native_json.state_json first.state))
             = first.state)

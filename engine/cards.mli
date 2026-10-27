@@ -34,3 +34,5 @@ val color_name : color -> string
 val color_key : color -> string
 val crew_name : crew -> string
 val ability_name : ability -> string
+val color_of_key : string -> color option
+val complete_crew : int list -> crew -> bool
