@@ -24,8 +24,9 @@ This is a playtesting prototype; balance and AI still need playtesting. Reloadin
 
 ## Modular development foundation
 
-Recovery checkpoint: the installed opam lock and complete bootstrap validation are
-still pending. The commands below describe the intended complete workflow.
+The locked bootstrap and full aggregate have been exercised locally on macOS.
+Independent clean-checkout, hosted CI, and required integration-gate evidence
+remain acceptance requirements.
 
 The separate S02 foundation uses OCaml/Melange, TypeScript, Vite, and real-browser
 smoke tests. With Node 24.19.0 (bundled npm 11.17.0), opam 2.6.1, and the documented

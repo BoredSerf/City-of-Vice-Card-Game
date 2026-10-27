@@ -1,8 +1,8 @@
 # S02 development foundation
 
-Recovery checkpoint: runtime and npm lock are present. The final installed opam
-lock, full aggregate, and clean-checkout bootstrap verification remain pending.
-The commands below describe the intended complete workflow.
+The installed dependency locks, bootstrap, and full aggregate have been exercised
+locally on macOS. Independent clean-checkout verification, hosted CI, and required
+integration-gate evidence remain acceptance requirements.
 
 This foundation implements the product-neutral toolchain boundary in the
 [S02 contract](../IMPLEMENTATION.md#s02--reproducible-project-foundation).

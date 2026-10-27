@@ -6,5 +6,10 @@ let () =
       let actual = Foundation.probe label in
       if actual <> expected then
         failwith
-          (Printf.sprintf "probe %S: expected %S, received %S" label expected actual))
-    [ ("S02", "OCaml / S02"); ("", "OCaml / "); ("two words", "OCaml / two words") ]
+          (Printf.sprintf "probe %S: expected %S, received %S" label expected
+             actual))
+    [
+      ("S02", "OCaml / S02");
+      ("", "OCaml / ");
+      ("two words", "OCaml / two words");
+    ]

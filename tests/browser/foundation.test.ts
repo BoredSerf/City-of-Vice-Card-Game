@@ -1,11 +1,13 @@
 import { afterAll, beforeAll, expect, test } from "vitest";
-import { chromium, type Browser, type BrowserContext } from "playwright";
+import type { Browser, BrowserContext } from "playwright";
 import { createServer, preview } from "vite";
 import { fileURLToPath } from "node:url";
 
 process.env.PLAYWRIGHT_BROWSERS_PATH = fileURLToPath(
   new URL("../../.cache/ms-playwright", import.meta.url),
 );
+// Playwright resolves its browser cache when imported, so configure it first.
+const { chromium } = await import("playwright");
 
 let browser: Browser;
 
