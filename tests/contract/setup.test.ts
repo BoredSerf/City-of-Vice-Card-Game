@@ -214,14 +214,14 @@ test("malformed, unsupported and impossible snapshots fail typed validation", ()
   const original = accepted(create_session("12345678")).state_json;
   const started = accepted(submit(original, 0)).state_json;
   const state = JSON.parse(started) as Setup_state;
-  const duplicate_name = '{"schema_version":2,' + started.slice(1);
+  const duplicate_name = '{"schema_version":999,' + started.slice(1);
   expect(accepted(validate_state(duplicate_name)).state_json).toBe(started);
   for (const malformed of ["{", "null", "[]", "{}", "true"]) {
     rejected(validate_state(malformed), malformed, "malformed_state");
     rejected(submit(malformed, 0), malformed, "malformed_state");
   }
   for (const invalid of [
-    { ...state, schema_version: 2 },
+    { ...state, schema_version: state.schema_version + 1 },
     { ...state, rules_version: "unknown" },
     { ...state, random_source: { algorithm: "other", cursor: "12345678" } },
   ]) {
@@ -237,6 +237,7 @@ test("malformed, unsupported and impossible snapshots fail typed validation", ()
     { ...state, turn_number: 2 },
     { ...state, players: [] },
     { ...state, discard: [99] },
+    { ...state, phase: "over" },
     {
       ...state,
       players: state.players.map((player) => ({
@@ -249,7 +250,6 @@ test("malformed, unsupported and impossible snapshots fail typed validation", ()
     rejected(validate_state(encoded), encoded, "invalid_state");
   }
   for (const invalid of [
-    { ...state, phase: "over" },
     { ...state, winner: 0 },
     { ...state, pending_decision: {} },
     { ...state, turn_number: 0.5 },

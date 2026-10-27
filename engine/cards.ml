@@ -141,3 +141,17 @@ let complete_crew active crew =
   List.for_all
     (fun card -> card.crew <> Some crew || List.mem card.id active)
     all
+
+let crews =
+  [
+    Docks;
+    Club_circuit;
+    Trailer_park;
+    Burbs;
+    Pipeline;
+    Night_shift;
+    Arts_district;
+    Hill_country;
+  ]
+
+let crew_of_name name = List.find_opt (fun crew -> crew_name crew = name) crews

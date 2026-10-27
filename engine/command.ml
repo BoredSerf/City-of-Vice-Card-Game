@@ -7,6 +7,13 @@ type t =
   | Trim_resource of { color : Cards.color }
   | Trade_resources of { from_color : Cards.color; to_color : Cards.color }
   | End_turn
+  | Activate_card of {
+      card_id : int;
+      wildcard_payment : Cards.color list option;
+    }
+  | Use_operator of { operator_id : int; target_ids : int list }
+  | Trade_distributors of { own_card_id : int; rival_card_id : int }
+  | Respond_intercept of { accept : bool }
 
 type rejection_code =
   | Invalid_seed
@@ -25,6 +32,9 @@ type rejection_code =
   | Invalid_payment
   | Insufficient_resources
   | Crew_unavailable
+  | Game_over
+  | Capacity_full
+  | Operator_limit
 
 type rejection = { code : rejection_code; field : string }
 
@@ -47,6 +57,9 @@ let rejection_name = function
   | Invalid_payment -> "invalid_payment"
   | Insufficient_resources -> "insufficient_resources"
   | Crew_unavailable -> "crew_unavailable"
+  | Game_over -> "game_over"
+  | Capacity_full -> "capacity_full"
+  | Operator_limit -> "operator_limit"
 
 let rejection_to_value rejection =
   Wire_value.Object
@@ -81,6 +94,29 @@ let to_value command =
         ( "trade_resources",
           [ ("from_color", color from_color); ("to_color", color to_color) ] )
     | End_turn -> ("end_turn", [])
+    | Activate_card { card_id; wildcard_payment } ->
+        ( "activate_card",
+          [
+            ("card_id", int_value card_id);
+            ( "wildcard_payment",
+              match wildcard_payment with
+              | None -> Null
+              | Some picks -> Array (List.map color picks) );
+          ] )
+    | Use_operator { operator_id; target_ids } ->
+        ( "use_operator",
+          [
+            ("operator_id", int_value operator_id);
+            ("target_ids", Array (List.map int_value target_ids));
+          ] )
+    | Trade_distributors { own_card_id; rival_card_id } ->
+        ( "trade_distributors",
+          [
+            ("own_card_id", int_value own_card_id);
+            ("rival_card_id", int_value rival_card_id);
+          ] )
+    | Respond_intercept { accept } ->
+        ("respond_intercept", [ ("accept", Bool accept) ])
   in
   Object (("command", String tag) :: fields)
 
@@ -101,6 +137,10 @@ let of_value value =
       | "cash_card" -> [ "card_id"; "color" ]
       | "trim_resource" -> [ "color" ]
       | "trade_resources" -> [ "from_color"; "to_color" ]
+      | "activate_card" -> [ "card_id"; "wildcard_payment" ]
+      | "use_operator" -> [ "operator_id"; "target_ids" ]
+      | "trade_distributors" -> [ "own_card_id"; "rival_card_id" ]
+      | "respond_intercept" -> [ "accept" ]
       | _ -> raise (Decode_error "command")
     in
     let fields = fields ("player_id" :: "command" :: names) value in
@@ -139,6 +179,35 @@ let of_value value =
       | "trade_resources" ->
           Trade_resources
             { from_color = choice "from_color"; to_color = choice "to_color" }
+      | "activate_card" ->
+          let wildcard_payment =
+            match field "wildcard_payment" fields with
+            | Null -> None
+            | value -> (
+                try Some (List.map (color "wildcard_payment") (array value))
+                with Decode_error _ -> raise (Decode_error "wildcard_payment"))
+          in
+          Activate_card { card_id = card_id (); wildcard_payment }
+      | "use_operator" ->
+          Use_operator
+            {
+              operator_id = int (field "operator_id" fields);
+              target_ids = List.map int (array (field "target_ids" fields));
+            }
+      | "trade_distributors" ->
+          Trade_distributors
+            {
+              own_card_id = int (field "own_card_id" fields);
+              rival_card_id = int (field "rival_card_id" fields);
+            }
+      | "respond_intercept" ->
+          Respond_intercept
+            {
+              accept =
+                (match field "accept" fields with
+                | Bool value -> value
+                | _ -> raise (Decode_error "accept"));
+            }
       | _ -> assert false
     in
     Ok (int (field "player_id" fields), command)

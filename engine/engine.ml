@@ -20,7 +20,7 @@ let update_player (snapshot : State.snapshot) player_id transform =
 
 let failure code field = Some (Command.reject code field)
 
-let command_rejection state ~player_id command =
+let ordinary_rejection state ~player_id command =
   let snapshot = State.snapshot state in
   match command with
   | Command.Start_game { opening_distributor } ->
@@ -39,11 +39,14 @@ let command_rejection state ~player_id command =
         let phase_allowed =
           match command with
           | Collect_income -> snapshot.phase = Ready
-          | Draw_card _ | Trade_resources _ | End_turn -> snapshot.phase = Play
+          | Draw_card _ | Trade_resources _ | End_turn | Activate_card _
+          | Use_operator _ | Trade_distributors _ ->
+              snapshot.phase = Play
           | Discard_draw_choice _ -> snapshot.phase = Draw_discard
           | Cash_card _ -> snapshot.phase = Play || snapshot.phase = Legit_cash
           | Trim_resource _ -> snapshot.phase = Trim
           | Start_game _ -> false
+          | Respond_intercept _ -> false
         in
         if not phase_allowed then failure Wrong_phase "phase"
         else
@@ -101,8 +104,49 @@ let command_rejection state ~player_id command =
               else None
           | End_turn when player_id = 1 && snapshot.turn_number = 2147483647 ->
               failure Invalid_state "turn_number"
+          | Activate_card { card_id; wildcard_payment } -> (
+              match Card_action.activate owner ~card_id ~wildcard_payment with
+              | Ok _ -> None
+              | Error rejection -> Some rejection)
+          | Use_operator { operator_id; target_ids } -> (
+              match
+                Card_action.attack snapshot.players ~attacker_id:player_id
+                  ~operator_id ~target_ids
+              with
+              | Ok _ -> None
+              | Error rejection -> Some rejection)
+          | Trade_distributors { own_card_id; rival_card_id } -> (
+              match
+                Card_action.trade snapshot.players ~player_id ~own_card_id
+                  ~rival_card_id
+              with
+              | Ok _ -> None
+              | Error rejection -> Some rejection)
           | Collect_income | End_turn -> None
-          | Start_game _ -> assert false)
+          | Start_game _ | Respond_intercept _ -> assert false)
+
+let command_rejection state ~player_id command =
+  let snapshot = State.snapshot state in
+  if player_id <> 0 && player_id <> 1 then failure Invalid_actor "player_id"
+  else if snapshot.phase = State.Over then failure Game_over "phase"
+  else
+    match (command, snapshot.pending_decision) with
+    | Command.Respond_intercept _, _ -> (
+        if snapshot.phase <> Intercept then failure Wrong_phase "phase"
+        else
+          match snapshot.pending_decision with
+          | Some (Pending_intercept { player_id = owner; _ })
+            when owner = player_id ->
+              None
+          | _ -> failure Invalid_actor "player_id")
+    | ( Trim_resource { color },
+        Some (Pending_post_action_trim { player_id = owner }) ) ->
+        if owner <> player_id then failure Invalid_actor "player_id"
+        else if
+          Resource_bank.get (player snapshot player_id).resources color = 0
+        then failure Invalid_choice "color"
+        else None
+    | _ -> ordinary_rejection state ~player_id command
 
 let conclude snapshot events =
   match
@@ -111,6 +155,90 @@ let conclude snapshot events =
   with
   | Ok state -> Ok { state; events }
   | Error rejection -> Error rejection
+
+let crew_changes (before : State.snapshot) (after : State.snapshot) =
+  List.concat_map
+    (fun player_id ->
+      List.filter_map
+        (fun crew ->
+          let was = State.has_crew (player before player_id) crew in
+          let now = State.has_crew (player after player_id) crew in
+          if was = now then None
+          else if now then Some (Event.Crew_completed { player_id; crew })
+          else Some (Event.Crew_lost { player_id; crew }))
+        Cards.crews)
+    [ 0; 1 ]
+
+let finish_action before (snapshot : State.snapshot) events =
+  let events = events @ crew_changes before snapshot in
+  match State.board_outcome snapshot.players with
+  | Some (Some outcome) ->
+      conclude
+        {
+          snapshot with
+          phase = Over;
+          outcome = Some outcome;
+          pending_decision = None;
+        }
+        (events
+        @ [
+            Event.Game_finished
+              { winner = outcome.winner; reason = outcome.reason };
+          ])
+  | Some None -> (
+      match
+        List.find_opt
+          (fun who ->
+            let owner = player snapshot who in
+            Resource_bank.total owner.resources > State.resource_limit owner)
+          [ 0; 1 ]
+      with
+      | None ->
+          conclude
+            { snapshot with phase = Play; pending_decision = None }
+            events
+      | Some player_id ->
+          conclude
+            {
+              snapshot with
+              phase = Trim;
+              pending_decision = Some (Pending_post_action_trim { player_id });
+            }
+            (events
+            @ [
+                Event.Decision_required
+                  { player_id; decision = Post_action_trim };
+              ]))
+  | None -> Error (Command.reject Invalid_state "outcome")
+
+let execute_attack (before : State.snapshot) ~player_id ~operator_id ~target_ids
+    (attack : Card_action.attack) prefix =
+  let snapshot =
+    {
+      before with
+      phase = Play;
+      pending_decision = None;
+      players = attack.players;
+      discard = before.discard @ attack.discarded @ [ operator_id ];
+    }
+  in
+  let snapshot =
+    update_player snapshot player_id (fun owner ->
+        {
+          owner with
+          resources = attack.paid.remaining;
+          active_card_ids =
+            List.filter (( <> ) operator_id) owner.active_card_ids;
+        })
+  in
+  finish_action before snapshot
+    (prefix
+    @ [
+        Event.Payment_made { player_id; resources = attack.paid.debit };
+        Operator_result
+          { player_id; operator_id; target_ids; affected = attack.affected };
+        Operator_disposed { player_id; operator_id };
+      ])
 
 let continue (snapshot : State.snapshot) ~player_id ~drawn_card_id =
   let owner = player snapshot player_id in
@@ -173,7 +301,7 @@ let income ~draw_index (snapshot : State.snapshot) ~player_id =
   in
   let snapshot =
     update_player snapshot player_id (fun owner ->
-        { owner with resources; draw_price = 1 })
+        { owner with resources; draw_price = 1; traded_distributors = false })
   in
   let events = [ Event.Income_collected { player_id; resources = base } ] in
   let snapshot, events =
@@ -384,6 +512,11 @@ let perform_with_random ~draw_index state ~player_id command =
               @ decisions)
           else conclude snapshot events
       | Trim_resource { color } ->
+          let decision =
+            match snapshot.pending_decision with
+            | Some (Pending_post_action_trim _) -> Event.Post_action_trim
+            | _ -> Resource_trim
+          in
           let snapshot =
             update_player snapshot player_id (fun owner ->
                 {
@@ -398,11 +531,7 @@ let perform_with_random ~draw_index state ~player_id command =
           else
             conclude
               { snapshot with phase = Play; pending_decision = None }
-              (events
-              @ [
-                  Event.Decision_resolved
-                    { player_id; decision = Resource_trim };
-                ])
+              (events @ [ Event.Decision_resolved { player_id; decision } ])
       | Trade_resources { from_color; to_color } ->
           let rate = State.trade_rate (player snapshot player_id) in
           let snapshot =
@@ -419,6 +548,147 @@ let perform_with_random ~draw_index state ~player_id command =
             [
               Event.Resources_traded
                 { player_id; from_color; to_color; spent = rate };
+            ]
+      | Activate_card { card_id; wildcard_payment } ->
+          let paid =
+            Result.get_ok
+              (Card_action.activate
+                 (player snapshot player_id)
+                 ~card_id ~wildcard_payment)
+          in
+          let changed =
+            update_player snapshot player_id (fun owner ->
+                {
+                  owner with
+                  resources = paid.remaining;
+                  hand = List.filter (( <> ) card_id) owner.hand;
+                  suspended_card_ids =
+                    List.filter (( <> ) card_id) owner.suspended_card_ids;
+                  active_card_ids = owner.active_card_ids @ [ card_id ];
+                })
+          in
+          finish_action snapshot changed
+            [
+              Event.Payment_made { player_id; resources = paid.debit };
+              Card_activated { player_id; card_id };
+            ]
+      | Use_operator { operator_id; target_ids } -> (
+          let attack =
+            Result.get_ok
+              (Card_action.attack snapshot.players ~attacker_id:player_id
+                 ~operator_id ~target_ids)
+          in
+          let defender_id = 1 - player_id in
+          match
+            Card_action.interception_payment snapshot.players ~defender_id
+              ~operator_id
+          with
+          | None ->
+              execute_attack snapshot ~player_id ~operator_id ~target_ids attack
+                []
+          | Some _ ->
+              conclude
+                {
+                  snapshot with
+                  phase = Intercept;
+                  pending_decision =
+                    Some
+                      (Pending_intercept
+                         {
+                           player_id = defender_id;
+                           attacker_id = player_id;
+                           operator_id;
+                           target_ids;
+                           payment = attack.paid.debit;
+                         });
+                }
+                [
+                  Event.Decision_required
+                    { player_id = defender_id; decision = Interception };
+                ])
+      | Respond_intercept { accept } -> (
+          match snapshot.pending_decision with
+          | Some (Pending_intercept { attacker_id; operator_id; target_ids; _ })
+            ->
+              let answer =
+                Event.Intercept_answered { player_id; operator_id; accept }
+              in
+              let resolved =
+                Event.Decision_resolved { player_id; decision = Interception }
+              in
+              if accept then
+                let paid =
+                  Option.get
+                    (Card_action.interception_payment snapshot.players
+                       ~defender_id:player_id ~operator_id)
+                in
+                let changed =
+                  update_player snapshot attacker_id (fun owner ->
+                      {
+                        owner with
+                        active_card_ids =
+                          List.filter (( <> ) operator_id) owner.active_card_ids;
+                      })
+                in
+                let changed =
+                  update_player changed player_id (fun owner ->
+                      {
+                        owner with
+                        resources = paid.remaining;
+                        active_card_ids =
+                          owner.active_card_ids @ [ operator_id ];
+                      })
+                in
+                conclude
+                  { changed with phase = Play; pending_decision = None }
+                  [
+                    answer;
+                    Payment_made { player_id; resources = paid.debit };
+                    Operator_intercepted
+                      { attacker_id; defender_id = player_id; operator_id };
+                    resolved;
+                  ]
+              else
+                let attack =
+                  Result.get_ok
+                    (Card_action.attack snapshot.players ~attacker_id
+                       ~operator_id ~target_ids)
+                in
+                execute_attack snapshot ~player_id:attacker_id ~operator_id
+                  ~target_ids attack [ answer; resolved ]
+          | _ -> assert false)
+      | Trade_distributors { own_card_id; rival_card_id } ->
+          let paid =
+            Result.get_ok
+              (Card_action.trade snapshot.players ~player_id ~own_card_id
+                 ~rival_card_id)
+          in
+          let changed =
+            update_player snapshot player_id (fun owner ->
+                {
+                  owner with
+                  resources = paid.remaining;
+                  active_card_ids =
+                    List.map
+                      (fun id -> if id = own_card_id then rival_card_id else id)
+                      owner.active_card_ids;
+                  traded_distributors = true;
+                })
+          in
+          let changed =
+            update_player changed (1 - player_id) (fun owner ->
+                {
+                  owner with
+                  active_card_ids =
+                    List.map
+                      (fun id -> if id = rival_card_id then own_card_id else id)
+                      owner.active_card_ids;
+                })
+          in
+          finish_action snapshot changed
+            [
+              Event.Payment_made { player_id; resources = paid.debit };
+              Distributors_traded { player_id; own_card_id; rival_card_id };
             ]
       | End_turn ->
           let to_player = 1 - player_id in
@@ -468,6 +738,19 @@ let legal_commands state ~player_id =
           (fun opening_distributor ->
             Command.Start_game { opening_distributor })
           Cards.opening_ids
+    | Over -> []
+    | Intercept ->
+        [
+          Command.Respond_intercept { accept = true };
+          Respond_intercept { accept = false };
+        ]
+    | Trim
+      when match snapshot.pending_decision with
+           | Some (Pending_post_action_trim _) -> true
+           | _ -> false ->
+        List.map
+          (fun color -> Command.Trim_resource { color })
+          Resource_bank.colors
     | _
       when snapshot.active_player <> Some player_id
            || (player_id <> 0 && player_id <> 1) ->
@@ -524,7 +807,58 @@ let legal_commands state ~player_id =
                 Resource_bank.colors)
             Resource_bank.colors
         in
-        draws @ cash @ trades @ [ Command.End_turn ]
+        let activations =
+          List.concat_map
+            (fun card_id ->
+              let card = Option.get (Cards.find card_id) in
+              let choices =
+                if card.category = Cards.Legit then
+                  List.map (fun color -> Some [ color ]) Resource_bank.colors
+                else [ None ]
+              in
+              List.map
+                (fun wildcard_payment ->
+                  Command.Activate_card { card_id; wildcard_payment })
+                choices)
+            owner.hand
+        in
+        let targets =
+          List.filter Cards.is_distributor
+            (player snapshot (1 - player_id)).active_card_ids
+        in
+        let target_lists =
+          List.map (fun id -> [ id ]) targets
+          @ List.concat_map
+              (fun first ->
+                List.filter_map
+                  (fun second ->
+                    if first = second then None else Some [ first; second ])
+                  targets)
+              targets
+        in
+        let operators =
+          List.concat_map
+            (fun operator_id ->
+              match (Option.get (Cards.find operator_id)).category with
+              | Cards.Operator _ ->
+                  List.map
+                    (fun target_ids ->
+                      Command.Use_operator { operator_id; target_ids })
+                    target_lists
+              | _ -> [])
+            owner.active_card_ids
+        in
+        let swaps =
+          List.concat_map
+            (fun own_card_id ->
+              List.map
+                (fun rival_card_id ->
+                  Command.Trade_distributors { own_card_id; rival_card_id })
+                targets)
+            (List.filter Cards.is_distributor owner.active_card_ids)
+        in
+        draws @ cash @ trades @ activations @ operators @ swaps
+        @ [ Command.End_turn ]
   in
   List.filter
     (fun command -> command_rejection state ~player_id command = None)

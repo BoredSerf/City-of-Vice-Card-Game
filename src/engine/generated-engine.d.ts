@@ -34,12 +34,49 @@ declare module "@city-of-vice/engine" {
         to_color: Resource_color;
       }
     | { command: "end_turn" };
-  export type Engine_command = Setup_command | Economy_command;
-  export type Decision_kind = "draw_discard" | "legit_cash" | "trim";
+  export type Card_command =
+    | {
+        command: "activate_card";
+        card_id: number;
+        wildcard_payment: Resource_color[] | null;
+      }
+    | { command: "use_operator"; operator_id: number; target_ids: number[] }
+    | {
+        command: "trade_distributors";
+        own_card_id: number;
+        rival_card_id: number;
+      }
+    | { command: "respond_intercept"; accept: boolean };
+  export type Engine_command = Setup_command | Economy_command | Card_command;
+  export type Decision_kind =
+    "draw_discard" | "legit_cash" | "trim" | "intercept" | "post_action_trim";
+  export type Win_reason = "elimination" | "expansion";
+  export type Crew =
+    | "The Docks"
+    | "Club Circuit"
+    | "Trailer Park"
+    | "The Burbs"
+    | "Pipeline"
+    | "Night Shift"
+    | "Arts District"
+    | "Hill Country";
+  export type Card_destination =
+    | { zone: "discard" }
+    | { zone: "hand"; player_id: number; suspended: boolean }
+    | { zone: "active"; player_id: number };
   export type Pending_decision =
     | { decision: "draw_discard"; player_id: number; card_ids: number[] }
     | { decision: "legit_cash"; player_id: number; drawn_card_id: number }
-    | { decision: "trim"; player_id: number };
+    | { decision: "trim"; player_id: number }
+    | { decision: "post_action_trim"; player_id: number }
+    | {
+        decision: "intercept";
+        player_id: number;
+        attacker_id: number;
+        operator_id: number;
+        target_ids: number[];
+        payment: Setup_player["resources"];
+      };
   export type Engine_event =
     | Setup_event
     | {
@@ -100,7 +137,36 @@ declare module "@city-of-vice/engine" {
         event: "decision_required" | "decision_resolved";
         player_id: number;
         decision: Decision_kind;
-      };
+      }
+    | { event: "card_activated"; player_id: number; card_id: number }
+    | { event: "crew_completed" | "crew_lost"; player_id: number; crew: Crew }
+    | {
+        event: "operator_result";
+        player_id: number;
+        operator_id: number;
+        target_ids: number[];
+        affected: { card_id: number; destination: Card_destination }[];
+      }
+    | { event: "operator_disposed"; player_id: number; operator_id: number }
+    | {
+        event: "intercept_answered";
+        player_id: number;
+        operator_id: number;
+        accept: boolean;
+      }
+    | {
+        event: "operator_intercepted";
+        attacker_id: number;
+        defender_id: number;
+        operator_id: number;
+      }
+    | {
+        event: "distributors_traded";
+        player_id: number;
+        own_card_id: number;
+        rival_card_id: number;
+      }
+    | { event: "game_finished"; winner: number; reason: Win_reason };
 
   export interface Setup_player {
     resources: {
@@ -115,12 +181,13 @@ declare module "@city-of-vice/engine" {
     active_card_ids: number[];
     suspended_card_ids: number[];
     draw_price: number;
+    traded_distributors: boolean;
   }
 
   /** Trusted full snapshot; this is not a redacted player-policy view. */
   export interface Setup_state {
-    schema_version: 1;
-    rules_version: "prototype_4ccb197_pd002_s04_working";
+    schema_version: 2;
+    rules_version: "prototype_4ccb197_pd002_s05_working";
     phase: "awaiting_opening" | "ready";
     turn_number: number;
     active_player: number | null;
@@ -150,16 +217,27 @@ declare module "@city-of-vice/engine" {
     | "insufficient_cards"
     | "invalid_payment"
     | "insufficient_resources"
-    | "crew_unavailable";
+    | "crew_unavailable"
+    | "game_over"
+    | "capacity_full"
+    | "operator_limit";
 
   export type Engine_state = Omit<
     Setup_state,
-    "phase" | "pending_decision" | "history"
+    "phase" | "pending_decision" | "history" | "winner" | "win_reason"
   > & {
     phase:
-      Setup_state["phase"] | "play" | "draw_discard" | "legit_cash" | "trim";
+      | Setup_state["phase"]
+      | "play"
+      | "draw_discard"
+      | "legit_cash"
+      | "trim"
+      | "intercept"
+      | "over";
     pending_decision: Pending_decision | null;
     history: Engine_event[];
+    winner: number | null;
+    win_reason: Win_reason | null;
   };
 
   export interface Rejected {

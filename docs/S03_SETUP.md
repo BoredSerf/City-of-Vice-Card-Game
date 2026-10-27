@@ -8,9 +8,10 @@ with zero resources. Initial income collection belongs to S04; the approved
 applies to the later `end_turn` implementation. The first-turn assumption is
 recorded in [issue #58](https://github.com/BoredSerf/City-of-Vice-Card-Game/issues/58).
 
-This does not implement income, ordinary turns, crew effects, payments, drawing,
-operators, victory, policies, controller, browser storage or legacy save migration.
-The root prototype and separate S02 probe/browser shell remain in place.
+S03's scope excluded ordinary turns and effects; subsequent
+[S04 economy](S04_ECONOMY.md) and [S05 effects](S05_EFFECTS.md) extend this same
+engine. Policies, controller, browser storage and legacy save migration remain
+later work. The root prototype and separate S02 probe/browser shell stay in place.
 
 ## Domain and snapshots
 
@@ -29,10 +30,11 @@ start, neither player has an executable S03 command to discover. New games use a
 new session; repeating `start_game` on a started session rejects unchanged.
 
 The original interim S03 rules ID was `prototype_4ccb197_pd002`. The current engine
-uses the explicit [S04 working identifier](S04_ECONOMY.md) and rejects that old ID.
-Schema remains 1, with ordered zones, resources, phase/turn/player, RNG cursor and
-structured history. S03 awaiting/initial-ready constraints remain strict; S04
-adds its documented economy/pending states. These snapshots are trusted full
+uses schema 2 and `prototype_4ccb197_pd002_s05_working`; old S03/S04 interim
+layouts reject unsupported. S05 adds the required Arts boolean and typed
+defender/terminal states. S03 awaiting/initial-ready constraints remain strict;
+ordered zones, resources, phase/turn/player, RNG cursor and structured history
+remain shared. These snapshots are trusted full
 engine data, not redacted player-policy views. S06 owns the player boundary.
 
 The shared `Wire_value` representation is ordinary pure JSON-shaped data.
@@ -45,8 +47,9 @@ an input JSON object repeats a name; both then use the same state decoder.
 
 Validation rejects unsupported versions/RNG algorithms, malformed fields, unknown
 phases, wrong player count, missing/duplicate/out-of-range cards, invalid initial
-resources/draw prices/suspension, inconsistent turns/starters/history, and non-null
-outcomes or invalid pending choices. It validates the documented emitted states rather than
+resources/draw prices/suspension, inconsistent turns/starters/history, outcomes
+and invalid pending choices. S05 validates supported terminal outcomes explicitly.
+The codec validates the documented emitted states rather than
 claiming support for arbitrary future midgame or prototype saves. There is no
 reachability solver or migration promise.
 
