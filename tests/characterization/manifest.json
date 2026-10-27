@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "status": "observational_baseline",
   "prototype_baseline": "4ccb19703d4af1a1c202d922b514a58a17d0e537",
   "human_decision_record": "docs/decisions/PD-001-reference-and-crews.md#initial-reference",
@@ -52,10 +52,12 @@
   ],
   "fixtures": [
     "cards.json",
-    "scenarios.json"
+    "scenarios.json",
+    "public_command_parity.json"
   ],
   "rule_decision_register": "rule_decisions.json",
-  "expectation_policy": "Literal expected deltas and visible log entries; unlisted serializable changes fail. The initial source reference is approved, but scenario outcomes remain observations and grant no rule or correction approval.",
+  "public_command_parity": "public_command_parity.json",
+  "expectation_policy": "Literal observed deltas and visible log entries remain unchanged; unlisted serializable changes fail. PD-001 approves the source reference, not all outcomes. PD-002 separately approves only RD-007 public-command expectations and the precisely listed helper exclusions; golden specifications are not executed by the legacy runner.",
   "random_policy": "Constant 0.999999 supplied independently per scenario; explicit bottom-to-top deck arrays, with the final element drawn first.",
   "gates": [
     "RD-001",
@@ -71,9 +73,16 @@
     "RD-011",
     "RD-012"
   ],
-  "approved_golden_scenarios": [],
+  "approved_golden_scenarios": [
+    "S01-SETUP-002",
+    "S01-INCOME-004",
+    "S01-DRAW-002",
+    "S01-CREW-NIGHT-001",
+    "S01-TURN-001",
+    "S01-TURN-002"
+  ],
   "coverage_limitations": [
-    "No approved golden scenarios. The earlier shared crew-resource choice is outside the accepted MVP direction and cannot execute against this source; detailed eight-crew semantics remain gated by RD-002.",
+    "Six PD-002 golden specifications share the linked observation IDs and are checked only as metadata, not executed against any engine. Other observed outcomes remain unapproved; detailed eight-crew semantics remain gated by RD-002.",
     "Instrumented source probes, including the two-callback beginAI queue, are not real-browser, elapsed-timing, layout, animation, accessibility or reload acceptance tests.",
     "Controlled states prove local observations, not full-game reachability or exhaustive AI behavior."
   ]

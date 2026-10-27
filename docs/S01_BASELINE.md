@@ -4,6 +4,8 @@ This is an implementation checkpoint of the existing S01 contract in
 [`IMPLEMENTATION.md`](../IMPLEMENTATION.md#s01--behavioral-baseline-and-rule-decisions).
 The product owner has accepted the initial source reference and the high-level
 eight-crew MVP direction in [PD-001](decisions/PD-001-reference-and-crews.md).
+The later [PD-002](decisions/PD-002-public-command-boundary.md) resolves only
+RD-007's public-command rejection and automatic-income boundary.
 This checkpoint does not change the game or complete S01. Detailed product rulings
 and independent review remain separate gates.
 
@@ -24,16 +26,20 @@ distinct crew bonuses; its priority remains `unset`. RD-002 retains the detailed
 timing, consent, overflow and compatibility questions. Merged code and passing
 tests supply no additional product approval.
 
-Every scenario remains `prototype_observation` / `unapproved_candidate`; the
+Every original scenario remains `prototype_observation` / `unapproved_candidate`; the
 retained approval label means the individual outcome has not been promoted to an
-approved intended rule. All 92 expected outcomes are unchanged. There are no
-approved corrections or approved golden scenarios. The former shared crew bonus
-cannot execute against this reference and is no longer the selected MVP direction.
+approved intended rule. All 92 observed outcomes are unchanged. Six separate
+approved golden specifications now record PD-002's public-command correction,
+using the same linked observation IDs without promoting their legacy results.
+The former shared crew bonus cannot execute against this reference and is no
+longer the selected MVP direction.
 See RD-001 and RD-002 in the
 [rule-decision register](../tests/characterization/rule_decisions.json).
 
-S03 remains gated by RD-007 and its ordinary S01/S02 dependencies. Each unresolved
-decision lists the commands and downstream slices it blocks. S02's foundation work
+RD-007 no longer supplies a rule-decision gate; S03's ordinary S01/S02 dependencies
+and acceptance/integration obligations remain. S02's required-check enforcement
+and controlled failure/block/correction/pass proof are still required. Each
+unresolved decision lists the commands and downstream slices it blocks. S02's foundation work
 is not blocked by these rule decisions; ordinary roadmap dependencies still apply.
 The roadmap coordinator alone owns the slice register.
 
@@ -43,16 +49,22 @@ The roadmap coordinator alone owns the slice register.
 | --- | --- |
 | [`cards.json`](../tests/characterization/cards.json) | All 36 unique cards: 24 distributors in eight crews, six legits, six operators; identity, color, business, crew, activation cost, and ability data. |
 | [`scenarios.json`](../tests/characterization/scenarios.json) | 92 stable scenario IDs, complete initial states, explicit randomness, ordered commands, literal expected results/deltas/logs, provenance and decision links. |
+| [`public_command_parity.json`](../tests/characterization/public_command_parity.json) | Six PD-002 golden specifications linked to the same observation IDs, exact helper-step exclusions, fixture references and approved public-command expectations; metadata only, never executed here. |
 | [`rule_decisions.json`](../tests/characterization/rule_decisions.json) | Authoritative S01 decision register: observed conflict, required product decision, exact affected scenario IDs, command families, blocked slices and source references. |
 | [`harness.cjs`](../tests/characterization/harness.cjs) | Independent Node runner against the pinned prototype, not the replacement engine. |
 | [`characterization.test.cjs`](../tests/characterization.test.cjs) | Validator, exact-transition, mutation-sensitivity and traceability checks, plus the complete corpus run. |
 | [`PROTOTYPE_CHANGES.md`](PROTOTYPE_CHANGES.md) | Change-ledger intake and authority status. |
 | [`PD-001`](decisions/PD-001-reference-and-crews.md) | Public-safe product-owner decision, exact initial reference and bounded crew direction. |
+| [`PD-002`](decisions/PD-002-public-command-boundary.md) | Exact bounded public-command ruling, its observation/exclusion map and remaining gates. |
 
-The existing `index.html`, original tests, scenarios and roadmap register are
-unchanged by this approval-record amendment. The MVP plan and FR-001 record now
-reflect PD-001's high-level direction. There is no new dependency, build system or
-runtime engine implementation.
+The existing `index.html`, original tests, card inventory, observation scenarios,
+historical review receipts and roadmap register are unchanged by PD-002's
+approval-record amendment. There is no new dependency, build system or runtime
+engine implementation. This checkpoint is stacked on independently verified S01
+[PR #52](https://github.com/BoredSerf/City-of-Vice-Card-Game/pull/52) at exact commit
+`196c2a5459ffee09bd54ee116e89c55fc0f7c1cf`; its
+[prior review receipt](S01_PRODUCT_REVIEW.md) applies to that parent state, not this
+amendment. Human acceptance and integration of the prerequisite remain pending.
 
 The source card records leave operator `ability_cost` empty; effective use costs
 come from the target (twice its cost for a Fixer), as exercised by the operator
@@ -100,19 +112,21 @@ The original tests remain useful historical evidence, but some of their setup
 helpers duplicate or omit cards. This new corpus establishes its own complete
 partitions; it does not rewrite or silently endorse those older fixtures.
 
-The version-2 metadata validator requires all twelve unique manifest gates to
+The version-3 metadata validator requires all twelve unique manifest gates to
 match the register exactly, checks both directions of every scenario link, and
 accepts only known slice IDs and declared command-family labels. These labels
 include future public/controller operations; they need not be executable legacy
-methods. The sole resolved gate is RD-001, bound to the exact approved source
-commit/tree and PD-001 reference. The other eleven gates must remain unresolved
-with null resolution records and nonempty downstream mappings. RD-002 alone has a
-separate partial decision record for crew direction. Unapproved scenarios and an
-empty approved-golden list remain mandatory.
+methods. Resolved RD-001 is bound to the exact approved source commit/tree and
+PD-001 reference. Resolved RD-007 is bound to PD-002, its three command families,
+six observation IDs and separate golden record. The other ten gates must remain
+unresolved with null resolution records and nonempty downstream mappings. RD-002 alone has a
+separate partial decision record for crew direction. All original observations
+remain unapproved. Only the six PD-002 golden specifications are approved, with
+`execution: specification_only`; the validator never calls a game engine for them.
 
 These closed rules reject missing/substituted human-record references, source
 movement and broader approval claims. The corpus also requires the referenced
-decision document to exist and be nonempty. They check consistency with the
+decision documents to exist and be nonempty. They check consistency with the
 recorded decision; they cannot authenticate product authority from arbitrary text.
 Independent review checks the actual human decision and its scope. Later product
 decisions require a deliberately reviewed metadata update.
@@ -165,10 +179,26 @@ redacted player boundary or exhaustive policy optimality. S06 owns that boundary
 
 `S01-TURN-001` observes exported `runAI` returning to `play` with human income
 already collected. On the same initial state, `S01-TURN-002` observes browser
-`beginAI` returning to `ready` without that income. RD-007 maps both outcomes to
-the still-unresolved public-command/controller choice; neither is approved as
-intended behavior. It also maps `S01-DRAW-002` and `S01-CREW-NIGHT-001`, whose
-direct income-helper calls during `play` are not claims of a browser-legal new turn.
+`beginAI` returning to `ready` without that income. These results remain historical
+observations. PD-002 now specifies automatic next-player income for public
+`end_turn`, and unchanged typed rejection for invalid opening choices and repeated
+income collection. Its separate golden fixtures cover both player directions on
+crew-free states and reject another income command after handoff. They do not
+adopt `runAI`'s bundled policy actions as a public command contract.
+
+The golden `initial_state_ref` identifies an original scenario and a one-based
+`after_step` observation boundary (0 means its initial state). Literal observed
+deltas materialize that fixture without executing source. `changes` is an explicit
+fixture override: only `S01-TURN-002` changes `current` to 1 to cover reverse
+handoff. Its existing full card partition, deck order and fixed randomness remain
+the inputs. Rejection expectations cover the entire serialized state, including
+null before failed setup. Successful handoff expectations specify only PD-002's
+next player, one automatic base-income application and no separate income step;
+they do not choose the remaining output schema, event payloads or turn numbering.
+
+The separate exclusion list names exact helper/controller steps. In particular,
+only step 2 of `S01-CREW-NIGHT-001` is excluded; its activation/crew observation
+remains unapproved under RD-002. Full mapping and authority appear in PD-002.
 
 ## Reproduction
 
@@ -180,10 +210,12 @@ timeout 30s node --max-old-space-size=128 --test --test-concurrency=1 tests/*.te
 timeout 30s node --max-old-space-size=128 tests/characterization/harness.cjs
 ```
 
-The full suite contains the 16 unchanged original tests plus eighteen characterization
-harness tests. The corpus runner reports 36 cards, 92 scenarios, the approved
-baseline SHA, and the same exact source commit. There is no `package.json` at
-this checkpoint, so no npm lint/build/test result is claimed. S02 must add these
+The full suite contains the 16 unchanged original tests plus 22 characterization
+harness tests. The corpus runner reports 36 cards, 92 executed observations, the
+approved baseline SHA, the same exact source commit, and six golden specifications
+with `golden_execution: specification_only`. The latter count is metadata
+validation, not a legacy or replacement-engine test result. There is no
+`package.json` at this checkpoint, so no npm lint/build/test result is claimed. S02 must add these
 checks to the integration gate when the foundation exists.
 
 To verify against a clean reference materialization while retaining the corpus
@@ -200,6 +232,16 @@ The source-hash check covers the reference `index.html` and original test file.
 The new corpus itself belongs to the S01 branch; copying it into the source
 worktree is unnecessary. A clean detached materialization at the stated source
 commit passed the corpus on 2026-10-13. The tree stayed clean.
+
+Keep the full test and corpus outputs, source HEAD/tree and clean-status evidence
+with the review work item. Negative controls in the test suite mutate isolated
+in-memory metadata and fail on wrong/missing approval, broadened golden claims,
+changed rejection or automatic-income semantics, incorrect fixture references,
+broadened helper exclusions, and missing source evidence. A source/measurement
+error fails the check; it is not an application pass. After retaining evidence,
+remove only the detached worktree created for that verification with `git worktree
+remove ../city-of-vice-candidate`. Tests create no persistent browser state or
+other resources.
 
 ## Review evidence and remaining gates
 
@@ -232,10 +274,14 @@ commit passed the corpus on 2026-10-13. The tree stayed clean.
   null-baseline policy and missing checks for scoped human evidence, source
   identity and partial crew direction; the revised checks then passed. The
   original negative identifier, gate-membership and reciprocal-link cases remain.
-  A further negative test first exposed that RD-007 could lose S03 while retaining
-  its other slice links; the scoped validator now rejects that unauthorized lift.
-- Eleven rule decisions remain unresolved, including RD-002's detailed crew
-  semantics. FR-001 priority is unset, and RD-007 still blocks S03. A green run
+  At that prior checkpoint, a further negative test exposed that RD-007 could
+  lose S03 while retaining its other slice links; the prior scoped validator
+  rejected that unauthorized lift under PD-001.
+- PD-002 updates the earlier closed metadata rules deliberately: RD-007 is now
+  resolved, with exact helper exclusions and separate approved intended-rule
+  evidence. Ten rule decisions remain unresolved, including RD-002's detailed crew
+  semantics. FR-001 priority is unset. S03's ordinary dependencies and S02's
+  enforcement/acceptance proof remain. A green run
   supplies no additional product ruling. Independent acceptance of this changed
   artifact must be recorded in a new review receipt; the historical receipt
   applies only to its identified checkpoint.

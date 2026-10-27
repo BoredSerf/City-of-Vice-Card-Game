@@ -62,11 +62,9 @@ function limit_violations(state) {
   return violations.sort();
 }
 
-function assert_transition(before, after, expected) {
-  if (expected.state) {
-    assert.deepEqual(clone_json(after), expected.state);
-    return;
-  }
+// Materialize literal fixture data only; this does not execute a game command.
+function expected_state(before, expected) {
+  if (expected.state) return clone_json(expected.state);
   const wanted = clone_json(before);
   for (const [field, value] of Object.entries(expected.changes || {})) {
     const parts = field.split('.');
@@ -84,7 +82,11 @@ function assert_transition(before, after, expected) {
   }
   // Fixture logs are literal completed observations in emission order.
   wanted.logs = [...(expected.logs || [])].reverse().concat(wanted.logs).slice(0, 45);
-  assert.deepEqual(clone_json(after), wanted);
+  return wanted;
+}
+
+function assert_transition(before, after, expected) {
+  assert.deepEqual(clone_json(after), expected_state(before, expected));
 }
 
 function load_prototype(source_root) {
@@ -235,15 +237,83 @@ const approved_source_commit = '4ccb19703d4af1a1c202d922b514a58a17d0e537';
 const approved_source_tree = '2ec9c3176abea9efcce93491a9ea0265dbb6db17';
 const baseline_decision_record = 'docs/decisions/PD-001-reference-and-crews.md#initial-reference';
 const crew_decision_record = 'docs/decisions/PD-001-reference-and-crews.md#crew-direction';
+const public_command_decision_record = 'docs/decisions/PD-002-public-command-boundary.md#approved-rule';
+const public_command_parity_file = 'public_command_parity.json';
+const rd007_excluded_steps = {
+  'S01-SETUP-002': [1],
+  'S01-INCOME-004': [1, 2],
+  'S01-DRAW-002': [1],
+  'S01-CREW-NIGHT-001': [2],
+  'S01-TURN-001': [1],
+  'S01-TURN-002': [1, 2, 3],
+};
 
-function validate_decisions(scenarios, decisions, manifest) {
-  assert.ok(manifest && manifest.schema_version === 2, 'Unsupported baseline metadata schema');
+// These are approved specifications, never sent to the legacy runner. Validate
+// only PD-002's bounded constraints; leave output types/events/crew rules to the
+// applicable implementation contracts and unresolved product decisions.
+function validate_public_command_parity(scenarios, manifest, parity) {
+  const ids = Object.keys(rd007_excluded_steps);
+  assert.ok(parity && parity.schema_version === 1, 'Unsupported PD-002 golden schema');
+  assert.equal(manifest.public_command_parity, public_command_parity_file, 'RD-007 golden fixture is required');
+  assert.deepEqual(manifest.approved_golden_scenarios, ids, 'PD-002 golden IDs differ');
+  assert.equal(parity.decision_id, 'RD-007', 'PD-002 golden decision differs');
+  assert.equal(parity.human_decision_record, public_command_decision_record, 'PD-002 golden human decision differs');
+  assert.equal(parity.provenance, 'approved_correction', 'PD-002 golden provenance differs');
+  assert.equal(parity.execution, 'specification_only', 'PD-002 golden cases are not executed');
+  assert.equal(parity.source_observation_commit, approved_source_commit, 'PD-002 golden observation reference differs');
+  assert.ok(Array.isArray(parity.helper_exclusions), 'RD-007 helper exclusions are required');
+  assert.deepEqual(parity.helper_exclusions.map(value => value.scenario_id), ids, 'RD-007 helper exclusion IDs differ');
+  for (const exclusion of parity.helper_exclusions) {
+    assert.deepEqual(exclusion.step_numbers, rd007_excluded_steps[exclusion.scenario_id], 'RD-007 helper exclusion steps differ');
+    assert.ok(typeof exclusion.reason === 'string' && exclusion.reason.trim(), 'RD-007 helper exclusion needs a reason');
+    const observation = scenarios.find(value => value.id === exclusion.scenario_id);
+    assert.ok(observation && exclusion.step_numbers.every(number => observation.steps[number - 1]),
+      'RD-007 helper exclusion references a missing observation step');
+  }
+  assert.ok(Array.isArray(parity.golden_scenarios), 'PD-002 golden scenarios are required');
+  assert.deepEqual(parity.golden_scenarios.map(value => value.id), ids, 'PD-002 golden scenario IDs differ');
+  const rejection = {result: 'typed_rejection', serialized_state: 'unchanged'};
+  for (const golden of parity.golden_scenarios) {
+    const observation = scenarios.find(value => value.id === golden.id);
+    const after_step = golden.id === 'S01-CREW-NIGHT-001' ? 1 : 0;
+    const changes = golden.id === 'S01-TURN-002' ? {current: 1} : {};
+    assert.deepEqual(golden.initial_state_ref, {scenario_id: golden.id, after_step, changes}, 'PD-002 golden fixture differs');
+    let initial = clone_json(observation.initial_state);
+    if (after_step) initial = expected_state(initial, observation.steps[0].expected);
+    if (initial) {
+      initial = expected_state(initial, {changes});
+      validate_state(initial);
+      assert.equal(initial.phase, 'play', 'PD-002 golden fixture must be in play');
+    }
+    let steps;
+    if (golden.id === 'S01-SETUP-002') {
+      assert.equal(initial, null, 'PD-002 golden setup starts without a game');
+      steps = [{command: 'start_game', args: [24], expected: rejection}];
+    } else if (golden.id.startsWith('S01-TURN-')) {
+      // Crew-free cases isolate automatic base income from still-open crew rules.
+      assert.deepEqual(initial.players.map(player => player.active), [[0], [3]], 'PD-002 golden turn fixture must be crew-free');
+      const next_player = 1 - initial.current;
+      steps = [{command: 'end_turn', args: [initial.current], expected: {
+        result: 'success', next_player,
+        automatic_income: {player: next_player, occurrences: 1,
+          resource_delta: {[next_player === 0 ? 'Green' : 'Yellow']: 1}},
+        requires_collect_income: false,
+      }}, {command: 'collect_income', args: [next_player], expected: rejection}];
+    } else {
+      const count = golden.id === 'S01-INCOME-004' ? 2 : 1;
+      steps = Array.from({length: count}, () => ({command: 'collect_income', args: [initial.current], expected: rejection}));
+    }
+    assert.deepEqual(golden.steps, steps, `PD-002 golden command expectations differ: ${golden.id}`);
+  }
+}
+
+function validate_decisions(scenarios, decisions, manifest, parity = read_json(public_command_parity_file)) {
+  assert.ok(manifest && manifest.schema_version === 3, 'Unsupported baseline metadata schema');
   assert.equal(manifest.status, 'observational_baseline', 'Unsupported baseline approval status');
   assert.equal(manifest.prototype_baseline, approved_source_commit, 'Approved baseline differs');
   assert.ok(manifest.source && manifest.source.commit === approved_source_commit &&
     manifest.source.tree === approved_source_tree, 'Approved source identity differs');
   assert.equal(manifest.human_decision_record, baseline_decision_record, 'Baseline human decision record is required');
-  assert.deepEqual(manifest.approved_golden_scenarios, [], 'Reference approval does not approve golden scenarios');
   assert.ok(Array.isArray(manifest.gates), 'Baseline gates must be an array');
   assert.equal(new Set(manifest.gates).size, manifest.gates.length, 'Manifest gates must be unique');
   assert.ok(manifest.gates.every(id => supported_gate_ids.has(id)), 'Unsupported gate identifier');
@@ -259,6 +329,12 @@ function validate_decisions(scenarios, decisions, manifest) {
       assert.equal(decision.status, 'resolved', 'The recorded baseline decision is resolved');
       assert.equal(decision.human_decision_record, baseline_decision_record, 'Baseline human decision record is required');
       assert.deepEqual(decision.blocked_slices, [], 'Resolved baseline gate cannot block slices');
+    } else if (decision.id === 'RD-007') {
+      assert.equal(decision.status, 'resolved', 'PD-002 resolves RD-007 only');
+      assert.equal(decision.human_decision_record, public_command_decision_record, 'RD-007 human decision record is required');
+      assert.deepEqual(decision.blocked_slices, [], 'Resolved RD-007 cannot block slices');
+      assert.deepEqual(decision.scenario_ids, Object.keys(rd007_excluded_steps), 'RD-007 golden observation links differ');
+      assert.deepEqual(decision.affected_commands, ['start_game', 'collect_income', 'end_turn'], 'RD-007 approved command scope differs');
     } else {
       assert.equal(decision.status, 'unresolved', 'This decision remains unresolved');
       assert.equal(decision.human_decision_record, null, 'Unresolved human decision evidence is absent');
@@ -267,12 +343,13 @@ function validate_decisions(scenarios, decisions, manifest) {
     }
     assert.equal(decision.partial_decision_record, decision.id === 'RD-002' ? crew_decision_record : undefined,
       'Unsupported partial human decision record');
+    assert.equal(decision.approved_expectations, decision.id === 'RD-007' ? public_command_parity_file : undefined,
+      'Unsupported RD-007 golden expectation record');
     assert.ok(Array.isArray(decision.affected_commands) && decision.affected_commands.length, 'Decision needs affected commands');
     assert.equal(new Set(decision.affected_commands).size, decision.affected_commands.length, 'Command IDs must be unique');
     assert.equal(new Set(decision.blocked_slices).size, decision.blocked_slices.length, 'Slice IDs must be unique');
     assert.ok(decision.affected_commands.every(id => supported_command_ids.has(id)), 'Unsupported command identifier');
     assert.ok(decision.blocked_slices.every(id => supported_slice_ids.has(id)), 'Unsupported slice identifier');
-    if (decision.id === 'RD-007') assert.ok(decision.blocked_slices.includes('S03'), 'RD-007 still gates S03');
     assert.ok(Array.isArray(decision.scenario_ids) && decision.scenario_ids.length, 'Decision needs affected scenarios');
     assert.equal(new Set(decision.scenario_ids).size, decision.scenario_ids.length, 'Affected scenario IDs must be unique');
     for (const id of decision.scenario_ids) assert.ok(id === '*' || scenario_ids.has(id), `Unknown scenario ${id}`);
@@ -295,6 +372,7 @@ function validate_decisions(scenarios, decisions, manifest) {
     const affected = decision.scenario_ids.includes('*') ? scenarios : scenarios.filter(scenario => decision.scenario_ids.includes(scenario.id));
     for (const scenario of affected) assert.ok(scenario.decision_ids.includes(decision.id), 'Decision mapping is not reciprocal');
   }
+  validate_public_command_parity(scenarios, manifest, parity);
 }
 
 function verify_corpus(options = {}) {
@@ -314,9 +392,12 @@ function verify_corpus(options = {}) {
   assert.deepEqual(clone_json(normalized), inventory);
   assert.deepEqual(inventory.map(card => card.id), Array.from({length: 36}, (_, id) => id));
   const scenarios = read_json('scenarios.json');
-  validate_decisions(scenarios, read_json('rule_decisions.json'), manifest);
-  const decision_record_path = path.resolve(__dirname, '../..', baseline_decision_record.split('#')[0]);
-  assert.ok(fs.readFileSync(decision_record_path, 'utf8').trim().length, 'Baseline human decision record is empty');
+  const parity = read_json(public_command_parity_file);
+  validate_decisions(scenarios, read_json('rule_decisions.json'), manifest, parity);
+  for (const record of [baseline_decision_record, public_command_decision_record]) {
+    const decision_record_path = path.resolve(__dirname, '../..', record.split('#')[0]);
+    assert.ok(fs.readFileSync(decision_record_path, 'utf8').trim().length, 'Human decision record is empty');
+  }
   assert.equal(new Set(scenarios.map(scenario => scenario.id)).size, scenarios.length, 'Scenario IDs must be unique');
   for (const area of manifest.required_areas) {
     assert.ok(scenarios.some(scenario => scenario.areas.includes(area)), `Missing area: ${area}`);
@@ -329,7 +410,8 @@ function verify_corpus(options = {}) {
     run_scenario(engine, source, scenario);
   }
   return {inventory_count: inventory.length, scenario_count: scenarios.length,
-    approved_baseline: manifest.prototype_baseline, source_commit: manifest.source.commit};
+    approved_baseline: manifest.prototype_baseline, source_commit: manifest.source.commit,
+    approved_golden_count: parity.golden_scenarios.length, golden_execution: parity.execution};
 }
 
 module.exports = {validate_state, limit_violations, assert_transition, load_prototype, run_scenario, validate_decisions, verify_corpus};
