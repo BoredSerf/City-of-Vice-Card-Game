@@ -7,6 +7,7 @@ const vm = require('node:vm');
 const harness_path = path.join(__dirname, 'characterization', 'harness.cjs');
 const decision_fixture = () => Object.fromEntries([
   ['scenarios', 'scenarios.json'], ['decisions', 'rule_decisions.json'], ['manifest', 'manifest.json'],
+  ['parity', 'public_command_parity.json'],
 ].map(([key, name]) => [key, JSON.parse(fs.readFileSync(path.join(__dirname, 'characterization', name)))]));
 const fixture_state = () => ({
   version: 7, turn: 1, current: 0, phase: 'play', winner: null,
@@ -90,6 +91,8 @@ test('the recorded reference executes the corpus without granting scenario appro
   assert.equal(result.inventory_count, 36);
   assert.equal(result.approved_baseline, '4ccb19703d4af1a1c202d922b514a58a17d0e537');
   assert.equal(result.scenario_count, 92);
+  assert.equal(result.approved_golden_count, 6);
+  assert.equal(result.golden_execution, 'specification_only');
 });
 
 test('corpus execution detects a missing payment and identifies the failing stable scenario', () => {
@@ -215,12 +218,72 @@ test('partial crew direction preserves unresolved command gates and observationa
   }
 });
 
-test('initial reference approval cannot lift the unresolved RD-007 setup gate', () => {
+test('only the bounded PD-002 decision resolves RD-007 while other rule gates remain', () => {
   const {validate_decisions} = require(harness_path);
-  const {scenarios, decisions, manifest} = decision_fixture();
-  const setup_gate = decisions.find(decision => decision.id === 'RD-007');
-  setup_gate.blocked_slices = setup_gate.blocked_slices.filter(id => id !== 'S03');
-  assert.throws(() => validate_decisions(scenarios, decisions, manifest), /RD-007 still gates S03/);
+  const fixture = decision_fixture();
+  assert.doesNotThrow(() => validate_decisions(fixture.scenarios, fixture.decisions, fixture.manifest, fixture.parity));
+  assert.deepEqual(fixture.decisions.filter(decision => decision.status === 'resolved').map(decision => decision.id),
+    ['RD-001', 'RD-007']);
+  for (const record of [null, '', fixture.manifest.human_decision_record, 'assumed approval']) {
+    const {scenarios, decisions, manifest, parity} = decision_fixture();
+    decisions.find(decision => decision.id === 'RD-007').human_decision_record = record;
+    assert.throws(() => validate_decisions(scenarios, decisions, manifest, parity), /RD-007 human decision/);
+  }
+});
+
+test('PD-002 golden expectations stay separate from observed outcomes and cannot claim execution', () => {
+  const {validate_decisions} = require(harness_path);
+  for (const change of [
+    ({parity}) => {parity.execution = 'exported_rules';},
+    ({parity}) => {parity.provenance = 'prototype_observation';},
+    ({parity}) => {parity.human_decision_record = null;},
+    ({parity}) => {parity.golden_scenarios.pop();},
+    ({manifest}) => {manifest.approved_golden_scenarios = [];},
+    ({decisions}) => {decisions.find(decision => decision.id === 'RD-007').approved_expectations = null;},
+  ]) {
+    const fixture = decision_fixture();
+    change(fixture);
+    assert.throws(() => validate_decisions(fixture.scenarios, fixture.decisions, fixture.manifest, fixture.parity),
+      /golden|PD-002|RD-007/i);
+  }
+});
+
+test('golden rejection, automatic income and fixture metadata reject representative malformed rules', () => {
+  const {validate_decisions} = require(harness_path);
+  for (const change of [
+    parity => {parity.golden_scenarios[0].steps[0].expected.serialized_state = 'changed';},
+    parity => {parity.golden_scenarios[1].steps[0].expected.result = 'success';},
+    parity => {parity.golden_scenarios[2].steps[0].args = [1];},
+    parity => {parity.golden_scenarios[3].initial_state_ref.after_step = 0;},
+    parity => {parity.golden_scenarios[4].steps[0].expected.requires_collect_income = true;},
+    parity => {parity.golden_scenarios[4].steps[0].expected.automatic_income.occurrences = 2;},
+    parity => {parity.golden_scenarios[5].steps[0].expected.automatic_income.player = 1;},
+    parity => {parity.golden_scenarios[5].steps[0].expected.automatic_income.resource_delta = {Yellow: 1};},
+    parity => {parity.golden_scenarios[5].initial_state_ref.changes = {};},
+  ]) {
+    const {scenarios, decisions, manifest, parity} = decision_fixture();
+    change(parity);
+    assert.throws(() => validate_decisions(scenarios, decisions, manifest, parity), /golden/i);
+  }
+});
+
+test('helper exclusions cover exactly the RD-007 steps and preserve Night Shift activation evidence', () => {
+  const {validate_decisions} = require(harness_path);
+  for (const change of [
+    parity => {parity.helper_exclusions.pop();},
+    parity => {parity.helper_exclusions[3].step_numbers = [1, 2];},
+    parity => {parity.helper_exclusions[0].step_numbers = [9];},
+    parity => {parity.helper_exclusions[0].scenario_id = 'S01-DRAW-006';},
+  ]) {
+    const {scenarios, decisions, manifest, parity} = decision_fixture();
+    change(parity);
+    assert.throws(() => validate_decisions(scenarios, decisions, manifest, parity), /helper exclusion/i);
+  }
+});
+
+test('unavailable source evidence fails the corpus check instead of reporting a pass', () => {
+  const {verify_corpus} = require(harness_path);
+  assert.throws(() => verify_corpus({source_root: path.join(__dirname, 'missing-prototype-source')}), /ENOENT/);
 });
 
 test('register-to-scenario links cannot disappear even when every forward link is removed', () => {

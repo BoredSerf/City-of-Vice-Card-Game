@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "decision_id": "RD-007",
+  "human_decision_record": "docs/decisions/PD-002-public-command-boundary.md#approved-rule",
+  "provenance": "approved_correction",
+  "execution": "specification_only",
+  "source_observation_commit": "4ccb19703d4af1a1c202d922b514a58a17d0e537",
+  "helper_exclusions": [
+    {"scenario_id": "S01-SETUP-002", "step_numbers": [1], "reason": "Invalid opening fallback is an internal factory observation, not public start_game behavior."},
+    {"scenario_id": "S01-INCOME-004", "step_numbers": [1, 2], "reason": "Direct startTurn calls during play bypass public repeated-income rejection."},
+    {"scenario_id": "S01-DRAW-002", "step_numbers": [1], "reason": "Direct startTurn during play bypasses public rejection and resets draw price."},
+    {"scenario_id": "S01-CREW-NIGHT-001", "step_numbers": [2], "reason": "Only the income-helper call during play is excluded; step 1 remains an unapproved activation/crew observation under RD-002."},
+    {"scenario_id": "S01-TURN-001", "step_numbers": [1], "reason": "runAI bundles rival income/actions and human income; its bundle is not a public end_turn transition."},
+    {"scenario_id": "S01-TURN-002", "step_numbers": [1, 2, 3], "reason": "The legacy beginAI handoff and collect-income notice do not define the approved automatic-income public handoff."}
+  ],
+  "golden_scenarios": [
+    {
+      "id": "S01-SETUP-002",
+      "initial_state_ref": {"scenario_id": "S01-SETUP-002", "after_step": 0, "changes": {}},
+      "steps": [
+        {"command": "start_game", "args": [24], "expected": {"result": "typed_rejection", "serialized_state": "unchanged"}}
+      ]
+    },
+    {
+      "id": "S01-INCOME-004",
+      "initial_state_ref": {"scenario_id": "S01-INCOME-004", "after_step": 0, "changes": {}},
+      "steps": [
+        {"command": "collect_income", "args": [0], "expected": {"result": "typed_rejection", "serialized_state": "unchanged"}},
+        {"command": "collect_income", "args": [0], "expected": {"result": "typed_rejection", "serialized_state": "unchanged"}}
+      ]
+    },
+    {
+      "id": "S01-DRAW-002",
+      "initial_state_ref": {"scenario_id": "S01-DRAW-002", "after_step": 0, "changes": {}},
+      "steps": [
+        {"command": "collect_income", "args": [0], "expected": {"result": "typed_rejection", "serialized_state": "unchanged"}}
+      ]
+    },
+    {
+      "id": "S01-CREW-NIGHT-001",
+      "initial_state_ref": {"scenario_id": "S01-CREW-NIGHT-001", "after_step": 1, "changes": {}},
+      "steps": [
+        {"command": "collect_income", "args": [0], "expected": {"result": "typed_rejection", "serialized_state": "unchanged"}}
+      ]
+    },
+    {
+      "id": "S01-TURN-001",
+      "initial_state_ref": {"scenario_id": "S01-TURN-001", "after_step": 0, "changes": {}},
+      "steps": [
+        {"command": "end_turn", "args": [0], "expected": {"result": "success", "next_player": 1, "automatic_income": {"player": 1, "occurrences": 1, "resource_delta": {"Yellow": 1}}, "requires_collect_income": false}},
+        {"command": "collect_income", "args": [1], "expected": {"result": "typed_rejection", "serialized_state": "unchanged"}}
+      ]
+    },
+    {
+      "id": "S01-TURN-002",
+      "initial_state_ref": {"scenario_id": "S01-TURN-002", "after_step": 0, "changes": {"current": 1}},
+      "steps": [
+        {"command": "end_turn", "args": [1], "expected": {"result": "success", "next_player": 0, "automatic_income": {"player": 0, "occurrences": 1, "resource_delta": {"Green": 1}}, "requires_collect_income": false}},
+        {"command": "collect_income", "args": [0], "expected": {"result": "typed_rejection", "serialized_state": "unchanged"}}
+      ]
+    }
+  ]
+}

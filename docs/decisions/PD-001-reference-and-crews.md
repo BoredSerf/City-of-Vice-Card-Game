@@ -45,3 +45,8 @@ changes. In particular, RD-007 still gates S03, alongside its ordinary S01/S02
 dependencies. This record alone does not complete S01 or make engine work ready.
 Any specific correction needs its own product decision, explicit expectation
 update and independent review under `CONTRIBUTING.md`.
+
+Subsequent decision: [PD-002, 2026-10-27](PD-002-public-command-boundary.md)
+resolves RD-007 only and adds separate public-command golden specifications.
+The no-golden/unresolved statements above describe PD-001's original checkpoint;
+PD-001 itself supplies no authority for that later correction.
