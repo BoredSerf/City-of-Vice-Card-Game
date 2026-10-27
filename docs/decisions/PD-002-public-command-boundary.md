@@ -58,7 +58,8 @@ does not approve all observed outcomes, resolve another rule decision, move the
 baseline, select `final_parity_ref`, start S03, change scope or priorities, or
 establish S01/S02 acceptance and integration.
 
-The roadmap coordinator retains scheduling and tracker ownership. S02's required
-check enforcement and controlled failure/block/correction/pass proof remain
-outstanding prerequisites. Human acceptance and merge remain required for every
-layer of the stack.
+The roadmap coordinator retains scheduling and tracker ownership. S02's applicable
+local and hosted checks must pass for the reviewed revision, with independent
+verification and human inspection before acceptance and merge under the
+[CI acceptance policy](../S02_FOUNDATION.md#ci-and-remaining-acceptance-gates).
+Human acceptance and merge remain required for every layer of the stack.
