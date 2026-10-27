@@ -126,7 +126,9 @@ let invoke case state command_value =
           state ~player_id command
       else Engine.perform_command state ~player_id command
 
-let run_case case =
+let legal_both_value state = `List (List.map (legal_value state) [ 0; 1 ])
+
+let run_case ?(both_players = false) case =
   let ident = text "id" case in
   let initial_value = member "initial_state" case in
   let initial =
@@ -200,26 +202,35 @@ let run_case case =
         in
         let trace =
           `Assoc
-            [
-              ("command_json", `String (Yojson.Basic.to_string command_value));
-              ("result", encoded);
-              ("legal_after", legal_value next actor);
-            ]
+            ([
+               ("command_json", `String (Yojson.Basic.to_string command_value));
+               ("result", encoded);
+               ("legal_after", legal_value next actor);
+             ]
+            @
+            if both_players then
+              [ ("legal_after_by_player", legal_both_value next) ]
+            else [])
         in
         run (index + 1) next expected rest (trace :: traces)
   in
   let steps = run 1 initial initial_value (list "steps" case) [] in
   `Assoc
-    [
-      ("id", `String ident);
-      ("initial_state_json", `String (Native_json.state_json initial));
-      ( "initial_actor",
-        `Int (Option.value ~default:0 (State.snapshot initial).active_player) );
-      ( "initial_legal",
-        legal_value initial
-          (Option.value ~default:0 (State.snapshot initial).active_player) );
-      ("steps", `List steps);
-    ]
+    ([
+       ("id", `String ident);
+       ("initial_state_json", `String (Native_json.state_json initial));
+       ( "initial_actor",
+         `Int (Option.value ~default:0 (State.snapshot initial).active_player)
+       );
+       ( "initial_legal",
+         legal_value initial
+           (Option.value ~default:0 (State.snapshot initial).active_player) );
+       ("steps", `List steps);
+     ]
+    @
+    if both_players then
+      [ ("initial_legal_by_player", legal_both_value initial) ]
+    else [])
 
 let metadata_test document =
   check

@@ -1,5 +1,19 @@
-type decision = Docks_discard | Forced_cash | Resource_trim
+type decision =
+  | Docks_discard
+  | Forced_cash
+  | Resource_trim
+  | Interception
+  | Post_action_trim
+
 type draw_source = Paid | Burbs
+type win_reason = Elimination | Expansion
+
+type destination =
+  | To_discard
+  | To_hand of { player_id : int; suspended : bool }
+  | To_active of { player_id : int }
+
+type affected = { card_id : int; destination : destination }
 
 type t =
   | Game_started of { turn_number : int; active_player : int }
@@ -32,6 +46,28 @@ type t =
     }
   | Decision_required of { player_id : int; decision : decision }
   | Decision_resolved of { player_id : int; decision : decision }
+  | Card_activated of { player_id : int; card_id : int }
+  | Crew_completed of { player_id : int; crew : Cards.crew }
+  | Crew_lost of { player_id : int; crew : Cards.crew }
+  | Operator_result of {
+      player_id : int;
+      operator_id : int;
+      target_ids : int list;
+      affected : affected list;
+    }
+  | Operator_disposed of { player_id : int; operator_id : int }
+  | Intercept_answered of { player_id : int; operator_id : int; accept : bool }
+  | Operator_intercepted of {
+      attacker_id : int;
+      defender_id : int;
+      operator_id : int;
+    }
+  | Distributors_traded of {
+      player_id : int;
+      own_card_id : int;
+      rival_card_id : int;
+    }
+  | Game_finished of { winner : int; reason : win_reason }
 
 let setup_events first rival =
   [
@@ -46,12 +82,25 @@ let decision_name = function
   | Docks_discard -> "draw_discard"
   | Forced_cash -> "legit_cash"
   | Resource_trim -> "trim"
+  | Interception -> "intercept"
+  | Post_action_trim -> "post_action_trim"
 
 let decision_of_name = function
   | "draw_discard" -> Docks_discard
   | "legit_cash" -> Forced_cash
   | "trim" -> Resource_trim
+  | "intercept" -> Interception
+  | "post_action_trim" -> Post_action_trim
   | _ -> raise (Wire_value.Decode_error "decision")
+
+let win_reason_name = function
+  | Elimination -> "elimination"
+  | Expansion -> "expansion"
+
+let win_reason_of_name = function
+  | "elimination" -> Elimination
+  | "expansion" -> Expansion
+  | _ -> raise (Wire_value.Decode_error "win_reason")
 
 let valid event =
   let player value = value = 0 || value = 1 in
@@ -97,11 +146,75 @@ let valid event =
       player player_id && from_color <> to_color && (spent = 2 || spent = 4)
   | Decision_required { player_id; _ } | Decision_resolved { player_id; _ } ->
       player player_id
+  | Card_activated { player_id; card_id } -> player player_id && card card_id
+  | Crew_completed { player_id; _ } | Crew_lost { player_id; _ } ->
+      player player_id
+  | Operator_result { player_id; operator_id; target_ids; affected } ->
+      player player_id
+      && (match Cards.find operator_id with
+        | Some { category = Operator _; _ } -> true
+        | _ -> false)
+      && target_ids <> []
+      && List.length target_ids <= 2
+      && List.length (List.sort_uniq Int.compare target_ids)
+         = List.length target_ids
+      && List.for_all Cards.is_distributor target_ids
+      && affected <> []
+      && List.length affected <= 6
+      && List.length
+           (List.sort_uniq Int.compare
+              (List.map (fun entry -> entry.card_id) affected))
+         = List.length affected
+      && List.for_all
+           (fun entry ->
+             Cards.is_distributor entry.card_id
+             &&
+             match entry.destination with
+             | To_discard -> true
+             | To_active { player_id } | To_hand { player_id; _ } ->
+                 player player_id)
+           affected
+  | Operator_disposed { player_id; operator_id }
+  | Intercept_answered { player_id; operator_id; _ } -> (
+      player player_id
+      &&
+      match Cards.find operator_id with
+      | Some { category = Operator _; _ } -> true
+      | _ -> false)
+  | Operator_intercepted { attacker_id; defender_id; operator_id } -> (
+      player attacker_id
+      && defender_id = 1 - attacker_id
+      &&
+      match Cards.find operator_id with
+      | Some { category = Operator _; _ } -> true
+      | _ -> false)
+  | Distributors_traded { player_id; own_card_id; rival_card_id } ->
+      player player_id
+      && own_card_id <> rival_card_id
+      && Cards.is_distributor own_card_id
+      && Cards.is_distributor rival_card_id
+  | Game_finished { winner; _ } -> player winner
 
 let to_value event =
   let open Wire_value in
   let i = int_value in
   let c color = String (Cards.color_key color) in
+  let affected_value entry =
+    let destination =
+      match entry.destination with
+      | To_discard -> Object [ ("zone", String "discard") ]
+      | To_active { player_id } ->
+          Object [ ("zone", String "active"); ("player_id", i player_id) ]
+      | To_hand { player_id; suspended } ->
+          Object
+            [
+              ("zone", String "hand");
+              ("player_id", i player_id);
+              ("suspended", Bool suspended);
+            ]
+    in
+    Object [ ("card_id", i entry.card_id); ("destination", destination) ]
+  in
   let tag, fields =
     match event with
     | Game_started { turn_number; active_player } ->
@@ -192,6 +305,55 @@ let to_value event =
             ("player_id", i player_id);
             ("decision", String (decision_name decision));
           ] )
+    | Card_activated { player_id; card_id } ->
+        ( "card_activated",
+          [ ("player_id", i player_id); ("card_id", i card_id) ] )
+    | Crew_completed { player_id; crew } ->
+        ( "crew_completed",
+          [
+            ("player_id", i player_id); ("crew", String (Cards.crew_name crew));
+          ] )
+    | Crew_lost { player_id; crew } ->
+        ( "crew_lost",
+          [
+            ("player_id", i player_id); ("crew", String (Cards.crew_name crew));
+          ] )
+    | Operator_result { player_id; operator_id; target_ids; affected } ->
+        ( "operator_result",
+          [
+            ("player_id", i player_id);
+            ("operator_id", i operator_id);
+            ("target_ids", Array (List.map i target_ids));
+            ("affected", Array (List.map affected_value affected));
+          ] )
+    | Operator_disposed { player_id; operator_id } ->
+        ( "operator_disposed",
+          [ ("player_id", i player_id); ("operator_id", i operator_id) ] )
+    | Intercept_answered { player_id; operator_id; accept } ->
+        ( "intercept_answered",
+          [
+            ("player_id", i player_id);
+            ("operator_id", i operator_id);
+            ("accept", Bool accept);
+          ] )
+    | Operator_intercepted { attacker_id; defender_id; operator_id } ->
+        ( "operator_intercepted",
+          [
+            ("attacker_id", i attacker_id);
+            ("defender_id", i defender_id);
+            ("operator_id", i operator_id);
+          ] )
+    | Distributors_traded { player_id; own_card_id; rival_card_id } ->
+        ( "distributors_traded",
+          [
+            ("player_id", i player_id);
+            ("own_card_id", i own_card_id);
+            ("rival_card_id", i rival_card_id);
+          ] )
+    | Game_finished { winner; reason } ->
+        ( "game_finished",
+          [ ("winner", i winner); ("reason", String (win_reason_name reason)) ]
+        )
   in
   Object (("event", String tag) :: fields)
 
@@ -218,6 +380,15 @@ let of_value value =
     | "resources_traded" ->
         [ "player_id"; "from_color"; "to_color"; "spent"; "gained" ]
     | "decision_required" | "decision_resolved" -> [ "player_id"; "decision" ]
+    | "card_activated" -> [ "player_id"; "card_id" ]
+    | "crew_completed" | "crew_lost" -> [ "player_id"; "crew" ]
+    | "operator_result" ->
+        [ "player_id"; "operator_id"; "target_ids"; "affected" ]
+    | "operator_disposed" -> [ "player_id"; "operator_id" ]
+    | "intercept_answered" -> [ "player_id"; "operator_id"; "accept" ]
+    | "operator_intercepted" -> [ "attacker_id"; "defender_id"; "operator_id" ]
+    | "distributors_traded" -> [ "player_id"; "own_card_id"; "rival_card_id" ]
+    | "game_finished" -> [ "winner"; "reason" ]
     | _ -> raise (Decode_error "event")
   in
   let fields = fields ("event" :: names) value in
@@ -233,6 +404,43 @@ let of_value value =
     if get name <> expected then raise (Decode_error name)
   in
   let actor () = number "player_id" in
+  let boolean value =
+    match value with Bool value -> value | _ -> raise (Decode_error "boolean")
+  in
+  let crew () =
+    match Cards.crew_of_name (text "crew") with
+    | Some crew -> crew
+    | None -> raise (Decode_error "crew")
+  in
+  let affected value =
+    let f = Wire_value.fields [ "card_id"; "destination" ] value in
+    let value = field "destination" f in
+    let tag =
+      match value with
+      | Object f -> string (field "zone" f)
+      | _ -> raise (Decode_error "destination")
+    in
+    let names =
+      match tag with
+      | "discard" -> [ "zone" ]
+      | "active" -> [ "zone"; "player_id" ]
+      | "hand" -> [ "zone"; "player_id"; "suspended" ]
+      | _ -> raise (Decode_error "destination")
+    in
+    let d = Wire_value.fields names value in
+    let destination =
+      match tag with
+      | "discard" -> To_discard
+      | "active" -> To_active { player_id = int (field "player_id" d) }
+      | _ ->
+          To_hand
+            {
+              player_id = int (field "player_id" d);
+              suspended = boolean (field "suspended" d);
+            }
+    in
+    { card_id = int (field "card_id" f); destination }
+  in
   let event =
     match tag with
     | "game_started" ->
@@ -324,6 +532,49 @@ let of_value value =
           {
             player_id = actor ();
             decision = decision_of_name (text "decision");
+          }
+    | "card_activated" ->
+        Card_activated { player_id = actor (); card_id = number "card_id" }
+    | "crew_completed" ->
+        Crew_completed { player_id = actor (); crew = crew () }
+    | "crew_lost" -> Crew_lost { player_id = actor (); crew = crew () }
+    | "operator_result" ->
+        Operator_result
+          {
+            player_id = actor ();
+            operator_id = number "operator_id";
+            target_ids = List.map int (array (get "target_ids"));
+            affected = List.map affected (array (get "affected"));
+          }
+    | "operator_disposed" ->
+        Operator_disposed
+          { player_id = actor (); operator_id = number "operator_id" }
+    | "intercept_answered" ->
+        Intercept_answered
+          {
+            player_id = actor ();
+            operator_id = number "operator_id";
+            accept = boolean (get "accept");
+          }
+    | "operator_intercepted" ->
+        Operator_intercepted
+          {
+            attacker_id = number "attacker_id";
+            defender_id = number "defender_id";
+            operator_id = number "operator_id";
+          }
+    | "distributors_traded" ->
+        Distributors_traded
+          {
+            player_id = actor ();
+            own_card_id = number "own_card_id";
+            rival_card_id = number "rival_card_id";
+          }
+    | "game_finished" ->
+        Game_finished
+          {
+            winner = number "winner";
+            reason = win_reason_of_name (text "reason");
           }
     | _ -> assert false
   in

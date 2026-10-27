@@ -5,6 +5,8 @@ type phase =
   | Draw_discard
   | Legit_cash
   | Trim
+  | Intercept
+  | Over
 
 type resources = Resource_bank.t = {
   green : int;
@@ -15,18 +17,29 @@ type resources = Resource_bank.t = {
   purple : int;
 }
 
-type player = {
+type player = Player_state.t = {
   resources : resources;
   hand : int list;
   active_card_ids : int list;
   suspended_card_ids : int list;
   draw_price : int;
+  traded_distributors : bool;
 }
+
+type outcome = { winner : int; reason : Event.win_reason }
 
 type pending_decision =
   | Pending_draw_discard of { player_id : int; card_ids : int list }
   | Pending_legit_cash of { player_id : int; drawn_card_id : int }
   | Pending_trim of { player_id : int }
+  | Pending_intercept of {
+      player_id : int;
+      attacker_id : int;
+      operator_id : int;
+      target_ids : int list;
+      payment : Resource_bank.t;
+    }
+  | Pending_post_action_trim of { player_id : int }
 
 type snapshot = {
   schema_version : int;
@@ -40,6 +53,7 @@ type snapshot = {
   random_source : Random_source.t;
   history : Event.t list;
   pending_decision : pending_decision option;
+  outcome : outcome option;
 }
 
 type t
@@ -52,6 +66,7 @@ val has_crew : player -> Cards.crew -> bool
 val resource_limit : player -> int
 val trade_rate : player -> int
 val possessed_legits : player -> int
+val board_outcome : player list -> outcome option option
 val create : Random_source.t -> t
 val snapshot : t -> snapshot
 val of_snapshot : snapshot -> (t, Command.rejection) result

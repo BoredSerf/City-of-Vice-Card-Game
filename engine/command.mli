@@ -7,6 +7,13 @@ type t =
   | Trim_resource of { color : Cards.color }
   | Trade_resources of { from_color : Cards.color; to_color : Cards.color }
   | End_turn
+  | Activate_card of {
+      card_id : int;
+      wildcard_payment : Cards.color list option;
+    }
+  | Use_operator of { operator_id : int; target_ids : int list }
+  | Trade_distributors of { own_card_id : int; rival_card_id : int }
+  | Respond_intercept of { accept : bool }
 
 type rejection_code =
   | Invalid_seed
@@ -25,6 +32,9 @@ type rejection_code =
   | Invalid_payment
   | Insufficient_resources
   | Crew_unavailable
+  | Game_over
+  | Capacity_full
+  | Operator_limit
 
 type rejection = { code : rejection_code; field : string }
 

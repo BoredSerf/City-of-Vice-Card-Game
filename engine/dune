@@ -13,6 +13,8 @@
   command
   payment
   event
+  player_state
+  card_action
   state
   setup
   engine)

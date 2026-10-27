@@ -400,7 +400,7 @@ let validation_test () =
     [ initial; ready ];
   let encoded = Native_json.state_json ready in
   let duplicate_name =
-    "{\"schema_version\":2," ^ String.sub encoded 1 (String.length encoded - 1)
+    "{\"schema_version\":999," ^ String.sub encoded 1 (String.length encoded - 1)
   in
   check
     (ok (Native_json.decode_state duplicate_name) = ready)
@@ -409,7 +409,7 @@ let validation_test () =
   let open Wire_value in
   let malformed =
     [
-      replace "schema_version" (int_value 2) value;
+      replace "schema_version" (int_value (State.schema_version + 1)) value;
       replace "rules_version" (String "unknown") value;
       replace "phase" (String "play") value;
       replace "turn_number" (int_value 2) value;

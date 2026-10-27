@@ -2,8 +2,9 @@
 
 S04 extends the pure OCaml setup engine with income, paid draw, cash, resource
 trades, mandatory decisions and turn handoff. The browser still displays the S02
-probe; root `index.html` remains the playable prototype. Activation, operators,
-victory, policies, controller, storage and gameplay UI remain later work.
+probe; root `index.html` remains the playable prototype. [S05 effects](S05_EFFECTS.md)
+subsequently adds activation, operators and victory. Policies, controller,
+storage and gameplay UI remain later work.
 
 ## Authority and fixtures
 
@@ -65,14 +66,16 @@ finds an empty deck. Docks may cross that boundary; its later discard cannot ent
 the earlier shuffle. A one-card shuffle consumes no RNG word. Production retains
 `xorshift32_v1`; original constant-stream comparisons use the native test seam.
 
-Schema remains 1 with explicit rules ID `prototype_4ccb197_pd002_s04_working`.
-Old interim S03 identifiers reject as unsupported; there is no storage/migration
-feature. Awaiting/initial-ready validation stays strict. Other phases validate
+The original S04 schema was 1 with rules ID `prototype_4ccb197_pd002_s04_working`.
+S05 deliberately projects these fixtures to schema 2/its working identifier and
+false initial Arts flags; old interim layouts reject unsupported. There is no
+storage/migration feature. Awaiting/initial-ready validation stays strict. Other phases validate
 card/capacity/resource/price bounds, suspension, pending owner/provenance and
 current income/decision/header context. A first typed handoff may anchor a
 controlled synthetic actor/round; subsequent handoffs count relatively. Anchoring
 is not a wire operation or production counter exception. A phase-only flip cannot
-skip income. Unsupported terminal-shaped data rejects; native outcomes are S05.
+skip income. S05 now validates native terminal outcomes; the prior terminal-shape
+controls assert semantic outcome contradictions using its supported layout.
 
 Docks admission also removes the two recorded new IDs locally and requires the
 remaining pre-draw hand to contain fewer than seven cards and possess at most

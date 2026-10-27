@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "rules_version": "prototype_4ccb197_pd002_s04_working",
+  "rules_version": "prototype_4ccb197_pd002_s05_working",
   "contract_sha256": "ba3427846ca231796f3cf04e56bfc88ab6e2978b0bb1bd859c37659bbfde3d09",
   "prototype_baseline": "4ccb19703d4af1a1c202d922b514a58a17d0e537",
   "provenance": "Original observations remain unchanged. Source comparisons are observations, PD-002 only is exact approval, issues61-63 outcomes remain provisional pending human PR acceptance. Counter convention and synthetic history anchors are the separately recorded issue72/contract assumptions, not additional exact PD-002 rulings.",
@@ -8,7 +8,7 @@
     "title-case legacy resource names to lowercase wire colors",
     "legacy version/field names to bound modular schema",
     "logs replaced by explicit chronological domain facts",
-    "tradedDistributors omitted: S05 Arts allowance not implemented",
+    "S05 schema2 adds required false Arts allowance to the preserved S04 fixtures",
     "controlled helper ready income projected through opposite-player Play and End_turn; added synthetic setup/phase history and explicit round context"
   ],
   "source_ledger": [
@@ -4435,8 +4435,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -4458,7 +4458,8 @@
             "hand": [1],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -4472,7 +4473,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -4564,8 +4566,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -4587,7 +4589,8 @@
             "hand": [24],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -4601,7 +4604,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -4693,8 +4697,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -4716,7 +4720,8 @@
             "hand": [30],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -4730,7 +4735,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -4822,8 +4828,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -4845,7 +4851,8 @@
             "hand": [1],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -4859,7 +4866,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -4940,8 +4948,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -4963,7 +4971,8 @@
             "hand": [1],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -4977,7 +4986,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -5058,8 +5068,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -5081,7 +5091,8 @@
             "hand": [1],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -5095,7 +5106,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -5176,8 +5188,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "trim",
         "turn_number": 1,
         "active_player": 0,
@@ -5199,7 +5211,8 @@
             "hand": [],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -5213,7 +5226,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -5326,8 +5340,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "trim",
         "turn_number": 1,
         "active_player": 0,
@@ -5349,7 +5363,8 @@
             "hand": [],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -5363,7 +5378,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -5451,8 +5467,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -5474,7 +5490,8 @@
             "hand": [],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -5488,7 +5505,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -5579,8 +5597,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -5602,7 +5620,8 @@
             "hand": [],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -5616,7 +5635,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -5709,8 +5729,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -5732,7 +5752,8 @@
             "hand": [],
             "active_card_ids": [21, 22, 23],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -5746,7 +5767,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -5837,8 +5859,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -5860,7 +5882,8 @@
             "hand": [],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -5874,7 +5897,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -6019,8 +6043,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -6042,7 +6066,8 @@
             "hand": [],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -6056,7 +6081,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -6137,8 +6163,8 @@
       "random_source_kind": "constant",
       "facade": false,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -6160,7 +6186,8 @@
             "hand": [],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -6174,7 +6201,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -6287,8 +6315,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -6307,7 +6335,8 @@
             "hand": [16, 17, 18, 19, 20],
             "active_card_ids": [0, 1, 2, 3, 4, 5, 6, 7, 24, 25, 26, 30, 31],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -6323,7 +6352,8 @@
               8, 9, 10, 11, 12, 13, 14, 15, 27, 28, 29, 32, 33
             ],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -6404,8 +6434,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 1,
@@ -6427,7 +6457,8 @@
             "hand": [],
             "active_card_ids": [0, 24, 30],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -6441,7 +6472,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -6570,8 +6602,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 1,
@@ -6593,7 +6625,8 @@
             "hand": [],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -6607,7 +6640,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -6745,8 +6779,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 1,
@@ -6768,7 +6802,8 @@
             "hand": [],
             "active_card_ids": [9, 10, 11],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -6782,7 +6817,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -6925,8 +6961,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 1,
@@ -6948,7 +6984,8 @@
             "hand": [0, 1, 2, 4, 5, 6, 7],
             "active_card_ids": [9, 10, 11],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -6962,7 +6999,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -7093,8 +7131,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 1,
@@ -7116,7 +7154,8 @@
             "hand": [],
             "active_card_ids": [9, 10, 11, 15, 16, 17, 24],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -7130,7 +7169,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -7283,8 +7323,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -7306,7 +7346,8 @@
             "hand": [],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -7320,7 +7361,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -7409,8 +7451,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -7432,7 +7474,8 @@
             "hand": [],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 3
+            "draw_price": 3,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -7446,7 +7489,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -7525,8 +7569,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -7548,7 +7592,8 @@
             "hand": [],
             "active_card_ids": [15, 16, 17],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -7562,7 +7607,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -7641,8 +7687,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -7664,7 +7710,8 @@
             "hand": [1, 2, 4, 5, 6, 7, 8],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -7678,7 +7725,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -7759,8 +7807,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -7782,7 +7830,8 @@
             "hand": [1, 2, 4, 5, 6, 7, 8],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -7796,7 +7845,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -7877,8 +7927,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -7900,7 +7950,8 @@
             "hand": [4, 5, 6, 7, 8, 9, 10],
             "active_card_ids": [0, 1, 2],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -7914,7 +7965,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -8000,8 +8052,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -8023,7 +8075,8 @@
             "hand": [1, 2, 4, 5, 6, 7],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -8037,7 +8090,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -8149,8 +8203,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -8172,7 +8226,8 @@
             "hand": [4, 5, 6, 7, 9, 10],
             "active_card_ids": [0, 1, 2],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -8186,7 +8241,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -8330,8 +8386,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -8353,7 +8409,8 @@
             "hand": [4, 5, 6, 7, 8, 9],
             "active_card_ids": [0, 1, 2],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -8367,7 +8424,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -8474,8 +8532,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -8497,7 +8555,8 @@
             "hand": [4, 5, 6, 7, 8, 9],
             "active_card_ids": [0, 1, 2],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -8511,7 +8570,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -8677,8 +8737,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -8700,7 +8760,8 @@
             "hand": [25, 26],
             "active_card_ids": [0, 1, 2, 24],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -8714,7 +8775,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -8908,8 +8970,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -8931,7 +8993,8 @@
             "hand": [25, 26],
             "active_card_ids": [0, 24],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -8945,7 +9008,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -9117,8 +9181,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "draw_discard",
         "turn_number": 1,
         "active_player": 1,
@@ -9140,7 +9204,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -9154,7 +9219,8 @@
             "hand": [31, 25],
             "active_card_ids": [0, 1, 2],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -9283,8 +9349,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "legit_cash",
         "turn_number": 1,
         "active_player": 1,
@@ -9306,7 +9372,8 @@
             "hand": [],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -9320,7 +9387,8 @@
             "hand": [25, 26, 27],
             "active_card_ids": [3, 24],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -9453,8 +9521,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 1,
@@ -9476,7 +9544,8 @@
             "hand": [],
             "active_card_ids": [9, 10, 11, 24, 25, 26],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -9490,7 +9559,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -9767,8 +9837,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 1,
@@ -9790,7 +9860,8 @@
             "hand": [],
             "active_card_ids": [9, 10, 11, 24, 25, 26],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -9804,7 +9875,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -10104,8 +10176,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -10127,7 +10199,8 @@
             "hand": [],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -10141,7 +10214,8 @@
             "hand": [],
             "active_card_ids": [9, 10, 11, 24, 25, 26],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -10372,8 +10446,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 1,
@@ -10395,7 +10469,8 @@
             "hand": [],
             "active_card_ids": [9, 10, 11, 15, 16, 17, 24, 25, 26],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -10409,7 +10484,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -10627,8 +10703,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 1,
@@ -10650,7 +10726,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -10664,7 +10741,8 @@
             "hand": [],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -10828,8 +10906,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -10851,7 +10929,8 @@
             "hand": [],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -10865,7 +10944,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -11016,8 +11096,8 @@
       "random_source_kind": "constant",
       "facade": false,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -11036,7 +11116,8 @@
             "hand": [16, 17, 18, 19, 20],
             "active_card_ids": [0, 1, 2, 3, 4, 5, 6, 7, 24, 26, 30],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -11050,7 +11131,8 @@
             "hand": [21, 22, 23, 34, 35],
             "active_card_ids": [8, 9, 10, 11, 12, 13, 14, 15, 27, 28, 29, 33],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -11203,8 +11285,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -11223,7 +11305,8 @@
             "hand": [16, 17, 18, 19, 20],
             "active_card_ids": [0, 1, 2, 3, 4, 5, 6, 7, 24, 26, 30],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -11237,7 +11320,8 @@
             "hand": [21, 22, 23, 34, 35],
             "active_card_ids": [8, 9, 10, 11, 12, 13, 14, 15, 27, 28, 29, 33],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -11390,8 +11474,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -11410,7 +11494,8 @@
             "hand": [16, 17, 18, 19, 20],
             "active_card_ids": [0, 1, 2, 3, 4, 5, 6, 7, 24, 26, 30],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -11424,7 +11509,8 @@
             "hand": [21, 22, 23, 34, 35],
             "active_card_ids": [8, 9, 10, 11, 12, 13, 14, 15, 27, 28, 29, 33],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -11572,8 +11658,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -11592,7 +11678,8 @@
             "hand": [16, 17, 18, 19, 20],
             "active_card_ids": [0, 1, 2, 3, 4, 5, 6, 7, 24, 25, 26, 30],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -11608,7 +11695,8 @@
               8, 9, 10, 11, 12, 13, 14, 15, 27, 28, 29, 32, 33
             ],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -11729,8 +11817,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -11752,7 +11840,8 @@
             "hand": [],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -11766,7 +11855,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -11847,8 +11937,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -11870,7 +11960,8 @@
             "hand": [],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -11884,7 +11975,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -11994,8 +12086,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 1,
@@ -12017,7 +12109,8 @@
             "hand": [],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -12031,7 +12124,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -12159,8 +12253,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "legit_cash",
         "turn_number": 2,
         "active_player": 0,
@@ -12182,7 +12276,8 @@
             "hand": [27],
             "active_card_ids": [9, 10, 11, 15, 16, 17, 24, 25, 26],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -12196,7 +12291,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -12385,8 +12481,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "draw_discard",
         "turn_number": 1,
         "active_player": 0,
@@ -12408,7 +12504,8 @@
             "hand": [25, 26, 27, 28],
             "active_card_ids": [0, 1, 2, 24],
             "suspended_card_ids": [],
-            "draw_price": 2
+            "draw_price": 2,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -12422,7 +12519,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -12601,8 +12699,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "legit_cash",
         "turn_number": 2,
         "active_player": 0,
@@ -12624,7 +12722,8 @@
             "hand": [27],
             "active_card_ids": [9, 10, 11, 24, 25, 26],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -12638,7 +12737,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -12852,8 +12952,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "trim",
         "turn_number": 2,
         "active_player": 0,
@@ -12875,7 +12975,8 @@
             "hand": [],
             "active_card_ids": [9, 10, 11, 24, 25, 26],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -12889,7 +12990,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -13115,8 +13217,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -13138,7 +13240,8 @@
             "hand": [1],
             "active_card_ids": [0],
             "suspended_card_ids": [1],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -13152,7 +13255,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -13257,8 +13361,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 1,
@@ -13280,7 +13384,8 @@
             "hand": [],
             "active_card_ids": [0, 24, 30],
             "suspended_card_ids": [],
-            "draw_price": 5
+            "draw_price": 5,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -13294,7 +13399,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -13418,8 +13524,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -13438,7 +13544,8 @@
             "hand": [16, 17, 18, 19, 20],
             "active_card_ids": [0, 1, 2, 3, 4, 5, 6, 7, 24, 25, 26, 30, 31],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -13454,7 +13561,8 @@
               8, 9, 10, 11, 12, 13, 14, 15, 27, 28, 29, 32, 33
             ],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -13560,8 +13668,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 2147483647,
         "active_player": 1,
@@ -13583,7 +13691,8 @@
             "hand": [],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -13597,7 +13706,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -13709,8 +13819,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -13732,7 +13842,8 @@
             "hand": [30],
             "active_card_ids": [0, 1, 2, 24],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -13746,7 +13857,8 @@
             "hand": [],
             "active_card_ids": [21, 22, 23, 25],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -14185,8 +14297,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -14208,7 +14320,8 @@
             "hand": [1, 2, 4, 5, 6, 7, 8],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -14222,7 +14335,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -14327,8 +14441,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -14347,7 +14461,8 @@
             "hand": [16, 17, 18, 19, 20],
             "active_card_ids": [0, 1, 2, 3, 4, 5, 6, 7, 24, 25, 26, 30, 31],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -14363,7 +14478,8 @@
               8, 9, 10, 11, 12, 13, 14, 15, 27, 28, 29, 32, 33
             ],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -14444,8 +14560,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -14467,7 +14583,8 @@
             "hand": [],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -14481,7 +14598,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -14567,8 +14685,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -14590,7 +14708,8 @@
             "hand": [1],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -14604,7 +14723,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -14697,8 +14817,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "legit_cash",
         "turn_number": 2,
         "active_player": 0,
@@ -14720,7 +14840,8 @@
             "hand": [27, 31],
             "active_card_ids": [9, 10, 11, 24, 25, 26],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -14734,7 +14855,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -14872,8 +14994,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -14895,7 +15017,8 @@
             "hand": [],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -14909,7 +15032,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -15054,8 +15178,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -15077,7 +15201,8 @@
             "hand": [],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 2
+            "draw_price": 2,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -15091,7 +15216,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -15210,8 +15336,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -15233,7 +15359,8 @@
             "hand": [],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 2
+            "draw_price": 2,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -15247,7 +15374,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -15366,8 +15494,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 2147483647,
         "active_player": 1,
@@ -15389,7 +15517,8 @@
             "hand": [],
             "active_card_ids": [9, 10, 11],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -15403,7 +15532,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -15488,8 +15618,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 1,
@@ -15511,7 +15641,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -15525,7 +15656,8 @@
             "hand": [1],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -15635,8 +15767,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 1,
@@ -15658,7 +15790,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -15672,7 +15805,8 @@
             "hand": [24],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -15782,8 +15916,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 1,
@@ -15805,7 +15939,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -15819,7 +15954,8 @@
             "hand": [30],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -15929,8 +16065,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 1,
@@ -15952,7 +16088,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -15966,7 +16103,8 @@
             "hand": [1],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -16065,8 +16203,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 1,
@@ -16088,7 +16226,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -16102,7 +16241,8 @@
             "hand": [],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -16211,8 +16351,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 1,
@@ -16234,7 +16374,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -16248,7 +16389,8 @@
             "hand": [],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -16359,8 +16501,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 1,
@@ -16382,7 +16524,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -16396,7 +16539,8 @@
             "hand": [],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -16559,8 +16703,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 1,
@@ -16582,7 +16726,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -16596,7 +16741,8 @@
             "hand": [4, 5, 6, 7, 8, 9],
             "active_card_ids": [0, 1, 2],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -16780,8 +16926,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 1,
@@ -16803,7 +16949,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -16817,7 +16964,8 @@
             "hand": [25, 26],
             "active_card_ids": [0, 24],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -17012,8 +17160,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "ready",
         "turn_number": 1,
         "active_player": 0,
@@ -17035,7 +17183,8 @@
             "hand": [35, 33, 31],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -17049,7 +17198,8 @@
             "hand": [34, 32, 30],
             "active_card_ids": [22],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -17140,8 +17290,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "draw_discard",
         "turn_number": 1,
         "active_player": 0,
@@ -17163,7 +17313,8 @@
             "hand": [25, 26, 27, 28],
             "active_card_ids": [0, 1, 2, 24],
             "suspended_card_ids": [],
-            "draw_price": 2
+            "draw_price": 2,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -17177,7 +17328,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -17372,8 +17524,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "draw_discard",
         "turn_number": 1,
         "active_player": 0,
@@ -17395,7 +17547,8 @@
             "hand": [25, 26, 27, 28],
             "active_card_ids": [0, 1, 2, 24],
             "suspended_card_ids": [],
-            "draw_price": 2
+            "draw_price": 2,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -17409,7 +17562,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -17604,8 +17758,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "draw_discard",
         "turn_number": 1,
         "active_player": 0,
@@ -17627,7 +17781,8 @@
             "hand": [4, 5, 6, 7, 8, 9, 31, 25],
             "active_card_ids": [0, 1, 2],
             "suspended_card_ids": [],
-            "draw_price": 2
+            "draw_price": 2,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -17641,7 +17796,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -17764,8 +17920,8 @@
       "random_source_kind": "seeded",
       "facade": true,
       "initial_state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "draw_discard",
         "turn_number": 1,
         "active_player": 0,
@@ -17787,7 +17943,8 @@
             "hand": [4, 5, 6, 7, 8, 9, 31, 25],
             "active_card_ids": [0, 1, 2],
             "suspended_card_ids": [],
-            "draw_price": 2
+            "draw_price": 2,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -17801,7 +17958,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -18168,8 +18326,8 @@
     {
       "id": "S04-DERIVED-CODEC-001/pre-cash26",
       "state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "legit_cash",
         "turn_number": 2,
         "active_player": 0,
@@ -18191,7 +18349,8 @@
             "hand": [27],
             "active_card_ids": [9, 10, 11, 15, 16, 17, 24, 25, 26],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -18205,7 +18364,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -18319,8 +18479,8 @@
     {
       "id": "S01-REJECT-003/terminal-shape-reference",
       "state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "over",
         "turn_number": 1,
         "active_player": 0,
@@ -18342,7 +18502,8 @@
             "hand": [1],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -18356,7 +18517,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -18406,13 +18568,14 @@
         "win_reason": "expansion",
         "pending_decision": null
       },
-      "expected_code": "malformed_state"
+      "expected_code": "invalid_state",
+      "expected_field": "outcome"
     },
     {
       "id": "S04-DERIVED-CODEC-001/anchor-missing-income",
       "state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 2147483647,
         "active_player": 1,
@@ -18434,7 +18597,8 @@
             "hand": [],
             "active_card_ids": [9, 10, 11],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -18448,7 +18612,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -18497,8 +18662,8 @@
     {
       "id": "S04-DERIVED-CODEC-001/anchor-wrong-income",
       "state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 2147483647,
         "active_player": 1,
@@ -18520,7 +18685,8 @@
             "hand": [],
             "active_card_ids": [9, 10, 11],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -18534,7 +18700,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -18595,8 +18762,8 @@
     {
       "id": "S04-DERIVED-CODEC-001/anchor-repeated-income",
       "state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 2147483647,
         "active_player": 1,
@@ -18618,7 +18785,8 @@
             "hand": [],
             "active_card_ids": [9, 10, 11],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -18632,7 +18800,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -18705,8 +18874,8 @@
     {
       "id": "S04-DERIVED-CODEC-001/anchor-header",
       "state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 2147483647,
         "active_player": 0,
@@ -18728,7 +18897,8 @@
             "hand": [],
             "active_card_ids": [9, 10, 11],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -18742,7 +18912,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -18803,8 +18974,8 @@
     {
       "id": "S04-DERIVED-CODEC-001/anchor-round-header",
       "state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 2147483646,
         "active_player": 1,
@@ -18826,7 +18997,8 @@
             "hand": [],
             "active_card_ids": [9, 10, 11],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -18840,7 +19012,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -18901,8 +19074,8 @@
     {
       "id": "S04-DERIVED-CODEC-001/anchor-repeated",
       "state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 2147483647,
         "active_player": 1,
@@ -18924,7 +19097,8 @@
             "hand": [],
             "active_card_ids": [9, 10, 11],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -18938,7 +19112,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -19017,8 +19192,8 @@
     {
       "id": "S04-DERIVED-CODEC-001/anchor-second-jump",
       "state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 19,
         "active_player": 0,
@@ -19040,7 +19215,8 @@
             "hand": [],
             "active_card_ids": [9, 10, 11],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -19054,7 +19230,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -19133,8 +19310,8 @@
     {
       "id": "S04-DERIVED-CODEC-001/late-relative-7",
       "state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 7,
         "active_player": 0,
@@ -19156,7 +19333,8 @@
             "hand": [],
             "active_card_ids": [9, 10, 11],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -19170,7 +19348,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -19249,8 +19428,8 @@
     {
       "id": "S04-DERIVED-CODEC-001/late-relative-19",
       "state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 19,
         "active_player": 0,
@@ -19272,7 +19451,8 @@
             "hand": [],
             "active_card_ids": [9, 10, 11],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -19286,7 +19466,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -19365,8 +19546,8 @@
     {
       "id": "S04-DERIVED-CODEC-001/owner-draw_discard",
       "state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "draw_discard",
         "turn_number": 1,
         "active_player": 0,
@@ -19388,7 +19569,8 @@
             "hand": [4, 5, 6, 7, 9, 10, 31, 25],
             "active_card_ids": [0, 1, 2],
             "suspended_card_ids": [],
-            "draw_price": 2
+            "draw_price": 2,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -19402,7 +19584,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -19485,8 +19668,8 @@
     {
       "id": "S04-DERIVED-CODEC-001/phase-draw_discard",
       "state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -19508,7 +19691,8 @@
             "hand": [4, 5, 6, 7, 9, 10, 31, 25],
             "active_card_ids": [0, 1, 2],
             "suspended_card_ids": [],
-            "draw_price": 2
+            "draw_price": 2,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -19522,7 +19706,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -19605,8 +19790,8 @@
     {
       "id": "S04-DERIVED-CODEC-001/condition-draw_discard",
       "state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "draw_discard",
         "turn_number": 1,
         "active_player": 0,
@@ -19628,7 +19813,8 @@
             "hand": [4, 5, 6, 7, 9, 10, 31, 25],
             "active_card_ids": [0, 1, 2],
             "suspended_card_ids": [],
-            "draw_price": 2
+            "draw_price": 2,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -19642,7 +19828,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -19725,8 +19912,8 @@
     {
       "id": "S04-DERIVED-CODEC-001/owner-legit_cash",
       "state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "legit_cash",
         "turn_number": 2,
         "active_player": 0,
@@ -19748,7 +19935,8 @@
             "hand": [27],
             "active_card_ids": [9, 10, 11, 24, 25, 26],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -19762,7 +19950,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -19869,8 +20058,8 @@
     {
       "id": "S04-DERIVED-CODEC-001/phase-legit_cash",
       "state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 2,
         "active_player": 0,
@@ -19892,7 +20081,8 @@
             "hand": [27],
             "active_card_ids": [9, 10, 11, 24, 25, 26],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -19906,7 +20096,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -20013,8 +20204,8 @@
     {
       "id": "S04-DERIVED-CODEC-001/condition-legit_cash",
       "state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "legit_cash",
         "turn_number": 2,
         "active_player": 0,
@@ -20036,7 +20227,8 @@
             "hand": [27],
             "active_card_ids": [9, 10, 11, 24, 25, 26],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -20050,7 +20242,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -20157,8 +20350,8 @@
     {
       "id": "S04-DERIVED-CODEC-001/owner-trim",
       "state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "trim",
         "turn_number": 2,
         "active_player": 0,
@@ -20180,7 +20373,8 @@
             "hand": [],
             "active_card_ids": [9, 10, 11, 24, 25, 26],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -20194,7 +20388,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -20318,8 +20513,8 @@
     {
       "id": "S04-DERIVED-CODEC-001/phase-trim",
       "state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 2,
         "active_player": 0,
@@ -20341,7 +20536,8 @@
             "hand": [],
             "active_card_ids": [9, 10, 11, 24, 25, 26],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -20355,7 +20551,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -20479,8 +20676,8 @@
     {
       "id": "S04-DERIVED-CODEC-001/condition-trim",
       "state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "trim",
         "turn_number": 2,
         "active_player": 0,
@@ -20502,7 +20699,8 @@
             "hand": [],
             "active_card_ids": [9, 10, 11, 24, 25, 26],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -20516,7 +20714,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -20640,8 +20839,8 @@
     {
       "id": "S04-DERIVED-CODEC-001/nine-card-hand",
       "state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "draw_discard",
         "turn_number": 1,
         "active_player": 0,
@@ -20663,7 +20862,8 @@
             "hand": [4, 5, 6, 7, 9, 10, 31, 25, 8],
             "active_card_ids": [0, 1, 2],
             "suspended_card_ids": [],
-            "draw_price": 2
+            "draw_price": 2,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -20677,7 +20877,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -20760,8 +20961,8 @@
     {
       "id": "S04-DERIVED-CODEC-001/six-possessed-legits",
       "state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "draw_discard",
         "turn_number": 1,
         "active_player": 0,
@@ -20783,7 +20984,8 @@
             "hand": [25, 26, 27, 28, 29],
             "active_card_ids": [0, 1, 2, 24],
             "suspended_card_ids": [],
-            "draw_price": 2
+            "draw_price": 2,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -20797,7 +20999,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -20880,8 +21083,8 @@
     {
       "id": "S04-DERIVED-CODEC-001/capacity",
       "state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -20903,7 +21106,8 @@
             "hand": [],
             "active_card_ids": [0, 1, 2, 4],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -20917,7 +21121,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -20972,8 +21177,8 @@
     {
       "id": "S04-DERIVED-CODEC-001/active-operators",
       "state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -20995,7 +21200,8 @@
             "hand": [1],
             "active_card_ids": [0, 30, 31, 32],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -21009,7 +21215,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -21064,8 +21271,8 @@
     {
       "id": "S04-DERIVED-CODEC-001/active-legits",
       "state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -21087,7 +21294,8 @@
             "hand": [1],
             "active_card_ids": [0, 24, 25, 26, 27],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -21101,7 +21309,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -21156,8 +21365,8 @@
     {
       "id": "S04-DERIVED-CODEC-001/price14",
       "state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -21179,7 +21388,8 @@
             "hand": [1],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 14
+            "draw_price": 14,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -21193,7 +21403,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -21248,8 +21459,8 @@
     {
       "id": "S04-DERIVED-CODEC-001/suspension",
       "state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -21271,7 +21482,8 @@
             "hand": [1],
             "active_card_ids": [0],
             "suspended_card_ids": [2],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -21285,7 +21497,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -21340,8 +21553,8 @@
     {
       "id": "S04-DERIVED-CODEC-001/negative-bank",
       "state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -21363,7 +21576,8 @@
             "hand": [1],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -21377,7 +21591,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -21432,8 +21647,8 @@
     {
       "id": "S04-DERIVED-CODEC-001/fraction-bank",
       "state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -21455,7 +21670,8 @@
             "hand": [1],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -21469,7 +21685,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -21524,8 +21741,8 @@
     {
       "id": "S04-DERIVED-CODEC-001/outcome",
       "state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 1,
         "active_player": 0,
@@ -21547,7 +21764,8 @@
             "hand": [1],
             "active_card_ids": [0],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -21561,7 +21779,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -21608,18 +21827,20 @@
           }
         ],
         "winner": 1,
-        "win_reason": null,
+        "win_reason": "expansion",
         "pending_decision": null
       },
-      "expected_code": "malformed_state"
+      "expected_code": "invalid_state",
+      "expected_field": "outcome",
+      "projection": "S05 supported outcome pair preserves contradictory winner on a live one-business board; no longer an unsupported terminal parser check."
     },
     {
       "id": "S04-V-001/four-old-legits",
       "authority_record": "issue76; existing contract AC11/12",
       "projection": "Local mutation of a literal pending state; full36 partition and recorded two-card draw retained.",
       "state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "draw_discard",
         "turn_number": 1,
         "active_player": 0,
@@ -21641,7 +21862,8 @@
             "hand": [25, 26, 27, 28, 31],
             "active_card_ids": [0, 1, 2, 24],
             "suspended_card_ids": [],
-            "draw_price": 2
+            "draw_price": 2,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -21655,7 +21877,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -21741,8 +21964,8 @@
       "authority_record": "issue76; existing contract AC11/12",
       "projection": "Local mutation of a literal pending state; full36 partition and recorded two-card draw retained.",
       "state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "draw_discard",
         "turn_number": 1,
         "active_player": 0,
@@ -21764,7 +21987,8 @@
             "hand": [25, 26, 27, 28, 31, 32],
             "active_card_ids": [0, 1, 2, 24],
             "suspended_card_ids": [],
-            "draw_price": 2
+            "draw_price": 2,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -21778,7 +22002,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -21864,8 +22089,8 @@
       "authority_record": "issue76; existing contract AC11/12",
       "projection": "Local mutation of a literal pending state; full36 partition and recorded two-card draw retained.",
       "state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "draw_discard",
         "turn_number": 1,
         "active_player": 0,
@@ -21887,7 +22112,8 @@
             "hand": [4, 5, 6, 7, 8, 9, 31, 25, 10],
             "active_card_ids": [0, 1, 2],
             "suspended_card_ids": [],
-            "draw_price": 2
+            "draw_price": 2,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -21901,7 +22127,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -21987,8 +22214,8 @@
     {
       "id": "S04-DERIVED-CODEC-001/anchor-relative8",
       "state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 8,
         "active_player": 0,
@@ -22010,7 +22237,8 @@
             "hand": [],
             "active_card_ids": [9, 10, 11],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -22024,7 +22252,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -22102,8 +22331,8 @@
     {
       "id": "S04-DERIVED-CODEC-001/anchor-return12",
       "state": {
-        "schema_version": 1,
-        "rules_version": "prototype_4ccb197_pd002_s04_working",
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
         "phase": "play",
         "turn_number": 12,
         "active_player": 0,
@@ -22125,7 +22354,8 @@
             "hand": [],
             "active_card_ids": [9, 10, 11],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           },
           {
             "resources": {
@@ -22139,7 +22369,8 @@
             "hand": [],
             "active_card_ids": [3],
             "suspended_card_ids": [],
-            "draw_price": 1
+            "draw_price": 1,
+            "traded_distributors": false
           }
         ],
         "random_source": {
@@ -22196,5 +22427,15 @@
         "pending_decision": null
       }
     }
-  ]
+  ],
+  "schema_projection": {
+    "source_commit": "f553191f2176c43e073129beceaba200a009cccc",
+    "contract_sha256": "cc71b5a8769320e40952c58876ab04c0d8a17310b8c8c646df0946e9276b7876",
+    "changes": [
+      "all modular envelopes schema1->2 and S04->S05 interim rules ID",
+      "required traded_distributors=false for both owners; no prior Arts action",
+      "two former outcome-shape checks now assert inconsistent supported outcome; second gains explicit expansion reason"
+    ],
+    "preservation": "All card/bank/order/phase/counter/history/RNG facts, original S01 records/approval and provisional labels retained."
+  }
 }

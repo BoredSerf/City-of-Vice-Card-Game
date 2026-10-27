@@ -35,7 +35,11 @@
 
 (alias
  (name runtest)
- (deps setup_parity.json economy_parity.json))
+ (deps
+  setup_parity.json
+  economy_parity.json
+  effects_parity.json
+  simulation_replay.jsonl))
 
 (library
  (name economy_fixture)
@@ -65,3 +69,45 @@
   (with-stdout-to
    %{targets}
    (run %{exe:economy_parity.exe}))))
+
+(library
+ (name effects_fixture)
+ (modules effects_fixture)
+ (libraries city_engine native_json economy_fixture yojson)
+ (modes native))
+
+(test
+ (name effects_test)
+ (modules effects_test)
+ (libraries city_engine native_json economy_fixture effects_fixture yojson)
+ (modes native)
+ (deps
+  ../tests/effects/scenarios.json
+  ../tests/characterization/scenarios.json))
+
+(executable
+ (name effects_parity)
+ (modules effects_parity)
+ (libraries effects_fixture yojson)
+ (modes native))
+
+(rule
+ (targets effects_parity.json)
+ (deps ../tests/effects/scenarios.json)
+ (action
+  (with-stdout-to
+   %{targets}
+   (run %{exe:effects_parity.exe}))))
+
+(executable
+ (name simulation_test)
+ (modules simulation_test)
+ (libraries city_engine native_json economy_fixture yojson)
+ (modes native))
+
+(rule
+ (targets simulation_replay.jsonl)
+ (action
+  (with-stdout-to
+   %{targets}
+   (run %{exe:simulation_test.exe}))))
