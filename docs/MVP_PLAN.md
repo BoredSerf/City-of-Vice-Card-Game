@@ -28,6 +28,22 @@ Characterization expectations remain observations until a specific intended rule
 or correction is approved. FR-001 priority remains `unset`; architecture,
 platform scope and the remaining acceptance criteria are unchanged.
 
+## CI acceptance amendment 2026-10-27
+
+The product owner authorized removing mandatory GitHub required-status-check
+enforcement and the deliberate failing-check merge-block demonstration from MVP
+acceptance. This supersedes the earlier enforcement and proof of failure, blocked
+integration, correction, and a passing run; it does not establish that those former
+requirements passed.
+
+The automated verification workflow and all actual checks remain required.
+Applicable local and hosted checks must pass for the reviewed revision, and a
+human must inspect the results before accepting and merging the pull request.
+Failed checks or missing verification evidence still block acceptance and merge.
+Existing repository protections must be respected. Human acceptance, dependency
+order, independent verification of exact prerequisite revisions, and post-merge
+tracker reconciliation remain unchanged.
+
 ## 1. Outcome
 
 The MVP will turn the single-file prototype into a maintainable application with:
@@ -340,7 +356,12 @@ Exit condition: the approved browser MVP is releasable and its unsupported capab
 - **MVP-009A — Cloudflare deployment:** An authorized production-branch run deploys the exact verified `dist/` artifact to Cloudflare Pages without placing deployment credentials in source or build output; a post-deployment smoke check passes against the resulting URL.
 - **MVP-010 — Standalone export:** One documented command produces a self-contained HTML file from the same source, and that file passes the shared browser smoke test. If this criterion becomes materially preventative, removing it requires a recorded product decision; it cannot silently fail or drift.
 - **MVP-011 — Responsive access:** Critical gameplay remains operable by keyboard and at representative phone, tablet, and desktop sizes, with reduced-motion preferences honored.
-- **MVP-012 — CI gate:** Type checking, tests, and both distribution builds run automatically and block integration on failure.
+- **MVP-012 — CI verification:** Type checking, tests, and both distribution builds
+  run automatically. Applicable local and hosted checks pass for the reviewed
+  revision, and a human inspects their results before acceptance and merge. A
+  failed check or missing evidence prevents acceptance and merge under the
+  contribution workflow; GitHub required-status-check enforcement and a deliberate
+  failing-check merge-block demonstration are not acceptance prerequisites.
 - **MVP-013 — Documentation:** The README explains development, tests, architecture, website output, standalone output, known limitations, and the absence or presence of a license.
 - **MVP-014 — Legacy retirement:** The original monolithic implementation is
   removed as live source only after the modular build passes verification against

@@ -109,14 +109,16 @@ eligible work under the existing priority, ordering, and rule-decision gates.
   prerequisites, record every exact revision and independently verify the combined
   base before relying on it. Record that base and how it contains the prerequisites.
 - Run applicable checks against the cumulative stack, including each new test or
-  build command in the accumulated integration gate. If a parent changes, reassess
-  affected contracts and evidence, update descendants, and independently reverify
-  affected behavior before relying on the changed base.
+  build command in the accumulated verification workflow. If a parent changes,
+  reassess affected contracts and evidence, update descendants, and independently
+  reverify affected behavior before relying on the changed base.
 - Unresolved product or rule decisions, unsafe behavior, failed applicable checks,
   and unverified required interfaces still block affected development. Stacking
-  does not resolve RD-007 or waive S02's required-check enforcement and actual
-  failure/block/correction/pass acceptance proof. Keep pending acceptance and
-  integration requirements explicit even where verified code permits development.
+  does not resolve RD-007 or waive S02's passing local and hosted checks and
+  independent verification of the reviewed revision. Apply the
+  [CI acceptance amendment](docs/MVP_PLAN.md#ci-acceptance-amendment-2026-10-27).
+  Keep pending acceptance and integration requirements explicit even where
+  verified code permits development.
 - Record the readiness exception and its evidence outside the roadmap status cells.
   Verified but unmerged work is not `done` or integrated; keep existing `review`,
   `blocked`, and reconciliation obligations truthful.
@@ -137,11 +139,19 @@ Implementation and review do not move roadmap status automatically. The roadmap
 coordinator applies the small status updates described in `IMPLEMENTATION.md` after
 the relevant transition is established.
 
+Before acceptance and merge, a human inspects the source review and applicable
+local and hosted check results for the reviewed revision. Failed checks or missing
+verification evidence block acceptance and merge. Keep every actual test and
+build check in the automated workflow as it is introduced. The CI acceptance
+amendment removes mandatory GitHub required-status-check enforcement and the
+deliberate failing-check merge-block demonstration; it does not waive passing
+checks or human inspection.
+
 The user accepts and merges every pull request, including workflow and status-only
 changes, in dependency order. Do not enable automatic merging, merge on the user's
-behalf, push directly to `main`, or bypass required checks. After a parent merges,
-update descendant bases and verification as needed. Mark a slice `done` only after
-acceptance and integration, through the post-merge status update, which also awaits
-human merge. The coordinator then confirms the authoritative tracker and integration
-evidence agree and all stack obligations are closed; do not create a no-op tracker
-update merely to record that confirmation.
+behalf, push directly to `main`, or bypass existing repository protections. After a
+parent merges, update descendant bases and verification as needed. Mark a slice
+`done` only after acceptance and integration, through the post-merge status update,
+which also awaits human merge. The coordinator then confirms the authoritative
+tracker and integration evidence agree and all stack obligations are closed; do
+not create a no-op tracker update merely to record that confirmation.
