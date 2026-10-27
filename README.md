@@ -37,9 +37,18 @@ with `npm run browser:install`, then run `npm run verify`. After Melange compila
 backend-free static site in `dist/`.
 
 The aggregate includes S01's original/validator tests and explicit
-`npm run test:characterization` corpus check. Its six PD-002 golden cases are
-validated as specifications only, while all 92 historical observations still
-execute against the pinned prototype.
+`npm run test:characterization` corpus check. All 92 historical observations still
+execute against the pinned prototype. The six PD-002 golden cases retain their
+specification-only status in that legacy runner; S03's separate native and
+generated-module tests now execute the applicable invalid-opening correction.
+
+The S03 pure OCaml engine implements deterministic setup only: create a seeded
+session, discover opening distributors, and start a game at its first income-ready
+state. It includes a versioned snapshot codec and a narrow JSON facade; it does
+not yet implement turns, AI, storage, or a playable modular UI. See
+[the setup guide](docs/S03_SETUP.md) for the API, native/scenario and generated
+fixtures, exact randomness contract, and scope limits. The web shell still shows
+the S02 probe; continue using root `index.html` to play.
 
 See [the foundation guide](docs/S02_FOUNDATION.md) for prerequisites, architecture,
 locked dependencies, individual checks, and remaining CI/integration acceptance

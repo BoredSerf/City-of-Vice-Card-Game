@@ -52,5 +52,6 @@ depends: [
   "uucp" {= "18.0.0"}
   "uuseg" {= "18.0.0"}
   "uutf" {= "1.0.4"}
+  "yojson" {= "3.0.0"}
 ]
 build: ["dune" "build" "-j" jobs "@all"]
