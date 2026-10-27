@@ -73,17 +73,26 @@ if (
 
 mkdirSync(tool_environment.TMPDIR, { recursive: true });
 if (!existsSync(resolve(opam_root, "config"))) {
+  // Refuse confirmations so a failed sandbox probe can never auto-disable it.
   opam([
     "init",
     "--bare",
     "--no-setup",
     "--no-opamrc",
-    "--yes",
+    "--confirm-level=no",
     "default",
     repository_url,
   ]);
 }
 check_sandbox();
+// opam init can keep a failed sandbox enabled and still return success.
+// Require its default hook to launch before creating a switch or building.
+run("env", [
+  `OPAM_SWITCH_PREFIX=${resolve(project_root, "_opam")}`,
+  resolve(opam_root, "opam-init/hooks/sandbox.sh"),
+  "build",
+  "true",
+]);
 // Report missing system dependencies; never invoke a system package installer.
 opam(["option", "--global", "depext-run-installs=false"]);
 if (!existsSync(resolve(project_root, "_opam/.opam-switch/switch-config"))) {
