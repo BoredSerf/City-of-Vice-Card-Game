@@ -6,7 +6,7 @@
     "human_decision_record": "docs/decisions/PD-001-reference-and-crews.md#initial-reference",
     "observed": "The product owner approved exact source 4ccb19703d4af1a1c202d922b514a58a17d0e537 as the initial reference while keeping documented defects and edge cases open.",
     "conflict": "The original absence of human baseline approval is resolved by PD-001; source acceptance does not approve every observed rule outcome.",
-    "decision_required": "None for this initial reference. A later baseline move or a specific correction needs separate authority; RD-007 still blocks S03.",
+    "decision_required": "None for this initial reference. A later baseline move or another specific correction needs separate authority; PD-002 separately resolves RD-007 only.",
     "scenario_ids": [
       "*"
     ],
@@ -207,11 +207,12 @@
   {
     "id": "RD-007",
     "title": "Legacy helper permissiveness versus the future public command boundary",
-    "status": "unresolved",
-    "human_decision_record": null,
+    "status": "resolved",
+    "human_decision_record": "docs/decisions/PD-002-public-command-boundary.md#approved-rule",
     "observed": "Invalid opening IDs take the fallback deal, and direct startTurn calls collect income repeatedly in play. Exported runAI returns the human to play with income; browser beginAI returns ready without human income on the same input.",
-    "conflict": "The browser constrains helper entry and differs in turn handoff. The accepted engine requires explicit phase/player validation; it does not select either legacy handoff path as intended semantics.",
-    "decision_required": "Identify helper observations excluded from public-command parity; specify intended rejections and whether end-turn handoff requires a separate collect_income command before human play.",
+    "conflict": "Resolved by PD-002: public commands reject invalid opening choices and repeated income collection without changing state; end_turn collects next-player income automatically. Precisely linked internal helper observations are excluded only from public-command parity and remain historical evidence.",
+    "decision_required": "None for this bounded public-command rule. Other unresolved rule decisions, ordinary dependencies, S02 enforcement proof and human acceptance/integration obligations remain operative.",
+    "approved_expectations": "public_command_parity.json",
     "scenario_ids": [
       "S01-SETUP-002",
       "S01-INCOME-004",
@@ -225,15 +226,10 @@
       "collect_income",
       "end_turn"
     ],
-    "blocked_slices": [
-      "S03",
-      "S04",
-      "S07",
-      "S08",
-      "S09"
-    ],
+    "blocked_slices": [],
     "source_refs": [
       "docs/MVP_PLAN.md#5-engine-contract",
+      "docs/decisions/PD-002-public-command-boundary.md#approved-rule",
       "index.html#L477-L494",
       "index.html#L571-L577",
       "index.html#L683",
