@@ -37,11 +37,13 @@ See RD-001 and RD-002 in the
 [rule-decision register](../tests/characterization/rule_decisions.json).
 
 RD-007 no longer supplies a rule-decision gate; S03's ordinary S01/S02 dependencies
-and acceptance/integration obligations remain. S02's required-check enforcement
-and controlled failure/block/correction/pass proof are still required. Each
-unresolved decision lists the commands and downstream slices it blocks. S02's foundation work
-is not blocked by these rule decisions; ordinary roadmap dependencies still apply.
-The roadmap coordinator alone owns the slice register.
+and acceptance/integration obligations remain. S02's applicable local and hosted
+checks must pass for the reviewed revision, with independent verification and
+human inspection before acceptance and merge under the
+[CI acceptance policy](S02_FOUNDATION.md#ci-and-remaining-acceptance-gates). Each
+unresolved decision lists the commands and downstream slices it blocks. S02's
+foundation work is not blocked by these rule decisions; ordinary roadmap
+dependencies still apply. The roadmap coordinator alone owns the slice register.
 
 ## Artifacts
 
@@ -281,7 +283,7 @@ other resources.
   resolved, with exact helper exclusions and separate approved intended-rule
   evidence. Ten rule decisions remain unresolved, including RD-002's detailed crew
   semantics. FR-001 priority is unset. S03's ordinary dependencies and S02's
-  enforcement/acceptance proof remain. A green run
+  passing-check, independent-review and acceptance obligations remain. A green run
   supplies no additional product ruling. Independent acceptance of this changed
   artifact must be recorded in a new review receipt; the historical receipt
   applies only to its identified checkpoint.

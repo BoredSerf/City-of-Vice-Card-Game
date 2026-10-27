@@ -26,8 +26,11 @@ This is a playtesting prototype; balance and AI still need playtesting. Reloadin
 
 The prerequisite foundation has independent technical verification, including
 successful hosted bootstrap and aggregate checks. This combined S01/S02 source
-requires current cumulative review; required integration-gate enforcement and
-controlled failure/block/correction/pass acceptance proof remain open.
+requires current cumulative local and hosted validation and independent review at
+its exact revision. The product owner's 2026-10-27 CI acceptance-policy amendment
+removes mandatory GitHub required-status-check enforcement and the deliberate
+failing-check merge-block demonstration; all actual checks and human inspection
+before acceptance and merge remain required.
 
 The separate S02 foundation uses OCaml/Melange, TypeScript, Vite, and real-browser
 smoke tests. With Node 24.22.1 (bundled npm 11.19.1), opam 2.6.1, and the documented
@@ -42,6 +45,7 @@ validated as specifications only, while all 92 historical observations still
 execute against the pinned prototype.
 
 See [the foundation guide](docs/S02_FOUNDATION.md) for prerequisites, architecture,
-locked dependencies, individual checks, and remaining CI/integration acceptance
-gates. The foundation does not implement gameplay; continue using root `index.html`
-for the current prototype. No open-source license has been assigned.
+locked dependencies, individual checks, and remaining CI verification and
+acceptance requirements. The foundation does not implement gameplay; continue
+using root `index.html` for the current prototype. No open-source license has been
+assigned.

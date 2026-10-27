@@ -3,9 +3,20 @@
 The prerequisite foundation at `ca648316467c0ae0dba7c8a3a13ff620b70f9ecb`
 has independent technical verification, including a successful locked bootstrap
 and full aggregate in actual hosted CI. This combined source requires fresh
-cumulative validation and independent review. Required integration enforcement
-and controlled failure/block/correction/pass acceptance proof remain open in
-[issue #56](https://github.com/BoredSerf/City-of-Vice-Card-Game/issues/56).
+cumulative local and hosted validation and independent review at its exact
+revision.
+
+The product owner's CI acceptance-policy amendment of 2026-10-27 removes mandatory
+GitHub required-status-check enforcement and the deliberate failing-check
+merge-block demonstration. The former obligation recorded in
+[issue #56](https://github.com/BoredSerf/City-of-Vice-Card-Game/issues/56) is
+superseded by that policy change, not established as satisfied. The
+[historical reviews](S02_REVIEW.md) and [S01 review receipt](S01_PRODUCT_REVIEW.md)
+retain their original evidence and findings under the policy then in effect.
+Apply the current [MVP CI acceptance criterion](MVP_PLAN.md#10-mvp-acceptance-criteria)
+and [contribution workflow](../CONTRIBUTING.md#pull-requests-and-completion).
+All actual checks and human inspection before acceptance and merge remain
+required.
 
 This foundation implements the product-neutral toolchain boundary in the
 [S02 contract](../IMPLEMENTATION.md#s02--reproducible-project-foundation).
@@ -189,7 +200,7 @@ Vitest versions accepts Node 24.22.1.
 and aggregate verification on ordinary `pull_request` events and pushes to
 `main`, using the standard native x64 `macos-15-intel` runner. The exact prerequisite
 `ca648316` has an independently examined successful hosted run; that historical
-result does not verify this combined revision or make enforcement configured. Linux developer
+result does not verify this combined revision. Linux developer
 bootstrap prerequisites are separate from this hosted verification path.
 The stable job name is `integration`. It uses read-only contents access,
 no persisted checkout credentials, no secrets, no deployment, no path exclusions,
@@ -200,17 +211,16 @@ The job logs native prerequisites, exact tool versions, lock hashes before and
 after bootstrap, and Playwright's actual browser executable and launch arguments.
 The browser launch must retain `chromiumSandbox: true` and omit `--no-sandbox`.
 
-Workflow source alone does not make a check required or prove it has passed.
-S02 acceptance additionally requires a successful hosted run for the current
-implementation and owner/admin evidence that a controlled failing available
-check blocks integration through the required gate. Evidence must identify the
-protected target, required check/app, actual checked-out revision, failing
-run, observed blocked integration, and subsequent passing run. The PR remains a
-Draft until applicable evidence and independent review are established. Issue #56
-retains the enforcement and controlled failure/block/correction/pass obligations;
-neither stacking nor successful local/hosted execution waives them. Human
-acceptance, dependency-order merges and post-merge tracker reconciliation remain
-separate requirements.
+Workflow source alone does not prove a check has passed. S02 acceptance requires
+every applicable check to pass locally and in hosted CI for the reviewed revision.
+Evidence must identify the actual checked-out commit, commands and outcomes, and
+the successful hosted run. A human must inspect the source review and check
+results before acceptance and merge; failed checks or missing evidence still
+block those transitions. The PR remains a Draft until applicable evidence and
+independent review are established. Stacking does not waive these checks or
+independent verification. Human acceptance, dependency-order merges and post-merge
+tracker reconciliation remain separate requirements. This documentation amendment
+does not establish current runtime verification or change the PR's readiness.
 
 The [historical checkpoint review](S02_REVIEW.md) covers the earlier unfinished
 preparation, not acceptance of this runtime implementation. Game rules, AI,
