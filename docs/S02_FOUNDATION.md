@@ -15,13 +15,14 @@ Install these exact developer tools before bootstrapping:
 
 | Tool                                     | Version |
 | ---------------------------------------- | ------- |
-| Node                                     | 24.19.0 |
-| npm, bundled with that Node distribution | 11.17.0 |
+| Node                                     | 24.22.1 |
+| npm, bundled with that Node distribution | 11.19.1 |
 | opam                                     | 2.6.1   |
 
 The [official Node distribution index](https://nodejs.org/dist/index.json) records
 the Node/npm pairing. Verify downloaded Node archives against their
-[official checksums](https://nodejs.org/dist/v24.19.0/SHASUMS256.txt).
+[official checksums](https://nodejs.org/dist/v24.22.1/SHASUMS256.txt).
+Node 24.22.1 incorporates the [October 2026 security fixes](https://nodejs.org/en/blog/release/v24.22.1/).
 The [opam release](https://github.com/ocaml/opam/releases/tag/2.6.1) includes native
 macOS and Linux binaries; verify their digests from the official release metadata.
 The workflow pins and checks the native x64 macOS binary's SHA-256 before execution.
@@ -159,7 +160,7 @@ requires OCaml >=5.5 and <5.6, and Dune >=3.21. The selected
 [Dune](https://opam.ocaml.org/packages/dune/dune.3.24.2/) and
 [ocamlformat](https://opam.ocaml.org/packages/ocamlformat/ocamlformat.0.29.0/)
 versions satisfy the installed solution. Registry metadata for exact Vite and
-Vitest versions accepts Node 24.19.0.
+Vitest versions accepts Node 24.22.1.
 
 ## CI and remaining acceptance gates
 
