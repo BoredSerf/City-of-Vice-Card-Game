@@ -92,6 +92,40 @@ A rules delta updates the characterization corpus before implementation. UI and
 copy deltas update their applicable browser fixtures or reference evidence. Mixed
 changes perform every applicable check.
 
+## Development on verified, unmerged prerequisites
+
+The product owner permits stacked branches and pull requests so that waiting for
+human acceptance or merge alone need not stop dependent development. This is a
+development-readiness exception to the usual integrated-dependency requirement,
+not acceptance or integration of the prerequisite. The roadmap coordinator selects
+eligible work under the existing priority, ordering, and rule-decision gates.
+
+- Before dependent development starts, independently verify each prerequisite's
+  implementation and applicable tests at an exact commit. Record every parent
+  pull request, commit SHA, and verification evidence in the dependent work item
+  or pull request. A branch's existence or a passing check alone is insufficient.
+- Base the dependent branch on its verified prerequisite branch and target its pull
+  request at that parent branch, keeping its own change reviewable. With multiple
+  prerequisites, record every exact revision and independently verify the combined
+  base before relying on it. Record that base and how it contains the prerequisites.
+- Run applicable checks against the cumulative stack, including each new test or
+  build command in the accumulated integration gate. If a parent changes, reassess
+  affected contracts and evidence, update descendants, and independently reverify
+  affected behavior before relying on the changed base.
+- Unresolved product or rule decisions, unsafe behavior, failed applicable checks,
+  and unverified required interfaces still block affected development. Stacking
+  does not resolve RD-007 or waive S02's required-check enforcement and actual
+  failure/block/correction/pass acceptance proof. Keep pending acceptance and
+  integration requirements explicit even where verified code permits development.
+- Record the readiness exception and its evidence outside the roadmap status cells.
+  Verified but unmerged work is not `done` or integrated; keep existing `review`,
+  `blocked`, and reconciliation obligations truthful.
+
+One roadmap coordinator retains ownership of the entire unfinished stack, pending
+decisions, and reconciliation through human merges. The same coordinator may
+continue eligible dependent work while earlier verified pull requests await human
+acceptance or merge; finishing one layer does not release that ownership.
+
 ## Pull requests and completion
 
 Keep a change within its owning slice or delta. The pull request should identify
@@ -102,3 +136,12 @@ product-owner acceptance.
 Implementation and review do not move roadmap status automatically. The roadmap
 coordinator applies the small status updates described in `IMPLEMENTATION.md` after
 the relevant transition is established.
+
+The user accepts and merges every pull request, including workflow and status-only
+changes, in dependency order. Do not enable automatic merging, merge on the user's
+behalf, push directly to `main`, or bypass required checks. After a parent merges,
+update descendant bases and verification as needed. Mark a slice `done` only after
+acceptance and integration, through the post-merge status update, which also awaits
+human merge. The coordinator then confirms the authoritative tracker and integration
+evidence agree and all stack obligations are closed; do not create a no-op tracker
+update merely to record that confirmation.

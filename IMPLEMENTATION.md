@@ -21,8 +21,11 @@ slice branches do not edit it.
 To operate the roadmap:
 
 1. The roadmap coordinator selects the lowest-numbered `ready` slice at the highest
-   priority. Parallel work is allowed only when dependencies are complete and the
-   assignments do not edit the same contracts, interfaces, or files.
+   priority. The verified-stacking exception below may make a dependent slice
+   eligible for development before integration; apply the same priority and
+   ordering rules. Parallel work is allowed only when dependencies are integrated
+   or satisfy that exception, and assignments do not edit the same contracts,
+   interfaces, or files.
 2. Assign one slice coordinator and one implementation owner outside this document.
    The roadmap coordinator changes the slice's single Status cell to
    `in_progress` in a status-only update.
@@ -35,7 +38,9 @@ To operate the roadmap:
 5. After acceptance and integration, the roadmap coordinator makes a small
    post-merge status update that changes the same cell to `done` and moves newly
    unblocked slices from `planned` to `ready`. Slice implementation pull requests
-   therefore never need to predict their own merge.
+   therefore never need to predict their own merge. The user accepts and merges
+   every pull request, including workflow and status-only updates, in dependency
+   order; post-merge reconciliation remains open until its update is human-merged.
 6. Use `blocked` when a listed stop condition or unresolved dependency prevents
    safe progress. Record the reason and required decision in the work item, leaving
    this roadmap concise. Return the cell to `ready` or `in_progress` after the
@@ -48,6 +53,34 @@ The S01 rule-decision register is a second readiness gate. S01 may finish with a
 decision unresolved only when the register maps it to the affected commands and
 slices. A mapped slice cannot enter `ready` until that decision is recorded as
 resolved; unaffected slices may continue when their ordinary dependencies permit.
+
+### Verified stacked development
+
+Follow the [stacking procedure in `CONTRIBUTING.md`](CONTRIBUTING.md#development-on-verified-unmerged-prerequisites).
+Waiting only for human acceptance or integration of independently verified code
+need not stop dependent development. Before starting, the coordinator records each
+prerequisite pull request, exact verified SHA, applicable independent evidence, and
+the development-readiness exception in the dependent work item or pull request.
+With several prerequisites, independently verify their combined base as well.
+Target each child pull request at its verified parent branch and check the
+cumulative stack. Parent changes require descendant updates, reassessment, and
+independent re-verification of affected behavior before continued reliance.
+
+This exception does not override product or rule-decision gates, unsafe behavior,
+failed applicable checks, or unverified required interfaces. RD-007 still gates
+S03. S02 still requires configured enforcement and actual evidence of failure,
+blocked integration, correction, and a passing run; a green workflow is insufficient.
+Keep pending acceptance and integration obligations explicit without representing
+unmerged prerequisites as
+`done` or integrated. Do not change priorities, dependencies, or slice contracts to
+make a stack eligible.
+
+The same roadmap coordinator owns the entire unfinished stack through human merges
+and tracker reconciliation. Update descendant bases and verification after parent
+merges as needed. No automatic merging, merge on the user's behalf, direct `main`
+push, or required-check bypass is permitted. Close out only when the authoritative
+tracker and integration evidence agree and no stack obligations remain; confirmation
+alone does not require a no-op tracker update.
 
 ### Prototype baseline and change intake
 
@@ -120,6 +153,10 @@ A slice is `done` only when all of the following are true:
 - the change has been reviewed against the current slice contract and the MVP
   acceptance criteria it serves; and
 - user-facing or developer documentation affected by the change is current.
+
+Human acceptance and actual integration are also required before recording `done`;
+independent verification of an unmerged prerequisite permits only the development
+exception above.
 
 A rules disagreement, unsafe state transition, hidden-information leak, broken
 cross-language contract, or need to expand approved scope is a stop condition, not
