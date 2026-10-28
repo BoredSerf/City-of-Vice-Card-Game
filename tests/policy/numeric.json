@@ -1,0 +1,1289 @@
+{
+  "contract_sha256": "b594ced35525ff9ae71113a8c410ea22aee470ec2857affa1dac2ce523fb910e",
+  "base_observation": {
+    "view": {
+      "player_id": 1,
+      "phase": "trim",
+      "turn_number": 1,
+      "active_player": 1,
+      "decision_owner": 1,
+      "winner": null,
+      "win_reason": null,
+      "players": [
+        {
+          "player_id": 0,
+          "resources": {
+            "green": 0,
+            "blue": 0,
+            "black": 0,
+            "white": 0,
+            "yellow": 0,
+            "purple": 0
+          },
+          "active_card_ids": [3],
+          "hand_count": 0
+        },
+        {
+          "player_id": 1,
+          "resources": {
+            "green": 1,
+            "blue": 1,
+            "black": 0,
+            "white": 0,
+            "yellow": 0,
+            "purple": 0
+          },
+          "active_card_ids": [0],
+          "hand_count": 2
+        }
+      ],
+      "hand": [4, 31],
+      "suspended_card_ids": [],
+      "draw_price": 1,
+      "traded_distributors": false,
+      "resource_limit": 10,
+      "trade_rate": 4,
+      "distributor_capacity": 3,
+      "draw_pile_count": 32,
+      "discard_count": 0,
+      "own_pending_decision": {
+        "decision": "trim"
+      }
+    },
+    "legal_commands": [
+      {
+        "command": "trim_resource",
+        "color": "green"
+      },
+      {
+        "command": "trim_resource",
+        "color": "blue"
+      }
+    ]
+  },
+  "negative_cases": [
+    {
+      "id": "retained-huge-trim",
+      "patches": {
+        "view.players.1.resources.green": 2147483647
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "bank0-green-27",
+      "patches": {
+        "view.players.0.resources.green": 27
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "bank0-blue-27",
+      "patches": {
+        "view.players.0.resources.blue": 27
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "bank0-black-27",
+      "patches": {
+        "view.players.0.resources.black": 27
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "bank0-white-27",
+      "patches": {
+        "view.players.0.resources.white": 27
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "bank0-yellow-27",
+      "patches": {
+        "view.players.0.resources.yellow": 27
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "bank0-purple-27",
+      "patches": {
+        "view.players.0.resources.purple": 27
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "bank0-green-2147483647",
+      "patches": {
+        "view.players.0.resources.green": 2147483647
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "bank0-blue-2147483647",
+      "patches": {
+        "view.players.0.resources.blue": 2147483647
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "bank0-black-2147483647",
+      "patches": {
+        "view.players.0.resources.black": 2147483647
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "bank0-white-2147483647",
+      "patches": {
+        "view.players.0.resources.white": 2147483647
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "bank0-yellow-2147483647",
+      "patches": {
+        "view.players.0.resources.yellow": 2147483647
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "bank0-purple-2147483647",
+      "patches": {
+        "view.players.0.resources.purple": 2147483647
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "bank0-bounded-components-total27",
+      "patches": {
+        "view.players.0.resources": {
+          "green": 26,
+          "blue": 1,
+          "black": 0,
+          "white": 0,
+          "yellow": 0,
+          "purple": 0
+        }
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "hand-count0-9",
+      "patches": {
+        "view.players.0.hand_count": 9
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "active-list0-37",
+      "patches": {
+        "view.players.0.active_card_ids": [
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+        ]
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "active-card0-36",
+      "patches": {
+        "view.players.0.active_card_ids": [36]
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "bank1-green-27",
+      "patches": {
+        "view.players.1.resources.green": 27
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "bank1-blue-27",
+      "patches": {
+        "view.players.1.resources.blue": 27
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "bank1-black-27",
+      "patches": {
+        "view.players.1.resources.black": 27
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "bank1-white-27",
+      "patches": {
+        "view.players.1.resources.white": 27
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "bank1-yellow-27",
+      "patches": {
+        "view.players.1.resources.yellow": 27
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "bank1-purple-27",
+      "patches": {
+        "view.players.1.resources.purple": 27
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "bank1-green-2147483647",
+      "patches": {
+        "view.players.1.resources.green": 2147483647
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "bank1-blue-2147483647",
+      "patches": {
+        "view.players.1.resources.blue": 2147483647
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "bank1-black-2147483647",
+      "patches": {
+        "view.players.1.resources.black": 2147483647
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "bank1-white-2147483647",
+      "patches": {
+        "view.players.1.resources.white": 2147483647
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "bank1-yellow-2147483647",
+      "patches": {
+        "view.players.1.resources.yellow": 2147483647
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "bank1-purple-2147483647",
+      "patches": {
+        "view.players.1.resources.purple": 2147483647
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "bank1-bounded-components-total27",
+      "patches": {
+        "view.players.1.resources": {
+          "green": 26,
+          "blue": 1,
+          "black": 0,
+          "white": 0,
+          "yellow": 0,
+          "purple": 0
+        }
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "hand-count1-9",
+      "patches": {
+        "view.players.1.hand_count": 9
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "active-list1-37",
+      "patches": {
+        "view.players.1.active_card_ids": [
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+        ]
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "active-card1-36",
+      "patches": {
+        "view.players.1.active_card_ids": [36]
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "draw_pile_count-37",
+      "patches": {
+        "view.draw_pile_count": 37
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "draw_pile_count-2147483647",
+      "patches": {
+        "view.draw_pile_count": 2147483647
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "discard_count-37",
+      "patches": {
+        "view.discard_count": 37
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "discard_count-2147483647",
+      "patches": {
+        "view.discard_count": 2147483647
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "pool-combined37",
+      "patches": {
+        "view.draw_pile_count": 36,
+        "view.discard_count": 1
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "pool-both-int32max",
+      "patches": {
+        "view.draw_pile_count": 2147483647,
+        "view.discard_count": 2147483647
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "draw_price-0",
+      "patches": {
+        "view.draw_price": 0
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "draw_price-14",
+      "patches": {
+        "view.draw_price": 14
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "draw_price-2147483647",
+      "patches": {
+        "view.draw_price": 2147483647
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "resource_limit-0",
+      "patches": {
+        "view.resource_limit": 0
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "resource_limit-11",
+      "patches": {
+        "view.resource_limit": 11
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "resource_limit-2147483647",
+      "patches": {
+        "view.resource_limit": 2147483647
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "trade_rate-0",
+      "patches": {
+        "view.trade_rate": 0
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "trade_rate-3",
+      "patches": {
+        "view.trade_rate": 3
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "trade_rate-2147483647",
+      "patches": {
+        "view.trade_rate": 2147483647
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "distributor_capacity-0",
+      "patches": {
+        "view.distributor_capacity": 0
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "distributor_capacity-5",
+      "patches": {
+        "view.distributor_capacity": 5
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "distributor_capacity-13",
+      "patches": {
+        "view.distributor_capacity": 13
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "distributor_capacity-2147483647",
+      "patches": {
+        "view.distributor_capacity": 2147483647
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "turn_number--1",
+      "patches": {
+        "view.turn_number": -1
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "turn_number-2147483648",
+      "patches": {
+        "view.turn_number": 2147483648
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "hand-37",
+      "patches": {
+        "view.hand": [
+          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4
+        ]
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "hand-invalid-card",
+      "patches": {
+        "view.hand": [36]
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "suspended_card_ids-37",
+      "patches": {
+        "view.suspended_card_ids": [
+          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4
+        ]
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "suspended_card_ids-invalid-card",
+      "patches": {
+        "view.suspended_card_ids": [36]
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "pending-draw-37",
+      "patches": {
+        "view.own_pending_decision": {
+          "decision": "draw_discard",
+          "card_ids": [
+            4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+            4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4
+          ]
+        }
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "pending-target-37",
+      "patches": {
+        "view.own_pending_decision": {
+          "decision": "intercept",
+          "attacker_id": 0,
+          "operator_id": 30,
+          "target_ids": [
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+          ]
+        }
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "pending-cash-invalid-card",
+      "patches": {
+        "view.own_pending_decision": {
+          "decision": "legit_cash",
+          "drawn_card_id": 36
+        }
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "pending-invalid-actor",
+      "patches": {
+        "view.own_pending_decision": {
+          "decision": "intercept",
+          "attacker_id": 2,
+          "operator_id": 30,
+          "target_ids": [0]
+        }
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "pending-invalid-operator",
+      "patches": {
+        "view.own_pending_decision": {
+          "decision": "intercept",
+          "attacker_id": 0,
+          "operator_id": 36,
+          "target_ids": [0]
+        }
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "players-empty",
+      "patches": {
+        "view.players": []
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "players-unordered",
+      "patches": {
+        "view.players.0.player_id": 1
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "active_player-invalid-actor",
+      "patches": {
+        "view.active_player": 2
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "decision_owner-invalid-actor",
+      "patches": {
+        "view.decision_owner": 2
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "winner-invalid-actor",
+      "patches": {
+        "view.winner": 2
+      },
+      "expected_rejection": {
+        "code": "malformed_command",
+        "field": "policy_observation"
+      }
+    },
+    {
+      "id": "main-invalid-actor",
+      "patches": {
+        "view.player_id": 2
+      },
+      "expected_rejection": {
+        "code": "invalid_actor",
+        "field": "player_id"
+      }
+    }
+  ],
+  "accepted_observations": [
+    {
+      "id": "trim-component26",
+      "observation": {
+        "view": {
+          "player_id": 1,
+          "phase": "trim",
+          "turn_number": 1,
+          "active_player": 1,
+          "decision_owner": 1,
+          "winner": null,
+          "win_reason": null,
+          "players": [
+            {
+              "player_id": 0,
+              "resources": {
+                "green": 0,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [3],
+              "hand_count": 0
+            },
+            {
+              "player_id": 1,
+              "resources": {
+                "green": 26,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [0],
+              "hand_count": 2
+            }
+          ],
+          "hand": [4, 31],
+          "suspended_card_ids": [],
+          "draw_price": 1,
+          "traded_distributors": false,
+          "resource_limit": 10,
+          "trade_rate": 4,
+          "distributor_capacity": 3,
+          "draw_pile_count": 32,
+          "discard_count": 0,
+          "own_pending_decision": {
+            "decision": "trim"
+          }
+        },
+        "legal_commands": [
+          {
+            "command": "trim_resource",
+            "color": "green"
+          },
+          {
+            "command": "trim_resource",
+            "color": "blue"
+          }
+        ]
+      },
+      "expected_command": {
+        "command": "trim_resource",
+        "color": "green"
+      }
+    },
+    {
+      "id": "trim-total26-hand-penalty",
+      "observation": {
+        "view": {
+          "player_id": 1,
+          "phase": "trim",
+          "turn_number": 1,
+          "active_player": 1,
+          "decision_owner": 1,
+          "winner": null,
+          "win_reason": null,
+          "players": [
+            {
+              "player_id": 0,
+              "resources": {
+                "green": 0,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [3],
+              "hand_count": 0
+            },
+            {
+              "player_id": 1,
+              "resources": {
+                "green": 25,
+                "blue": 1,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [0],
+              "hand_count": 2
+            }
+          ],
+          "hand": [4, 31],
+          "suspended_card_ids": [],
+          "draw_price": 1,
+          "traded_distributors": false,
+          "resource_limit": 10,
+          "trade_rate": 4,
+          "distributor_capacity": 3,
+          "draw_pile_count": 32,
+          "discard_count": 0,
+          "own_pending_decision": {
+            "decision": "trim"
+          }
+        },
+        "legal_commands": [
+          {
+            "command": "trim_resource",
+            "color": "green"
+          },
+          {
+            "command": "trim_resource",
+            "color": "blue"
+          }
+        ]
+      },
+      "expected_command": {
+        "command": "trim_resource",
+        "color": "green"
+      }
+    },
+    {
+      "id": "fund-total26-surplus-tie",
+      "observation": {
+        "view": {
+          "player_id": 1,
+          "phase": "play",
+          "turn_number": 1,
+          "active_player": 1,
+          "decision_owner": null,
+          "winner": null,
+          "win_reason": null,
+          "players": [
+            {
+              "player_id": 0,
+              "resources": {
+                "green": 0,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [3],
+              "hand_count": 0
+            },
+            {
+              "player_id": 1,
+              "resources": {
+                "green": 13,
+                "blue": 0,
+                "black": 13,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [0],
+              "hand_count": 2
+            }
+          ],
+          "hand": [4, 31],
+          "suspended_card_ids": [],
+          "draw_price": 1,
+          "traded_distributors": false,
+          "resource_limit": 10,
+          "trade_rate": 4,
+          "distributor_capacity": 3,
+          "draw_pile_count": 32,
+          "discard_count": 0,
+          "own_pending_decision": null
+        },
+        "legal_commands": [
+          {
+            "command": "trade_resources",
+            "from_color": "green",
+            "to_color": "blue"
+          },
+          {
+            "command": "trade_resources",
+            "from_color": "black",
+            "to_color": "blue"
+          },
+          {
+            "command": "end_turn"
+          }
+        ]
+      },
+      "expected_command": {
+        "command": "trade_resources",
+        "from_color": "green",
+        "to_color": "blue"
+      }
+    },
+    {
+      "id": "pool36-draw",
+      "observation": {
+        "view": {
+          "player_id": 1,
+          "phase": "play",
+          "turn_number": 1,
+          "active_player": 1,
+          "decision_owner": null,
+          "winner": null,
+          "win_reason": null,
+          "players": [
+            {
+              "player_id": 0,
+              "resources": {
+                "green": 0,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [3],
+              "hand_count": 0
+            },
+            {
+              "player_id": 1,
+              "resources": {
+                "green": 1,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [0],
+              "hand_count": 0
+            }
+          ],
+          "hand": [],
+          "suspended_card_ids": [],
+          "draw_price": 1,
+          "traded_distributors": false,
+          "resource_limit": 10,
+          "trade_rate": 4,
+          "distributor_capacity": 3,
+          "draw_pile_count": 36,
+          "discard_count": 0,
+          "own_pending_decision": null
+        },
+        "legal_commands": [
+          {
+            "command": "draw_card",
+            "payment": ["green"],
+            "use_docks_bonus": false
+          },
+          {
+            "command": "end_turn"
+          }
+        ]
+      },
+      "expected_command": {
+        "command": "draw_card",
+        "payment": ["green"],
+        "use_docks_bonus": false
+      }
+    },
+    {
+      "id": "discard36-draw",
+      "observation": {
+        "view": {
+          "player_id": 1,
+          "phase": "play",
+          "turn_number": 1,
+          "active_player": 1,
+          "decision_owner": null,
+          "winner": null,
+          "win_reason": null,
+          "players": [
+            {
+              "player_id": 0,
+              "resources": {
+                "green": 0,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [3],
+              "hand_count": 0
+            },
+            {
+              "player_id": 1,
+              "resources": {
+                "green": 1,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [0],
+              "hand_count": 0
+            }
+          ],
+          "hand": [],
+          "suspended_card_ids": [],
+          "draw_price": 1,
+          "traded_distributors": false,
+          "resource_limit": 10,
+          "trade_rate": 4,
+          "distributor_capacity": 3,
+          "draw_pile_count": 0,
+          "discard_count": 36,
+          "own_pending_decision": null
+        },
+        "legal_commands": [
+          {
+            "command": "draw_card",
+            "payment": ["green"],
+            "use_docks_bonus": false
+          },
+          {
+            "command": "end_turn"
+          }
+        ]
+      },
+      "expected_command": {
+        "command": "draw_card",
+        "payment": ["green"],
+        "use_docks_bonus": false
+      }
+    },
+    {
+      "id": "pool0-stop",
+      "observation": {
+        "view": {
+          "player_id": 1,
+          "phase": "play",
+          "turn_number": 1,
+          "active_player": 1,
+          "decision_owner": null,
+          "winner": null,
+          "win_reason": null,
+          "players": [
+            {
+              "player_id": 0,
+              "resources": {
+                "green": 0,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [3],
+              "hand_count": 0
+            },
+            {
+              "player_id": 1,
+              "resources": {
+                "green": 1,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [0],
+              "hand_count": 0
+            }
+          ],
+          "hand": [],
+          "suspended_card_ids": [],
+          "draw_price": 1,
+          "traded_distributors": false,
+          "resource_limit": 10,
+          "trade_rate": 4,
+          "distributor_capacity": 3,
+          "draw_pile_count": 0,
+          "discard_count": 0,
+          "own_pending_decision": null
+        },
+        "legal_commands": [
+          {
+            "command": "end_turn"
+          }
+        ]
+      },
+      "expected_command": {
+        "command": "end_turn"
+      }
+    },
+    {
+      "id": "coarse-sequences36-wait",
+      "observation": {
+        "view": {
+          "player_id": 1,
+          "phase": "trim",
+          "turn_number": 1,
+          "active_player": 0,
+          "decision_owner": null,
+          "winner": null,
+          "win_reason": null,
+          "players": [
+            {
+              "player_id": 0,
+              "resources": {
+                "green": 0,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [
+                3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+                3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3
+              ],
+              "hand_count": 0
+            },
+            {
+              "player_id": 1,
+              "resources": {
+                "green": 1,
+                "blue": 1,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+              ],
+              "hand_count": 2
+            }
+          ],
+          "hand": [
+            4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+            4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4
+          ],
+          "suspended_card_ids": [
+            4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+            4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4
+          ],
+          "draw_price": 1,
+          "traded_distributors": false,
+          "resource_limit": 10,
+          "trade_rate": 4,
+          "distributor_capacity": 3,
+          "draw_pile_count": 32,
+          "discard_count": 0,
+          "own_pending_decision": {
+            "decision": "intercept",
+            "attacker_id": 0,
+            "operator_id": 30,
+            "target_ids": [
+              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+            ]
+          }
+        },
+        "legal_commands": []
+      },
+      "expected_command": null
+    }
+  ]
+}

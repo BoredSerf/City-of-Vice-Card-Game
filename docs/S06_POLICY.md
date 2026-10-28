@@ -22,6 +22,31 @@ state or cached effects. An old command that is illegal now rejects unchanged; a
 old command that is still legal can succeed after full current validation, exactly
 as a fresh human submission. There is no observation-age stamp or session store.
 
+`Player_view.validate` checks the same supported envelope after observation
+decoding and before every native policy call, including waiting and terminal
+views. This prevents fabricated large values from changing native/generated
+scoring. It checks local shape prerequisites and the following coarse bounds:
+
+| Value                                                  | Supported range                          |
+| ------------------------------------------------------ | ---------------------------------------- |
+| Each public resource bank                              | Components 0..26, then total at most 26. |
+| Own draw price                                         | 1..13.                                   |
+| Own resource limit / trade rate / distributor capacity | 10 or 12 / 2 or 4 / 3, 6, 9 or 12.       |
+| Draw and discard counts                                | Each 0..36, then combined at most 36.    |
+| Each public hand count                                 | 0..8.                                    |
+| Each view card-ID sequence                             | At most 36 catalog IDs.                  |
+| Turn number                                            | 0..2147483647.                           |
+
+Both public players must remain ordered 0 then 1; participant and card IDs keep
+their existing domains. Component bounds precede sums, and sequence bounds
+precede policy counting/scoring. The envelope preserves mandatory cash/trim banks
+of 25/26, Docks' temporary eight-card hand and terminal Night-loss banks of 12.
+It does not reconstruct history or card ownership/partition from redacted data.
+An invalid main participant retains `invalid_actor/player_id`; other malformed or
+out-of-envelope view data reports `malformed_command/policy_observation` without
+an input/state echo. Valid views lacking a required choice retain
+`invalid_state/policy_legal_commands`.
+
 The source heuristic's business, active-operator, funding, held-operator, draw and
 spare-card priorities remain. Funding reserves fixed costs and plans a complete
 payment before proposing its first cash/trade step. It replans after submission.
@@ -80,7 +105,9 @@ policy/parity targets and actual generated contract suite consume
 `tests/policy/scenarios.json`, including exact source records, literal commands,
 complete expected states/facts/views, both mandatory owners, all eight crews,
 canonical payment, ordering, privacy twins, detachment and current-validation
-controls. Missing, empty or partial fixtures/parity fail. Native/generated
+controls. Numeric controls include direct native record construction, actual
+generated rejection, raw JSON last-value normalization, accepted-edge preferences
+and real State-admitted projection/codec/policy paths. Missing, empty or partial fixtures/parity fail. Native/generated
 agreement corroborates the independent literals. The existing 120 complete-game
 simulation/replay, 92 prototype observations and six specification-only PD-002
 goldens remain in the aggregate.

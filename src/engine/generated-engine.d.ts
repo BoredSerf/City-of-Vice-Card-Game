@@ -280,6 +280,10 @@ declare module "@city-of-vice/engine" {
         operator_id: number;
         target_ids: number[];
       };
+  /** Supported observation envelope: each bank component/total <=26; price1..13;
+   * cap10/12, rate2/4, capacity3/6/9/12; pool components/sum <=36; hand counts <=8;
+   * card-ID sequences <=36; nonnegative int32 turn. This is not full-game admission.
+   */
   export interface Player_view {
     player_id: number;
     phase: Engine_state["phase"];

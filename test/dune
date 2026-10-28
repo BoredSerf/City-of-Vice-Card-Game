@@ -126,6 +126,7 @@
  (modes native)
  (deps
   ../tests/policy/scenarios.json
+  ../tests/policy/numeric.json
   ../tests/characterization/scenarios.json))
 
 (executable

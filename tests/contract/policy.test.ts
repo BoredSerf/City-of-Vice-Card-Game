@@ -51,9 +51,15 @@ const read = <T>(path: string): T =>
   JSON.parse(readFileSync(new URL(path, import.meta.url), "utf8")) as T;
 // All IDs and native evidence are mandatory. Missing/empty/partial data fails.
 const traces = read<Trace[]>("../../_build/default/test/policy_parity.json");
-const fixtures = read<{ contract_sha256: string; cases: Fixture[] }>(
-  "../policy/scenarios.json",
-);
+const fixture_document = read<{
+  contract_sha256: string;
+  cases: Fixture[];
+  numeric_cases: Fixture[];
+}>("../policy/scenarios.json");
+const fixtures = {
+  ...fixture_document,
+  cases: [...fixture_document.cases, ...fixture_document.numeric_cases],
+};
 const clone = <T>(x: T): T => structuredClone(x);
 const parse = <T>(x: string): T => {
   expect(typeof x).toBe("string");
@@ -108,7 +114,7 @@ function measure(
     expect(propose(o)).toStrictEqual(propose(o));
   }
 }
-function patch(state: Engine_state, path: string, value: unknown) {
+function patch(state: object, path: string, value: unknown) {
   const keys = path.split(".");
   let target = state as unknown as Record<string, unknown>;
   for (const key of keys.slice(0, -1))
@@ -118,9 +124,11 @@ function patch(state: Engine_state, path: string, value: unknown) {
 
 test("S06 actual generated observations/proposals match literal choices, complete resulting states/facts and required native evidence", () => {
   expect(fixtures.contract_sha256).toBe(
-    "6e148a864daf90ee0c4c19451f59e5e4054cb1a9a18877ed8a1b81f9b9f08f15",
+    "b594ced35525ff9ae71113a8c410ea22aee470ec2857affa1dac2ce523fb910e",
   );
-  expect(fixtures.cases).toHaveLength(86);
+  expect(fixture_document.cases).toHaveLength(86);
+  expect(fixture_document.numeric_cases).toHaveLength(7);
+  expect(fixtures.cases).toHaveLength(93);
   expect(traces.map((t) => t.id)).toStrictEqual(
     fixtures.cases.map((t) => t.id),
   );
@@ -211,7 +219,8 @@ test("S06 twin worlds hide deck order/cursor and opponent composition for both i
   const check = (encoded: string) => {
     const s = JSON.parse(encoded) as Engine_state;
     const twin = clone(s);
-    twin.deck.reverse();
+    // Awaiting-opening admission requires the canonical complete deck order.
+    if (s.phase !== "awaiting_opening") twin.deck.reverse();
     twin.random_source.cursor = "12345678";
     const other = accepted(validate_state(JSON.stringify(twin))).state_json;
     for (const a of [0, 1]) {
@@ -225,9 +234,14 @@ test("S06 twin worlds hide deck order/cursor and opponent composition for both i
       checked++;
     }
     if (s.deck.length > 1)
-      expect({ ...observation(encoded, 0), leak: s.deck }).not.toStrictEqual({
+      expect({
+        ...observation(encoded, 0),
+        leak: s.deck,
+        cursor: s.random_source.cursor,
+      }).not.toStrictEqual({
         ...observation(other, 0),
         leak: twin.deck,
+        cursor: twin.random_source.cursor,
       });
   };
   for (const trace of traces) {
@@ -611,4 +625,104 @@ test("S06 one proposal, missing mandatory/stop choices, opening/waiting/terminal
     command: null,
   });
   expect(terminal).toBeGreaterThan(0);
+});
+
+test("S06-V001 numeric envelope rejects before arithmetic and preserves State-produced transient edges", () => {
+  const numeric = read<{
+    contract_sha256: string;
+    base_observation: Player_observation;
+    negative_cases: {
+      id: string;
+      patches: Record<string, unknown>;
+      expected_rejection: { code: string; field: string };
+    }[];
+    accepted_observations: {
+      id: string;
+      observation: Player_observation;
+      expected_command: Engine_command | null;
+    }[];
+  }>("../policy/numeric.json");
+  expect(numeric.contract_sha256).toBe(fixtures.contract_sha256);
+  expect(numeric.negative_cases).toHaveLength(69);
+  const canonical = traces[0]!.initial_state_json;
+  const original = observation(canonical, 1);
+  for (const record of numeric.negative_cases) {
+    const input = clone(numeric.base_observation);
+    for (const [path, value] of Object.entries(record.patches))
+      patch(input, path, value);
+    const before = JSON.stringify(input);
+    expect(parse(heuristic_proposal(before)), record.id).toStrictEqual({
+      status: "rejected",
+      rejection: record.expected_rejection,
+    });
+    expect(JSON.stringify(input)).toBe(before);
+    expect(observation(canonical, 1)).toStrictEqual(original);
+  }
+  expect(numeric.accepted_observations).toHaveLength(7);
+  for (const record of numeric.accepted_observations) {
+    expect(propose(record.observation), record.id).toStrictEqual({
+      status: "accepted",
+      command: record.expected_command,
+    });
+  }
+  const minimal = {
+    status: "rejected",
+    rejection: { code: "malformed_command", field: "policy_observation" },
+  };
+  const base = JSON.stringify(numeric.base_observation);
+  // JSON normalization precedes the guard on both public banks.
+  expect(
+    parse(
+      heuristic_proposal(
+        base.replace('"green":0', '"green":0,"green":2147483647'),
+      ),
+    ),
+  ).toStrictEqual(minimal);
+  expect(
+    heuristic_proposal(
+      base.replace('"green":0', '"green":2147483647,"green":0'),
+    ),
+  ).toBe(heuristic_proposal(base));
+  const views = traces
+    .flatMap((t) => [...t.initial, ...t.steps.flatMap((s) => s.after)])
+    .map((m) => m.observation.view);
+  const total = (v: Player_view) =>
+    Object.values(v.players[v.player_id]!.resources).reduce((a, b) => a + b, 0);
+  for (const amount of [25, 26])
+    expect(views.some((v) => total(v) === amount)).toBe(true);
+  expect(
+    views.some((v) => v.hand.length === 8 && v.phase === "draw_discard"),
+  ).toBe(true);
+  expect(
+    views.some(
+      (v) => v.draw_pile_count === 36 && v.phase === "awaiting_opening",
+    ),
+  ).toBe(true);
+  expect(
+    views.some(
+      (v) =>
+        v.phase === "over" &&
+        v.players.some(
+          (p) => Object.values(p.resources).reduce((a, b) => a + b, 0) === 12,
+        ),
+    ),
+  ).toBe(true);
+  expect(
+    views.some(
+      (v) =>
+        v.own_pending_decision?.decision === "post_action_trim" &&
+        total(v) === 12,
+    ),
+  ).toBe(true);
+  for (const price of [1, 13])
+    expect(views.some((v) => v.draw_price === price)).toBe(true);
+  for (const rate of [2, 4])
+    expect(views.some((v) => v.trade_rate === rate)).toBe(true);
+  for (const capacity of [3, 6, 9, 12])
+    expect(views.some((v) => v.distributor_capacity === capacity)).toBe(true);
+  expect(views.some((v) => v.turn_number === 2147483647)).toBe(true);
+  // Literal admitted arithmetic maxima: no int32 coercion can change these.
+  expect(20 * 26).toBe(520);
+  expect(60 + 25 * 36 + 200).toBe(1160);
+  expect(13 - 0).toBe(13);
 });

@@ -18,7 +18,7 @@ let discard_score id =
   | Distributor -> 60
   | Legit -> 80
 
-let propose (view : t) ~legal_commands =
+let propose_valid (view : t) ~legal_commands =
   let offered command = List.find_opt (( = ) command) legal_commands in
   let required command =
     match command with
@@ -347,3 +347,8 @@ let propose (view : t) ~legal_commands =
       in
       required (List.find_map (fun stage -> stage ()) stages)
   | Draw_discard | Legit_cash | Trim | Intercept -> required None
+
+let propose view ~legal_commands =
+  match Player_view.validate view with
+  | Error rejection -> Error rejection
+  | Ok () -> propose_valid view ~legal_commands

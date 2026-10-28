@@ -51,6 +51,8 @@ type t = {
 
 type observation = { view : t; legal_commands : Command.t list }
 
+val validate : t -> (unit, Command.rejection) result
+
 val observe :
   State.t -> player_id:int -> (observation, Command.rejection) result
 

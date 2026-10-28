@@ -8,7 +8,10 @@ let list = Economy_fixture.list
 let text = Economy_fixture.text
 let compare = Economy_fixture.compare_json
 let load () = Yojson.Basic.from_file "../tests/policy/scenarios.json"
-let cases = Economy_fixture.cases
+
+let cases document =
+  Economy_fixture.cases document @ list "numeric_cases" document
+
 let state_value = Economy_fixture.state_value
 let command_value c = Native_json.to_json (Command.to_value c)
 let decode v = ok (State.of_value (Native_json.of_json v))
@@ -38,6 +41,7 @@ let measurements state =
     List.map
       (fun a ->
         let o = observe state a in
+        ignore (ok (Player_view.validate o.view));
         check
           (o.legal_commands = Engine.legal_commands state ~player_id:a)
           "complete ordered legal list";
@@ -69,7 +73,7 @@ let compare_views label state expected =
 let metadata document =
   check
     (text "contract_sha256" document
-    = "6e148a864daf90ee0c4c19451f59e5e4054cb1a9a18877ed8a1b81f9b9f08f15")
+    = "b594ced35525ff9ae71113a8c410ea22aee470ec2857affa1dac2ce523fb910e")
     "S06 contract identity";
   let originals =
     Json.to_list
@@ -86,7 +90,13 @@ let metadata document =
         (List.find (fun s -> text "id" s = text "scenario_id" entry) originals))
     ledger;
   let records = cases document in
-  check (List.length records = 86) "complete nonempty S06 fixture inventory";
+  check
+    (List.length (Economy_fixture.cases document) = 86)
+    "original86 S06 fixtures";
+  check
+    (List.length (list "numeric_cases" document) = 7)
+    "numeric projection fixture inventory";
+  check (List.length records = 93) "complete nonempty S06 fixture inventory";
   check
     (List.length (List.sort_uniq String.compare (List.map (text "id") records))
     = List.length records)

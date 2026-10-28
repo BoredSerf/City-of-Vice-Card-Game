@@ -75,7 +75,10 @@ let equivalence state actor =
       (State.of_snapshot
          {
            s with
-           deck = List.rev s.deck;
+           (* Awaiting-opening admission requires the canonical full deck. *)
+           deck =
+             (if s.phase = State.Awaiting_opening then s.deck
+              else List.rev s.deck);
            random_source = Option.get (Random_source.of_hex "12345678");
          })
   in
@@ -89,6 +92,8 @@ let equivalence state actor =
       [
         ("safe", value (observe x actor));
         ("leak", `List (List.map (fun n -> `Int n) (State.snapshot x).deck));
+        ( "cursor",
+          `String (Random_source.to_hex (State.snapshot x).random_source) );
       ]
   in
   if List.length s.deck > 1 then
@@ -251,6 +256,158 @@ let current_validation state actor =
         "payment" );
     ]
 
+(* Construct typed records directly: decoding the invalid input first would
+   miss the public native-record entry path that this repair must protect. *)
+let patch_view (v : Player_view.t) path replacement =
+  let integer () = Json.to_int replacement in
+  let ids () = List.map Json.to_int (Json.to_list replacement) in
+  let optional () = if replacement = `Null then None else Some (integer ()) in
+  let player index
+      (change : Player_view.public_player -> Player_view.public_player) =
+    {
+      v with
+      players =
+        List.mapi
+          (fun i p -> if i = int_of_string index then change p else p)
+          v.players;
+    }
+  in
+  match String.split_on_char '.' path with
+  | [ "view"; "players" ] ->
+      check (replacement = `List []) "native players patch";
+      { v with players = [] }
+  | [ "view"; "players"; index; "player_id" ] ->
+      player index (fun p -> { p with player_id = integer () })
+  | [ "view"; "players"; index; "resources" ] ->
+      player index (fun p ->
+          {
+            p with
+            resources = Resource_bank.of_value (Native_json.of_json replacement);
+          })
+  | [ "view"; "players"; index; "resources"; color ] ->
+      player index (fun p ->
+          {
+            p with
+            resources =
+              Resource_bank.set p.resources
+                (Option.get (Cards.color_of_key color))
+                (integer ());
+          })
+  | [ "view"; "players"; index; "hand_count" ] ->
+      player index (fun p -> { p with hand_count = integer () })
+  | [ "view"; "players"; index; "active_card_ids" ] ->
+      player index (fun p -> { p with active_card_ids = ids () })
+  | [ "view"; "player_id" ] -> { v with player_id = integer () }
+  | [ "view"; "active_player" ] -> { v with active_player = optional () }
+  | [ "view"; "decision_owner" ] -> { v with decision_owner = optional () }
+  | [ "view"; "winner" ] -> { v with winner = optional () }
+  | [ "view"; "turn_number" ] -> { v with turn_number = integer () }
+  | [ "view"; "draw_price" ] -> { v with draw_price = integer () }
+  | [ "view"; "resource_limit" ] -> { v with resource_limit = integer () }
+  | [ "view"; "trade_rate" ] -> { v with trade_rate = integer () }
+  | [ "view"; "distributor_capacity" ] ->
+      { v with distributor_capacity = integer () }
+  | [ "view"; "draw_pile_count" ] -> { v with draw_pile_count = integer () }
+  | [ "view"; "discard_count" ] -> { v with discard_count = integer () }
+  | [ "view"; "hand" ] -> { v with hand = ids () }
+  | [ "view"; "suspended_card_ids" ] -> { v with suspended_card_ids = ids () }
+  | [ "view"; "own_pending_decision" ] ->
+      let pending =
+        match text "decision" replacement with
+        | "draw_discard" ->
+            Player_view.Draw_choice
+              (List.map Json.to_int (list "card_ids" replacement))
+        | "legit_cash" ->
+            Cash_legit (Json.to_int (member "drawn_card_id" replacement))
+        | "intercept" ->
+            Interception
+              {
+                attacker_id = Json.to_int (member "attacker_id" replacement);
+                operator_id = Json.to_int (member "operator_id" replacement);
+                target_ids =
+                  List.map Json.to_int (list "target_ids" replacement);
+              }
+        | _ -> failwith "unknown native pending patch"
+      in
+      { v with own_pending_decision = Some pending }
+  | _ -> failwith ("unknown direct-native patch " ^ path)
+
+let numeric_test state =
+  let document = Yojson.Basic.from_file "../tests/policy/numeric.json" in
+  check
+    (text "contract_sha256" document
+    = "b594ced35525ff9ae71113a8c410ea22aee470ec2857affa1dac2ce523fb910e")
+    "numeric contract identity";
+  let base_value = member "base_observation" document in
+  let base =
+    ok (Player_view.observation_of_value (Native_json.of_json base_value))
+  in
+  let before = Native_json.state_json state in
+  let negatives = list "negative_cases" document in
+  check (List.length negatives = 69) "required numeric rejection inventory";
+  List.iter
+    (fun record ->
+      let patches = Json.to_assoc (member "patches" record) in
+      let value =
+        List.fold_left
+          (fun v (path, replacement) ->
+            Economy_fixture.patch v (String.split_on_char '.' path) replacement)
+          base_value patches
+      in
+      let typed =
+        List.fold_left
+          (fun v (path, replacement) -> patch_view v path replacement)
+          base.view patches
+      in
+      let expected = member "expected_rejection" record in
+      let code =
+        if text "code" expected = "invalid_actor" then Command.Invalid_actor
+        else Malformed_command
+      in
+      let field = text "field" expected in
+      let saved = Player_view.observation_to_value { base with view = typed } in
+      error code field (Player_view.validate typed);
+      error code field
+        (Player_view.observation_of_value (Native_json.of_json value));
+      error code field
+        (Player_policy.propose typed ~legal_commands:base.legal_commands);
+      check
+        (saved = Player_view.observation_to_value { base with view = typed })
+        (text "id" record ^ " changed invalid typed input"))
+    negatives;
+  let accepted = list "accepted_observations" document in
+  check (List.length accepted = 7) "required numeric accepted inventory";
+  List.iter
+    (fun record ->
+      let o =
+        ok
+          (Player_view.observation_of_value
+             (Native_json.of_json (member "observation" record)))
+      in
+      ignore (ok (Player_view.validate o.view));
+      compare
+        (text "id" record ^ " literal accepted-edge choice")
+        (proposal o)
+        (`Assoc
+           [
+             ("status", `String "accepted");
+             ("command", member "expected_command" record);
+           ]);
+      check
+        (ok
+           (Player_view.observation_of_value
+              (Player_view.observation_to_value o))
+        = o)
+        "numeric edge roundtrip")
+    accepted;
+  check
+    (before = Native_json.state_json state)
+    "numeric controls changed canonical state/RNG/history";
+  Printf.printf
+    "S06-V001 shared envelope: %d native decoder/direct-record negatives; %d \
+     literal accepted edges\n"
+    (List.length negatives) (List.length accepted)
+
 let () =
   let document = load () in
   metadata document;
@@ -261,6 +418,7 @@ let () =
          (List.find (fun c -> text "id" c = "S01-AI-FUND-001") (cases document)))
   in
   codec fund;
+  numeric_test fund;
   current_validation fund 1;
   hidden_composition fund 1;
   let mirrored =
@@ -301,6 +459,7 @@ let () =
     "opponent-facing post-draw identity escaped";
   (* Every literal boundary covers both IDs, ordinary/mandatory/defender and terminal modes. *)
   let boundaries = ref 0 in
+  let views = ref [] in
   List.iter
     (fun c ->
       let rec inspect state steps =
@@ -309,6 +468,8 @@ let () =
         List.iter
           (fun actor ->
             let o = observe state actor in
+            ignore (ok (Player_view.validate o.view));
+            views := o.view :: !views;
             if o.view.decision_owner = Some actor then
               error Invalid_state "policy_legal_commands"
                 (Player_policy.propose o.view ~legal_commands:[])
@@ -338,6 +499,49 @@ let () =
       in
       inspect (decode (member "initial_state" c)) (list "steps" c))
     (cases document);
+  let requires label predicate =
+    check
+      (List.exists predicate !views)
+      ("missing State-admitted numeric preservation: " ^ label)
+  in
+  let own_bank (v : Player_view.t) =
+    (List.nth v.players v.player_id).resources
+  in
+  List.iter
+    (fun n ->
+      requires
+        ("bank total" ^ string_of_int n)
+        (fun v -> Resource_bank.total (own_bank v) = n))
+    [ 25; 26 ];
+  requires "Docks hand8" (fun v -> List.length v.Player_view.hand = 8);
+  requires "initial deck36" (fun v -> v.Player_view.draw_pile_count = 36);
+  requires "terminal bank12" (fun v ->
+      v.Player_view.phase = Over
+      && List.exists
+           (fun p -> Resource_bank.total p.Player_view.resources = 12)
+           v.players);
+  requires "post-action bank12" (fun v ->
+      v.Player_view.own_pending_decision = Some Post_action_trim
+      && Resource_bank.total (own_bank v) = 12);
+  List.iter
+    (fun n ->
+      requires
+        ("price" ^ string_of_int n)
+        (fun v -> v.Player_view.draw_price = n))
+    [ 1; 13 ];
+  List.iter
+    (fun n ->
+      requires
+        ("rate" ^ string_of_int n)
+        (fun v -> v.Player_view.trade_rate = n))
+    [ 2; 4 ];
+  List.iter
+    (fun n ->
+      requires
+        ("capacity" ^ string_of_int n)
+        (fun v -> v.Player_view.distributor_capacity = n))
+    [ 3; 6; 9; 12 ];
+  requires "maximum turn" (fun v -> v.Player_view.turn_number = 2147483647);
   Printf.printf
     "S06 literal policy/codec/privacy/current-validation: %d cases, %d \
      boundaries, both actors\n"

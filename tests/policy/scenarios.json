@@ -1,5 +1,5 @@
 {
-  "contract_sha256": "6e148a864daf90ee0c4c19451f59e5e4054cb1a9a18877ed8a1b81f9b9f08f15",
+  "contract_sha256": "b594ced35525ff9ae71113a8c410ea22aee470ec2857affa1dac2ce523fb910e",
   "prototype_baseline": "4ccb19703d4af1a1c202d922b514a58a17d0e537",
   "source_ledger": [
     {
@@ -44646,6 +44646,3507 @@
           "trade_rate": 4,
           "distributor_capacity": 3,
           "draw_pile_count": 22,
+          "discard_count": 0,
+          "own_pending_decision": null
+        }
+      ]
+    }
+  ],
+  "numeric_cases": [
+    {
+      "id": "S06-V001-CASH25-WHITE26",
+      "contract_id": "S04-DERIVED-GUARDS-001",
+      "authority_class": "provisional",
+      "authority_record": "issues61-63",
+      "source_refs": [
+        {
+          "scenario_id": "S01-AI-DECIDE-002",
+          "steps": [1],
+          "use": "explicit resolver only; ai_step is not executed or accepted"
+        }
+      ],
+      "projection": "Synthetic setup/turn/decision context; original zones/banks preserved except stated literal variant. Not a real action transcript.",
+      "random_source_kind": "seeded",
+      "facade": true,
+      "initial_state": {
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
+        "phase": "legit_cash",
+        "turn_number": 1,
+        "active_player": 1,
+        "deck": [
+          1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+          21, 22, 23, 28, 29, 30, 31, 32, 33, 34, 35
+        ],
+        "discard": [],
+        "players": [
+          {
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [],
+            "active_card_ids": [0],
+            "suspended_card_ids": [],
+            "draw_price": 1,
+            "traded_distributors": false
+          },
+          {
+            "resources": {
+              "green": 25,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [25, 26, 27],
+            "active_card_ids": [3, 24],
+            "suspended_card_ids": [],
+            "draw_price": 1,
+            "traded_distributors": false
+          }
+        ],
+        "random_source": {
+          "algorithm": "xorshift32_v1",
+          "cursor": "00000001"
+        },
+        "history": [
+          {
+            "event": "game_started",
+            "turn_number": 1,
+            "active_player": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 0,
+            "card_id": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 1,
+            "card_id": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 0,
+            "count": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 1,
+            "count": 3
+          },
+          {
+            "event": "income_collected",
+            "player_id": 0,
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            }
+          },
+          {
+            "event": "turn_changed",
+            "from_player": 0,
+            "to_player": 1,
+            "turn_number": 1
+          },
+          {
+            "event": "income_collected",
+            "player_id": 1,
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            }
+          },
+          {
+            "event": "cards_drawn",
+            "player_id": 1,
+            "card_ids": [27],
+            "source": "paid",
+            "price": 1
+          },
+          {
+            "event": "decision_required",
+            "player_id": 1,
+            "decision": "legit_cash"
+          }
+        ],
+        "winner": null,
+        "win_reason": null,
+        "pending_decision": {
+          "decision": "legit_cash",
+          "player_id": 1,
+          "drawn_card_id": 27
+        }
+      },
+      "steps": [
+        {
+          "command": {
+            "player_id": 1,
+            "command": "cash_card",
+            "card_id": 27,
+            "color": "white"
+          },
+          "policy": true,
+          "expected_changes": {
+            "players.1.hand": [25, 26],
+            "players.1.resources.white": 1,
+            "discard": [27],
+            "phase": "trim",
+            "pending_decision": {
+              "decision": "trim",
+              "player_id": 1
+            }
+          },
+          "expected_events": [
+            {
+              "event": "card_cashed",
+              "player_id": 1,
+              "card_id": 27,
+              "color": "white",
+              "amount": 1,
+              "mandatory": true
+            },
+            {
+              "event": "decision_resolved",
+              "player_id": 1,
+              "decision": "legit_cash"
+            },
+            {
+              "event": "decision_required",
+              "player_id": 1,
+              "decision": "trim"
+            }
+          ],
+          "expected_views": [
+            {
+              "player_id": 0,
+              "phase": "trim",
+              "turn_number": 1,
+              "active_player": 1,
+              "decision_owner": 1,
+              "winner": null,
+              "win_reason": null,
+              "players": [
+                {
+                  "player_id": 0,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [0],
+                  "hand_count": 0
+                },
+                {
+                  "player_id": 1,
+                  "resources": {
+                    "green": 25,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 1,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [3, 24],
+                  "hand_count": 2
+                }
+              ],
+              "hand": [],
+              "suspended_card_ids": [],
+              "draw_price": 1,
+              "traded_distributors": false,
+              "resource_limit": 10,
+              "trade_rate": 4,
+              "distributor_capacity": 3,
+              "draw_pile_count": 30,
+              "discard_count": 1,
+              "own_pending_decision": null
+            },
+            {
+              "player_id": 1,
+              "phase": "trim",
+              "turn_number": 1,
+              "active_player": 1,
+              "decision_owner": 1,
+              "winner": null,
+              "win_reason": null,
+              "players": [
+                {
+                  "player_id": 0,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [0],
+                  "hand_count": 0
+                },
+                {
+                  "player_id": 1,
+                  "resources": {
+                    "green": 25,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 1,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [3, 24],
+                  "hand_count": 2
+                }
+              ],
+              "hand": [25, 26],
+              "suspended_card_ids": [],
+              "draw_price": 1,
+              "traded_distributors": false,
+              "resource_limit": 10,
+              "trade_rate": 4,
+              "distributor_capacity": 6,
+              "draw_pile_count": 30,
+              "discard_count": 1,
+              "own_pending_decision": {
+                "decision": "trim"
+              }
+            }
+          ]
+        },
+        {
+          "command": {
+            "player_id": 1,
+            "command": "trim_resource",
+            "color": "green"
+          },
+          "policy": true,
+          "expected_changes": {
+            "players.1.resources.green": 24
+          },
+          "expected_events": [
+            {
+              "event": "resource_trimmed",
+              "player_id": 1,
+              "color": "green",
+              "amount": 1
+            }
+          ],
+          "expected_views": [
+            {
+              "player_id": 0,
+              "phase": "trim",
+              "turn_number": 1,
+              "active_player": 1,
+              "decision_owner": 1,
+              "winner": null,
+              "win_reason": null,
+              "players": [
+                {
+                  "player_id": 0,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [0],
+                  "hand_count": 0
+                },
+                {
+                  "player_id": 1,
+                  "resources": {
+                    "green": 24,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 1,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [3, 24],
+                  "hand_count": 2
+                }
+              ],
+              "hand": [],
+              "suspended_card_ids": [],
+              "draw_price": 1,
+              "traded_distributors": false,
+              "resource_limit": 10,
+              "trade_rate": 4,
+              "distributor_capacity": 3,
+              "draw_pile_count": 30,
+              "discard_count": 1,
+              "own_pending_decision": null
+            },
+            {
+              "player_id": 1,
+              "phase": "trim",
+              "turn_number": 1,
+              "active_player": 1,
+              "decision_owner": 1,
+              "winner": null,
+              "win_reason": null,
+              "players": [
+                {
+                  "player_id": 0,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [0],
+                  "hand_count": 0
+                },
+                {
+                  "player_id": 1,
+                  "resources": {
+                    "green": 24,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 1,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [3, 24],
+                  "hand_count": 2
+                }
+              ],
+              "hand": [25, 26],
+              "suspended_card_ids": [],
+              "draw_price": 1,
+              "traded_distributors": false,
+              "resource_limit": 10,
+              "trade_rate": 4,
+              "distributor_capacity": 6,
+              "draw_pile_count": 30,
+              "discard_count": 1,
+              "own_pending_decision": {
+                "decision": "trim"
+              }
+            }
+          ]
+        }
+      ],
+      "initial_legal": [
+        [],
+        [
+          {
+            "command": "cash_card",
+            "card_id": 25,
+            "color": "green"
+          },
+          {
+            "command": "cash_card",
+            "card_id": 25,
+            "color": "blue"
+          },
+          {
+            "command": "cash_card",
+            "card_id": 25,
+            "color": "black"
+          },
+          {
+            "command": "cash_card",
+            "card_id": 25,
+            "color": "white"
+          },
+          {
+            "command": "cash_card",
+            "card_id": 25,
+            "color": "yellow"
+          },
+          {
+            "command": "cash_card",
+            "card_id": 25,
+            "color": "purple"
+          },
+          {
+            "command": "cash_card",
+            "card_id": 26,
+            "color": "green"
+          },
+          {
+            "command": "cash_card",
+            "card_id": 26,
+            "color": "blue"
+          },
+          {
+            "command": "cash_card",
+            "card_id": 26,
+            "color": "black"
+          },
+          {
+            "command": "cash_card",
+            "card_id": 26,
+            "color": "white"
+          },
+          {
+            "command": "cash_card",
+            "card_id": 26,
+            "color": "yellow"
+          },
+          {
+            "command": "cash_card",
+            "card_id": 26,
+            "color": "purple"
+          },
+          {
+            "command": "cash_card",
+            "card_id": 27,
+            "color": "green"
+          },
+          {
+            "command": "cash_card",
+            "card_id": 27,
+            "color": "blue"
+          },
+          {
+            "command": "cash_card",
+            "card_id": 27,
+            "color": "black"
+          },
+          {
+            "command": "cash_card",
+            "card_id": 27,
+            "color": "white"
+          },
+          {
+            "command": "cash_card",
+            "card_id": 27,
+            "color": "yellow"
+          },
+          {
+            "command": "cash_card",
+            "card_id": 27,
+            "color": "purple"
+          }
+        ]
+      ],
+      "initial_views": [
+        {
+          "player_id": 0,
+          "phase": "legit_cash",
+          "turn_number": 1,
+          "active_player": 1,
+          "decision_owner": 1,
+          "winner": null,
+          "win_reason": null,
+          "players": [
+            {
+              "player_id": 0,
+              "resources": {
+                "green": 0,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [0],
+              "hand_count": 0
+            },
+            {
+              "player_id": 1,
+              "resources": {
+                "green": 25,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [3, 24],
+              "hand_count": 3
+            }
+          ],
+          "hand": [],
+          "suspended_card_ids": [],
+          "draw_price": 1,
+          "traded_distributors": false,
+          "resource_limit": 10,
+          "trade_rate": 4,
+          "distributor_capacity": 3,
+          "draw_pile_count": 30,
+          "discard_count": 0,
+          "own_pending_decision": null
+        },
+        {
+          "player_id": 1,
+          "phase": "legit_cash",
+          "turn_number": 1,
+          "active_player": 1,
+          "decision_owner": 1,
+          "winner": null,
+          "win_reason": null,
+          "players": [
+            {
+              "player_id": 0,
+              "resources": {
+                "green": 0,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [0],
+              "hand_count": 0
+            },
+            {
+              "player_id": 1,
+              "resources": {
+                "green": 25,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [3, 24],
+              "hand_count": 3
+            }
+          ],
+          "hand": [25, 26, 27],
+          "suspended_card_ids": [],
+          "draw_price": 1,
+          "traded_distributors": false,
+          "resource_limit": 10,
+          "trade_rate": 4,
+          "distributor_capacity": 6,
+          "draw_pile_count": 30,
+          "discard_count": 0,
+          "own_pending_decision": {
+            "decision": "legit_cash",
+            "drawn_card_id": 27
+          }
+        }
+      ]
+    },
+    {
+      "id": "S06-V001-CASH25-GREEN26",
+      "contract_id": "S04-DERIVED-GUARDS-001",
+      "authority_class": "provisional",
+      "authority_record": "issues61-63",
+      "source_refs": [
+        {
+          "scenario_id": "S01-AI-DECIDE-002",
+          "steps": [1],
+          "use": "explicit resolver only; ai_step is not executed or accepted"
+        }
+      ],
+      "projection": "Synthetic setup/turn/decision context; original zones/banks preserved except stated literal variant. Not a real action transcript.",
+      "random_source_kind": "seeded",
+      "facade": true,
+      "initial_state": {
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
+        "phase": "legit_cash",
+        "turn_number": 1,
+        "active_player": 0,
+        "deck": [
+          1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+          21, 22, 23, 28, 29, 30, 31, 32, 33, 34, 35
+        ],
+        "discard": [],
+        "players": [
+          {
+            "resources": {
+              "green": 25,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [25, 26, 27],
+            "active_card_ids": [3, 24],
+            "suspended_card_ids": [],
+            "draw_price": 1,
+            "traded_distributors": false
+          },
+          {
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [],
+            "active_card_ids": [0],
+            "suspended_card_ids": [],
+            "draw_price": 1,
+            "traded_distributors": false
+          }
+        ],
+        "random_source": {
+          "algorithm": "xorshift32_v1",
+          "cursor": "00000001"
+        },
+        "history": [
+          {
+            "event": "game_started",
+            "turn_number": 1,
+            "active_player": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 0,
+            "card_id": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 1,
+            "card_id": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 0,
+            "count": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 1,
+            "count": 3
+          },
+          {
+            "event": "income_collected",
+            "player_id": 0,
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            }
+          },
+          {
+            "event": "cards_drawn",
+            "player_id": 0,
+            "card_ids": [27],
+            "source": "paid",
+            "price": 1
+          },
+          {
+            "event": "decision_required",
+            "player_id": 0,
+            "decision": "legit_cash"
+          }
+        ],
+        "winner": null,
+        "win_reason": null,
+        "pending_decision": {
+          "decision": "legit_cash",
+          "player_id": 0,
+          "drawn_card_id": 27
+        }
+      },
+      "steps": [
+        {
+          "command": {
+            "player_id": 0,
+            "command": "cash_card",
+            "card_id": 27,
+            "color": "green"
+          },
+          "policy": false,
+          "expected_changes": {
+            "players.0.hand": [25, 26],
+            "players.0.resources.green": 26,
+            "discard": [27],
+            "phase": "trim",
+            "pending_decision": {
+              "decision": "trim",
+              "player_id": 0
+            }
+          },
+          "expected_events": [
+            {
+              "event": "card_cashed",
+              "player_id": 0,
+              "card_id": 27,
+              "color": "green",
+              "amount": 1,
+              "mandatory": true
+            },
+            {
+              "event": "decision_resolved",
+              "player_id": 0,
+              "decision": "legit_cash"
+            },
+            {
+              "event": "decision_required",
+              "player_id": 0,
+              "decision": "trim"
+            }
+          ],
+          "expected_views": [
+            {
+              "player_id": 0,
+              "phase": "trim",
+              "turn_number": 1,
+              "active_player": 0,
+              "decision_owner": 0,
+              "winner": null,
+              "win_reason": null,
+              "players": [
+                {
+                  "player_id": 0,
+                  "resources": {
+                    "green": 26,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [3, 24],
+                  "hand_count": 2
+                },
+                {
+                  "player_id": 1,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [0],
+                  "hand_count": 0
+                }
+              ],
+              "hand": [25, 26],
+              "suspended_card_ids": [],
+              "draw_price": 1,
+              "traded_distributors": false,
+              "resource_limit": 10,
+              "trade_rate": 4,
+              "distributor_capacity": 6,
+              "draw_pile_count": 30,
+              "discard_count": 1,
+              "own_pending_decision": {
+                "decision": "trim"
+              }
+            },
+            {
+              "player_id": 1,
+              "phase": "trim",
+              "turn_number": 1,
+              "active_player": 0,
+              "decision_owner": 0,
+              "winner": null,
+              "win_reason": null,
+              "players": [
+                {
+                  "player_id": 0,
+                  "resources": {
+                    "green": 26,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [3, 24],
+                  "hand_count": 2
+                },
+                {
+                  "player_id": 1,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [0],
+                  "hand_count": 0
+                }
+              ],
+              "hand": [],
+              "suspended_card_ids": [],
+              "draw_price": 1,
+              "traded_distributors": false,
+              "resource_limit": 10,
+              "trade_rate": 4,
+              "distributor_capacity": 3,
+              "draw_pile_count": 30,
+              "discard_count": 1,
+              "own_pending_decision": null
+            }
+          ]
+        },
+        {
+          "command": {
+            "player_id": 0,
+            "command": "trim_resource",
+            "color": "green"
+          },
+          "policy": true,
+          "expected_changes": {
+            "players.0.resources.green": 25
+          },
+          "expected_events": [
+            {
+              "event": "resource_trimmed",
+              "player_id": 0,
+              "color": "green",
+              "amount": 1
+            }
+          ],
+          "expected_views": [
+            {
+              "player_id": 0,
+              "phase": "trim",
+              "turn_number": 1,
+              "active_player": 0,
+              "decision_owner": 0,
+              "winner": null,
+              "win_reason": null,
+              "players": [
+                {
+                  "player_id": 0,
+                  "resources": {
+                    "green": 25,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [3, 24],
+                  "hand_count": 2
+                },
+                {
+                  "player_id": 1,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [0],
+                  "hand_count": 0
+                }
+              ],
+              "hand": [25, 26],
+              "suspended_card_ids": [],
+              "draw_price": 1,
+              "traded_distributors": false,
+              "resource_limit": 10,
+              "trade_rate": 4,
+              "distributor_capacity": 6,
+              "draw_pile_count": 30,
+              "discard_count": 1,
+              "own_pending_decision": {
+                "decision": "trim"
+              }
+            },
+            {
+              "player_id": 1,
+              "phase": "trim",
+              "turn_number": 1,
+              "active_player": 0,
+              "decision_owner": 0,
+              "winner": null,
+              "win_reason": null,
+              "players": [
+                {
+                  "player_id": 0,
+                  "resources": {
+                    "green": 25,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [3, 24],
+                  "hand_count": 2
+                },
+                {
+                  "player_id": 1,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [0],
+                  "hand_count": 0
+                }
+              ],
+              "hand": [],
+              "suspended_card_ids": [],
+              "draw_price": 1,
+              "traded_distributors": false,
+              "resource_limit": 10,
+              "trade_rate": 4,
+              "distributor_capacity": 3,
+              "draw_pile_count": 30,
+              "discard_count": 1,
+              "own_pending_decision": null
+            }
+          ]
+        }
+      ],
+      "initial_legal": [
+        [
+          {
+            "command": "cash_card",
+            "card_id": 25,
+            "color": "green"
+          },
+          {
+            "command": "cash_card",
+            "card_id": 25,
+            "color": "blue"
+          },
+          {
+            "command": "cash_card",
+            "card_id": 25,
+            "color": "black"
+          },
+          {
+            "command": "cash_card",
+            "card_id": 25,
+            "color": "white"
+          },
+          {
+            "command": "cash_card",
+            "card_id": 25,
+            "color": "yellow"
+          },
+          {
+            "command": "cash_card",
+            "card_id": 25,
+            "color": "purple"
+          },
+          {
+            "command": "cash_card",
+            "card_id": 26,
+            "color": "green"
+          },
+          {
+            "command": "cash_card",
+            "card_id": 26,
+            "color": "blue"
+          },
+          {
+            "command": "cash_card",
+            "card_id": 26,
+            "color": "black"
+          },
+          {
+            "command": "cash_card",
+            "card_id": 26,
+            "color": "white"
+          },
+          {
+            "command": "cash_card",
+            "card_id": 26,
+            "color": "yellow"
+          },
+          {
+            "command": "cash_card",
+            "card_id": 26,
+            "color": "purple"
+          },
+          {
+            "command": "cash_card",
+            "card_id": 27,
+            "color": "green"
+          },
+          {
+            "command": "cash_card",
+            "card_id": 27,
+            "color": "blue"
+          },
+          {
+            "command": "cash_card",
+            "card_id": 27,
+            "color": "black"
+          },
+          {
+            "command": "cash_card",
+            "card_id": 27,
+            "color": "white"
+          },
+          {
+            "command": "cash_card",
+            "card_id": 27,
+            "color": "yellow"
+          },
+          {
+            "command": "cash_card",
+            "card_id": 27,
+            "color": "purple"
+          }
+        ],
+        []
+      ],
+      "initial_views": [
+        {
+          "player_id": 0,
+          "phase": "legit_cash",
+          "turn_number": 1,
+          "active_player": 0,
+          "decision_owner": 0,
+          "winner": null,
+          "win_reason": null,
+          "players": [
+            {
+              "player_id": 0,
+              "resources": {
+                "green": 25,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [3, 24],
+              "hand_count": 3
+            },
+            {
+              "player_id": 1,
+              "resources": {
+                "green": 0,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [0],
+              "hand_count": 0
+            }
+          ],
+          "hand": [25, 26, 27],
+          "suspended_card_ids": [],
+          "draw_price": 1,
+          "traded_distributors": false,
+          "resource_limit": 10,
+          "trade_rate": 4,
+          "distributor_capacity": 6,
+          "draw_pile_count": 30,
+          "discard_count": 0,
+          "own_pending_decision": {
+            "decision": "legit_cash",
+            "drawn_card_id": 27
+          }
+        },
+        {
+          "player_id": 1,
+          "phase": "legit_cash",
+          "turn_number": 1,
+          "active_player": 0,
+          "decision_owner": 0,
+          "winner": null,
+          "win_reason": null,
+          "players": [
+            {
+              "player_id": 0,
+              "resources": {
+                "green": 25,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [3, 24],
+              "hand_count": 3
+            },
+            {
+              "player_id": 1,
+              "resources": {
+                "green": 0,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [0],
+              "hand_count": 0
+            }
+          ],
+          "hand": [],
+          "suspended_card_ids": [],
+          "draw_price": 1,
+          "traded_distributors": false,
+          "resource_limit": 10,
+          "trade_rate": 4,
+          "distributor_capacity": 3,
+          "draw_pile_count": 30,
+          "discard_count": 0,
+          "own_pending_decision": null
+        }
+      ]
+    },
+    {
+      "id": "S06-V001-DOCKS-HAND8",
+      "contract_id": "S04-PROV-DOCKS-001",
+      "authority_class": "numeric_envelope_issue87",
+      "authority_record": "issues61-63",
+      "source_refs": [
+        {
+          "scenario_id": "S01-CREW-DOCKS-001",
+          "steps": [1, 2, 3],
+          "use": "bounded source comparison/projection; exclusions recorded in ledger"
+        }
+      ],
+      "projection": "Synthetic setup/turn/decision context; original zones/banks preserved except stated literal variant. Not a real action transcript.",
+      "random_source_kind": "seeded",
+      "facade": true,
+      "initial_state": {
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
+        "phase": "play",
+        "turn_number": 1,
+        "active_player": 0,
+        "deck": [
+          10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 27,
+          28, 29, 30, 32, 33, 34, 35, 25, 31
+        ],
+        "discard": [],
+        "players": [
+          {
+            "resources": {
+              "green": 1,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [4, 5, 6, 7, 8, 9],
+            "active_card_ids": [0, 1, 2],
+            "suspended_card_ids": [],
+            "draw_price": 1,
+            "traded_distributors": false
+          },
+          {
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [],
+            "active_card_ids": [3],
+            "suspended_card_ids": [],
+            "draw_price": 1,
+            "traded_distributors": false
+          }
+        ],
+        "random_source": {
+          "algorithm": "xorshift32_v1",
+          "cursor": "00000001"
+        },
+        "history": [
+          {
+            "event": "game_started",
+            "turn_number": 1,
+            "active_player": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 0,
+            "card_id": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 1,
+            "card_id": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 0,
+            "count": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 1,
+            "count": 3
+          },
+          {
+            "event": "income_collected",
+            "player_id": 0,
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            }
+          }
+        ],
+        "winner": null,
+        "win_reason": null,
+        "pending_decision": null
+      },
+      "steps": [
+        {
+          "command": {
+            "player_id": 0,
+            "command": "draw_card",
+            "payment": ["green"],
+            "use_docks_bonus": true
+          },
+          "expected_changes": {
+            "players.0.resources.green": 0,
+            "players.0.hand": [4, 5, 6, 7, 8, 9, 31, 25],
+            "players.0.draw_price": 2,
+            "deck": [
+              10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26,
+              27, 28, 29, 30, 32, 33, 34, 35
+            ],
+            "phase": "draw_discard",
+            "pending_decision": {
+              "decision": "draw_discard",
+              "player_id": 0,
+              "card_ids": [31, 25]
+            }
+          },
+          "expected_events": [
+            {
+              "event": "payment_made",
+              "player_id": 0,
+              "resources": {
+                "green": 1,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              }
+            },
+            {
+              "event": "cards_drawn",
+              "player_id": 0,
+              "card_ids": [31, 25],
+              "source": "paid",
+              "price": 1
+            },
+            {
+              "event": "decision_required",
+              "player_id": 0,
+              "decision": "draw_discard"
+            }
+          ],
+          "policy": false,
+          "expected_views": [
+            {
+              "player_id": 0,
+              "phase": "draw_discard",
+              "turn_number": 1,
+              "active_player": 0,
+              "decision_owner": 0,
+              "winner": null,
+              "win_reason": null,
+              "players": [
+                {
+                  "player_id": 0,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [0, 1, 2],
+                  "hand_count": 8
+                },
+                {
+                  "player_id": 1,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [3],
+                  "hand_count": 0
+                }
+              ],
+              "hand": [4, 5, 6, 7, 8, 9, 31, 25],
+              "suspended_card_ids": [],
+              "draw_price": 2,
+              "traded_distributors": false,
+              "resource_limit": 10,
+              "trade_rate": 4,
+              "distributor_capacity": 3,
+              "draw_pile_count": 24,
+              "discard_count": 0,
+              "own_pending_decision": {
+                "decision": "draw_discard",
+                "card_ids": [31, 25]
+              }
+            },
+            {
+              "player_id": 1,
+              "phase": "draw_discard",
+              "turn_number": 1,
+              "active_player": 0,
+              "decision_owner": 0,
+              "winner": null,
+              "win_reason": null,
+              "players": [
+                {
+                  "player_id": 0,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [0, 1, 2],
+                  "hand_count": 8
+                },
+                {
+                  "player_id": 1,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [3],
+                  "hand_count": 0
+                }
+              ],
+              "hand": [],
+              "suspended_card_ids": [],
+              "draw_price": 1,
+              "traded_distributors": false,
+              "resource_limit": 10,
+              "trade_rate": 4,
+              "distributor_capacity": 3,
+              "draw_pile_count": 24,
+              "discard_count": 0,
+              "own_pending_decision": null
+            }
+          ]
+        },
+        {
+          "command": {
+            "player_id": 0,
+            "command": "discard_draw_choice",
+            "card_id": 4
+          },
+          "expected_rejection": {
+            "code": "invalid_choice",
+            "field": "card_id"
+          },
+          "policy": false,
+          "expected_views": [
+            {
+              "player_id": 0,
+              "phase": "draw_discard",
+              "turn_number": 1,
+              "active_player": 0,
+              "decision_owner": 0,
+              "winner": null,
+              "win_reason": null,
+              "players": [
+                {
+                  "player_id": 0,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [0, 1, 2],
+                  "hand_count": 8
+                },
+                {
+                  "player_id": 1,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [3],
+                  "hand_count": 0
+                }
+              ],
+              "hand": [4, 5, 6, 7, 8, 9, 31, 25],
+              "suspended_card_ids": [],
+              "draw_price": 2,
+              "traded_distributors": false,
+              "resource_limit": 10,
+              "trade_rate": 4,
+              "distributor_capacity": 3,
+              "draw_pile_count": 24,
+              "discard_count": 0,
+              "own_pending_decision": {
+                "decision": "draw_discard",
+                "card_ids": [31, 25]
+              }
+            },
+            {
+              "player_id": 1,
+              "phase": "draw_discard",
+              "turn_number": 1,
+              "active_player": 0,
+              "decision_owner": 0,
+              "winner": null,
+              "win_reason": null,
+              "players": [
+                {
+                  "player_id": 0,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [0, 1, 2],
+                  "hand_count": 8
+                },
+                {
+                  "player_id": 1,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [3],
+                  "hand_count": 0
+                }
+              ],
+              "hand": [],
+              "suspended_card_ids": [],
+              "draw_price": 1,
+              "traded_distributors": false,
+              "resource_limit": 10,
+              "trade_rate": 4,
+              "distributor_capacity": 3,
+              "draw_pile_count": 24,
+              "discard_count": 0,
+              "own_pending_decision": null
+            }
+          ]
+        },
+        {
+          "command": {
+            "player_id": 0,
+            "command": "discard_draw_choice",
+            "card_id": 31
+          },
+          "expected_changes": {
+            "players.0.hand": [4, 5, 6, 7, 8, 9, 25],
+            "discard": [31],
+            "phase": "play",
+            "pending_decision": null
+          },
+          "expected_events": [
+            {
+              "event": "card_discarded",
+              "player_id": 0,
+              "card_id": 31,
+              "reason": "docks"
+            },
+            {
+              "event": "decision_resolved",
+              "player_id": 0,
+              "decision": "draw_discard"
+            }
+          ],
+          "policy": true,
+          "expected_views": [
+            {
+              "player_id": 0,
+              "phase": "play",
+              "turn_number": 1,
+              "active_player": 0,
+              "decision_owner": null,
+              "winner": null,
+              "win_reason": null,
+              "players": [
+                {
+                  "player_id": 0,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [0, 1, 2],
+                  "hand_count": 7
+                },
+                {
+                  "player_id": 1,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [3],
+                  "hand_count": 0
+                }
+              ],
+              "hand": [4, 5, 6, 7, 8, 9, 25],
+              "suspended_card_ids": [],
+              "draw_price": 2,
+              "traded_distributors": false,
+              "resource_limit": 10,
+              "trade_rate": 4,
+              "distributor_capacity": 3,
+              "draw_pile_count": 24,
+              "discard_count": 1,
+              "own_pending_decision": null
+            },
+            {
+              "player_id": 1,
+              "phase": "play",
+              "turn_number": 1,
+              "active_player": 0,
+              "decision_owner": null,
+              "winner": null,
+              "win_reason": null,
+              "players": [
+                {
+                  "player_id": 0,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [0, 1, 2],
+                  "hand_count": 7
+                },
+                {
+                  "player_id": 1,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [3],
+                  "hand_count": 0
+                }
+              ],
+              "hand": [],
+              "suspended_card_ids": [],
+              "draw_price": 1,
+              "traded_distributors": false,
+              "resource_limit": 10,
+              "trade_rate": 4,
+              "distributor_capacity": 3,
+              "draw_pile_count": 24,
+              "discard_count": 1,
+              "own_pending_decision": null
+            }
+          ]
+        },
+        {
+          "command": {
+            "player_id": 0,
+            "command": "discard_draw_choice",
+            "card_id": 31
+          },
+          "expected_rejection": {
+            "code": "wrong_phase",
+            "field": "phase"
+          },
+          "policy": false,
+          "expected_views": [
+            {
+              "player_id": 0,
+              "phase": "play",
+              "turn_number": 1,
+              "active_player": 0,
+              "decision_owner": null,
+              "winner": null,
+              "win_reason": null,
+              "players": [
+                {
+                  "player_id": 0,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [0, 1, 2],
+                  "hand_count": 7
+                },
+                {
+                  "player_id": 1,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [3],
+                  "hand_count": 0
+                }
+              ],
+              "hand": [4, 5, 6, 7, 8, 9, 25],
+              "suspended_card_ids": [],
+              "draw_price": 2,
+              "traded_distributors": false,
+              "resource_limit": 10,
+              "trade_rate": 4,
+              "distributor_capacity": 3,
+              "draw_pile_count": 24,
+              "discard_count": 1,
+              "own_pending_decision": null
+            },
+            {
+              "player_id": 1,
+              "phase": "play",
+              "turn_number": 1,
+              "active_player": 0,
+              "decision_owner": null,
+              "winner": null,
+              "win_reason": null,
+              "players": [
+                {
+                  "player_id": 0,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [0, 1, 2],
+                  "hand_count": 7
+                },
+                {
+                  "player_id": 1,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [3],
+                  "hand_count": 0
+                }
+              ],
+              "hand": [],
+              "suspended_card_ids": [],
+              "draw_price": 1,
+              "traded_distributors": false,
+              "resource_limit": 10,
+              "trade_rate": 4,
+              "distributor_capacity": 3,
+              "draw_pile_count": 24,
+              "discard_count": 1,
+              "own_pending_decision": null
+            }
+          ]
+        }
+      ],
+      "initial_views": [
+        {
+          "player_id": 0,
+          "phase": "play",
+          "turn_number": 1,
+          "active_player": 0,
+          "decision_owner": null,
+          "winner": null,
+          "win_reason": null,
+          "players": [
+            {
+              "player_id": 0,
+              "resources": {
+                "green": 1,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [0, 1, 2],
+              "hand_count": 6
+            },
+            {
+              "player_id": 1,
+              "resources": {
+                "green": 0,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [3],
+              "hand_count": 0
+            }
+          ],
+          "hand": [4, 5, 6, 7, 8, 9],
+          "suspended_card_ids": [],
+          "draw_price": 1,
+          "traded_distributors": false,
+          "resource_limit": 10,
+          "trade_rate": 4,
+          "distributor_capacity": 3,
+          "draw_pile_count": 26,
+          "discard_count": 0,
+          "own_pending_decision": null
+        },
+        {
+          "player_id": 1,
+          "phase": "play",
+          "turn_number": 1,
+          "active_player": 0,
+          "decision_owner": null,
+          "winner": null,
+          "win_reason": null,
+          "players": [
+            {
+              "player_id": 0,
+              "resources": {
+                "green": 1,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [0, 1, 2],
+              "hand_count": 6
+            },
+            {
+              "player_id": 1,
+              "resources": {
+                "green": 0,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [3],
+              "hand_count": 0
+            }
+          ],
+          "hand": [],
+          "suspended_card_ids": [],
+          "draw_price": 1,
+          "traded_distributors": false,
+          "resource_limit": 10,
+          "trade_rate": 4,
+          "distributor_capacity": 3,
+          "draw_pile_count": 26,
+          "discard_count": 0,
+          "own_pending_decision": null
+        }
+      ]
+    },
+    {
+      "id": "S06-V001-TERMINAL-BANK12",
+      "contract_id": "S05-PROV-TERMINAL-NIGHT-001",
+      "authority_class": "numeric_envelope_issue87",
+      "authority_record": "issues61/64/65/66/73/74",
+      "source_refs": [],
+      "projection": "Supported schema2/strict fields and false initial Arts flags. Synthetic setup/income/actor context is not a claimed full-game transcript; literal gameplay values and specified expectations are independent of replacement engine output.",
+      "random_source_kind": "seeded",
+      "facade": true,
+      "initial_state": {
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
+        "phase": "play",
+        "turn_number": 1,
+        "active_player": 0,
+        "deck": [
+          1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 18, 19, 20, 21, 22, 23,
+          24, 25, 26, 27, 28, 29, 30, 31, 33, 34, 35
+        ],
+        "discard": [],
+        "players": [
+          {
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 1
+            },
+            "hand": [],
+            "active_card_ids": [0, 32],
+            "suspended_card_ids": [],
+            "draw_price": 1,
+            "traded_distributors": false
+          },
+          {
+            "resources": {
+              "green": 12,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [],
+            "active_card_ids": [15, 16, 17],
+            "suspended_card_ids": [],
+            "draw_price": 1,
+            "traded_distributors": false
+          }
+        ],
+        "random_source": {
+          "algorithm": "xorshift32_v1",
+          "cursor": "00000001"
+        },
+        "history": [
+          {
+            "event": "game_started",
+            "turn_number": 1,
+            "active_player": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 0,
+            "card_id": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 1,
+            "card_id": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 0,
+            "count": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 1,
+            "count": 3
+          },
+          {
+            "event": "income_collected",
+            "player_id": 0,
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            }
+          }
+        ],
+        "winner": null,
+        "win_reason": null,
+        "pending_decision": null
+      },
+      "steps": [
+        {
+          "command": {
+            "player_id": 0,
+            "command": "use_operator",
+            "operator_id": 32,
+            "target_ids": [15]
+          },
+          "expected_changes": {
+            "players.0.resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "players.0.active_card_ids": [0],
+            "players.1.active_card_ids": [],
+            "players.1.hand": [15, 16, 17],
+            "discard": [32],
+            "phase": "over",
+            "winner": 0,
+            "win_reason": "elimination",
+            "pending_decision": null
+          },
+          "expected_events": [
+            {
+              "event": "payment_made",
+              "player_id": 0,
+              "resources": {
+                "green": 0,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 1
+              }
+            },
+            {
+              "event": "operator_result",
+              "player_id": 0,
+              "operator_id": 32,
+              "target_ids": [15],
+              "affected": [
+                {
+                  "card_id": 15,
+                  "destination": {
+                    "zone": "hand",
+                    "player_id": 1,
+                    "suspended": false
+                  }
+                },
+                {
+                  "card_id": 16,
+                  "destination": {
+                    "zone": "hand",
+                    "player_id": 1,
+                    "suspended": false
+                  }
+                },
+                {
+                  "card_id": 17,
+                  "destination": {
+                    "zone": "hand",
+                    "player_id": 1,
+                    "suspended": false
+                  }
+                }
+              ]
+            },
+            {
+              "event": "operator_disposed",
+              "player_id": 0,
+              "operator_id": 32
+            },
+            {
+              "event": "crew_lost",
+              "player_id": 1,
+              "crew": "Night Shift"
+            },
+            {
+              "event": "game_finished",
+              "winner": 0,
+              "reason": "elimination"
+            }
+          ],
+          "policy": true,
+          "expected_views": [
+            {
+              "player_id": 0,
+              "phase": "over",
+              "turn_number": 1,
+              "active_player": 0,
+              "decision_owner": null,
+              "winner": 0,
+              "win_reason": "elimination",
+              "players": [
+                {
+                  "player_id": 0,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [0],
+                  "hand_count": 0
+                },
+                {
+                  "player_id": 1,
+                  "resources": {
+                    "green": 12,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [],
+                  "hand_count": 3
+                }
+              ],
+              "hand": [],
+              "suspended_card_ids": [],
+              "draw_price": 1,
+              "traded_distributors": false,
+              "resource_limit": 10,
+              "trade_rate": 4,
+              "distributor_capacity": 3,
+              "draw_pile_count": 31,
+              "discard_count": 1,
+              "own_pending_decision": null
+            },
+            {
+              "player_id": 1,
+              "phase": "over",
+              "turn_number": 1,
+              "active_player": 0,
+              "decision_owner": null,
+              "winner": 0,
+              "win_reason": "elimination",
+              "players": [
+                {
+                  "player_id": 0,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [0],
+                  "hand_count": 0
+                },
+                {
+                  "player_id": 1,
+                  "resources": {
+                    "green": 12,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [],
+                  "hand_count": 3
+                }
+              ],
+              "hand": [15, 16, 17],
+              "suspended_card_ids": [],
+              "draw_price": 1,
+              "traded_distributors": false,
+              "resource_limit": 10,
+              "trade_rate": 4,
+              "distributor_capacity": 3,
+              "draw_pile_count": 31,
+              "discard_count": 1,
+              "own_pending_decision": null
+            }
+          ]
+        },
+        {
+          "command": {
+            "player_id": 1,
+            "command": "trim_resource",
+            "color": "green"
+          },
+          "expected_rejection": {
+            "code": "game_over",
+            "field": "phase"
+          },
+          "policy": false,
+          "expected_views": [
+            {
+              "player_id": 0,
+              "phase": "over",
+              "turn_number": 1,
+              "active_player": 0,
+              "decision_owner": null,
+              "winner": 0,
+              "win_reason": "elimination",
+              "players": [
+                {
+                  "player_id": 0,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [0],
+                  "hand_count": 0
+                },
+                {
+                  "player_id": 1,
+                  "resources": {
+                    "green": 12,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [],
+                  "hand_count": 3
+                }
+              ],
+              "hand": [],
+              "suspended_card_ids": [],
+              "draw_price": 1,
+              "traded_distributors": false,
+              "resource_limit": 10,
+              "trade_rate": 4,
+              "distributor_capacity": 3,
+              "draw_pile_count": 31,
+              "discard_count": 1,
+              "own_pending_decision": null
+            },
+            {
+              "player_id": 1,
+              "phase": "over",
+              "turn_number": 1,
+              "active_player": 0,
+              "decision_owner": null,
+              "winner": 0,
+              "win_reason": "elimination",
+              "players": [
+                {
+                  "player_id": 0,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [0],
+                  "hand_count": 0
+                },
+                {
+                  "player_id": 1,
+                  "resources": {
+                    "green": 12,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [],
+                  "hand_count": 3
+                }
+              ],
+              "hand": [15, 16, 17],
+              "suspended_card_ids": [],
+              "draw_price": 1,
+              "traded_distributors": false,
+              "resource_limit": 10,
+              "trade_rate": 4,
+              "distributor_capacity": 3,
+              "draw_pile_count": 31,
+              "discard_count": 1,
+              "own_pending_decision": null
+            }
+          ]
+        },
+        {
+          "command": {
+            "player_id": 1,
+            "command": "cash_card",
+            "card_id": 15,
+            "color": "purple"
+          },
+          "expected_rejection": {
+            "code": "game_over",
+            "field": "phase"
+          },
+          "policy": false,
+          "expected_views": [
+            {
+              "player_id": 0,
+              "phase": "over",
+              "turn_number": 1,
+              "active_player": 0,
+              "decision_owner": null,
+              "winner": 0,
+              "win_reason": "elimination",
+              "players": [
+                {
+                  "player_id": 0,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [0],
+                  "hand_count": 0
+                },
+                {
+                  "player_id": 1,
+                  "resources": {
+                    "green": 12,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [],
+                  "hand_count": 3
+                }
+              ],
+              "hand": [],
+              "suspended_card_ids": [],
+              "draw_price": 1,
+              "traded_distributors": false,
+              "resource_limit": 10,
+              "trade_rate": 4,
+              "distributor_capacity": 3,
+              "draw_pile_count": 31,
+              "discard_count": 1,
+              "own_pending_decision": null
+            },
+            {
+              "player_id": 1,
+              "phase": "over",
+              "turn_number": 1,
+              "active_player": 0,
+              "decision_owner": null,
+              "winner": 0,
+              "win_reason": "elimination",
+              "players": [
+                {
+                  "player_id": 0,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [0],
+                  "hand_count": 0
+                },
+                {
+                  "player_id": 1,
+                  "resources": {
+                    "green": 12,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [],
+                  "hand_count": 3
+                }
+              ],
+              "hand": [15, 16, 17],
+              "suspended_card_ids": [],
+              "draw_price": 1,
+              "traded_distributors": false,
+              "resource_limit": 10,
+              "trade_rate": 4,
+              "distributor_capacity": 3,
+              "draw_pile_count": 31,
+              "discard_count": 1,
+              "own_pending_decision": null
+            }
+          ]
+        },
+        {
+          "command": {
+            "player_id": 1,
+            "command": "end_turn"
+          },
+          "expected_rejection": {
+            "code": "game_over",
+            "field": "phase"
+          },
+          "policy": false,
+          "expected_views": [
+            {
+              "player_id": 0,
+              "phase": "over",
+              "turn_number": 1,
+              "active_player": 0,
+              "decision_owner": null,
+              "winner": 0,
+              "win_reason": "elimination",
+              "players": [
+                {
+                  "player_id": 0,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [0],
+                  "hand_count": 0
+                },
+                {
+                  "player_id": 1,
+                  "resources": {
+                    "green": 12,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [],
+                  "hand_count": 3
+                }
+              ],
+              "hand": [],
+              "suspended_card_ids": [],
+              "draw_price": 1,
+              "traded_distributors": false,
+              "resource_limit": 10,
+              "trade_rate": 4,
+              "distributor_capacity": 3,
+              "draw_pile_count": 31,
+              "discard_count": 1,
+              "own_pending_decision": null
+            },
+            {
+              "player_id": 1,
+              "phase": "over",
+              "turn_number": 1,
+              "active_player": 0,
+              "decision_owner": null,
+              "winner": 0,
+              "win_reason": "elimination",
+              "players": [
+                {
+                  "player_id": 0,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [0],
+                  "hand_count": 0
+                },
+                {
+                  "player_id": 1,
+                  "resources": {
+                    "green": 12,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [],
+                  "hand_count": 3
+                }
+              ],
+              "hand": [15, 16, 17],
+              "suspended_card_ids": [],
+              "draw_price": 1,
+              "traded_distributors": false,
+              "resource_limit": 10,
+              "trade_rate": 4,
+              "distributor_capacity": 3,
+              "draw_pile_count": 31,
+              "discard_count": 1,
+              "own_pending_decision": null
+            }
+          ]
+        }
+      ],
+      "initial_views": [
+        {
+          "player_id": 0,
+          "phase": "play",
+          "turn_number": 1,
+          "active_player": 0,
+          "decision_owner": null,
+          "winner": null,
+          "win_reason": null,
+          "players": [
+            {
+              "player_id": 0,
+              "resources": {
+                "green": 0,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 1
+              },
+              "active_card_ids": [0, 32],
+              "hand_count": 0
+            },
+            {
+              "player_id": 1,
+              "resources": {
+                "green": 12,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [15, 16, 17],
+              "hand_count": 0
+            }
+          ],
+          "hand": [],
+          "suspended_card_ids": [],
+          "draw_price": 1,
+          "traded_distributors": false,
+          "resource_limit": 10,
+          "trade_rate": 4,
+          "distributor_capacity": 3,
+          "draw_pile_count": 31,
+          "discard_count": 0,
+          "own_pending_decision": null
+        },
+        {
+          "player_id": 1,
+          "phase": "play",
+          "turn_number": 1,
+          "active_player": 0,
+          "decision_owner": null,
+          "winner": null,
+          "win_reason": null,
+          "players": [
+            {
+              "player_id": 0,
+              "resources": {
+                "green": 0,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 1
+              },
+              "active_card_ids": [0, 32],
+              "hand_count": 0
+            },
+            {
+              "player_id": 1,
+              "resources": {
+                "green": 12,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [15, 16, 17],
+              "hand_count": 0
+            }
+          ],
+          "hand": [],
+          "suspended_card_ids": [],
+          "draw_price": 1,
+          "traded_distributors": false,
+          "resource_limit": 12,
+          "trade_rate": 4,
+          "distributor_capacity": 3,
+          "draw_pile_count": 31,
+          "discard_count": 0,
+          "own_pending_decision": null
+        }
+      ]
+    },
+    {
+      "id": "S06-V001-PRICE13",
+      "authority_class": "numeric_envelope_issue87",
+      "projection": "Controlled complete-card fixture with synthetic protocol context; no full-game reachability claim.",
+      "initial_state": {
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
+        "phase": "play",
+        "turn_number": 1,
+        "active_player": 1,
+        "deck": [
+          2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+          22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35
+        ],
+        "discard": [],
+        "players": [
+          {
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [],
+            "active_card_ids": [3],
+            "suspended_card_ids": [],
+            "draw_price": 1,
+            "traded_distributors": false
+          },
+          {
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [1],
+            "active_card_ids": [0],
+            "suspended_card_ids": [],
+            "draw_price": 13,
+            "traded_distributors": false
+          }
+        ],
+        "random_source": {
+          "algorithm": "xorshift32_v1",
+          "cursor": "00000001"
+        },
+        "history": [
+          {
+            "event": "game_started",
+            "turn_number": 1,
+            "active_player": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 0,
+            "card_id": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 1,
+            "card_id": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 0,
+            "count": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 1,
+            "count": 3
+          },
+          {
+            "event": "income_collected",
+            "player_id": 0,
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            }
+          },
+          {
+            "event": "turn_changed",
+            "from_player": 0,
+            "to_player": 1,
+            "turn_number": 1
+          },
+          {
+            "event": "income_collected",
+            "player_id": 1,
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            }
+          }
+        ],
+        "winner": null,
+        "win_reason": null,
+        "pending_decision": null
+      },
+      "steps": [
+        {
+          "command": {
+            "player_id": 1,
+            "command": "end_turn"
+          },
+          "policy": true,
+          "expected_changes": {
+            "active_player": 0,
+            "turn_number": 2,
+            "players.0.resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 1,
+              "purple": 0
+            }
+          },
+          "expected_events": [
+            {
+              "event": "turn_changed",
+              "from_player": 1,
+              "to_player": 0,
+              "turn_number": 2
+            },
+            {
+              "event": "income_collected",
+              "player_id": 0,
+              "resources": {
+                "green": 0,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 1,
+                "purple": 0
+              }
+            }
+          ],
+          "expected_views": [
+            {
+              "player_id": 0,
+              "phase": "play",
+              "turn_number": 2,
+              "active_player": 0,
+              "decision_owner": null,
+              "winner": null,
+              "win_reason": null,
+              "players": [
+                {
+                  "player_id": 0,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 1,
+                    "purple": 0
+                  },
+                  "active_card_ids": [3],
+                  "hand_count": 0
+                },
+                {
+                  "player_id": 1,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [0],
+                  "hand_count": 1
+                }
+              ],
+              "hand": [],
+              "suspended_card_ids": [],
+              "draw_price": 1,
+              "traded_distributors": false,
+              "resource_limit": 10,
+              "trade_rate": 4,
+              "distributor_capacity": 3,
+              "draw_pile_count": 33,
+              "discard_count": 0,
+              "own_pending_decision": null
+            },
+            {
+              "player_id": 1,
+              "phase": "play",
+              "turn_number": 2,
+              "active_player": 0,
+              "decision_owner": null,
+              "winner": null,
+              "win_reason": null,
+              "players": [
+                {
+                  "player_id": 0,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 1,
+                    "purple": 0
+                  },
+                  "active_card_ids": [3],
+                  "hand_count": 0
+                },
+                {
+                  "player_id": 1,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [0],
+                  "hand_count": 1
+                }
+              ],
+              "hand": [1],
+              "suspended_card_ids": [],
+              "draw_price": 13,
+              "traded_distributors": false,
+              "resource_limit": 10,
+              "trade_rate": 4,
+              "distributor_capacity": 3,
+              "draw_pile_count": 33,
+              "discard_count": 0,
+              "own_pending_decision": null
+            }
+          ]
+        }
+      ],
+      "initial_views": [
+        {
+          "player_id": 0,
+          "phase": "play",
+          "turn_number": 1,
+          "active_player": 1,
+          "decision_owner": null,
+          "winner": null,
+          "win_reason": null,
+          "players": [
+            {
+              "player_id": 0,
+              "resources": {
+                "green": 0,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [3],
+              "hand_count": 0
+            },
+            {
+              "player_id": 1,
+              "resources": {
+                "green": 0,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [0],
+              "hand_count": 1
+            }
+          ],
+          "hand": [],
+          "suspended_card_ids": [],
+          "draw_price": 1,
+          "traded_distributors": false,
+          "resource_limit": 10,
+          "trade_rate": 4,
+          "distributor_capacity": 3,
+          "draw_pile_count": 33,
+          "discard_count": 0,
+          "own_pending_decision": null
+        },
+        {
+          "player_id": 1,
+          "phase": "play",
+          "turn_number": 1,
+          "active_player": 1,
+          "decision_owner": null,
+          "winner": null,
+          "win_reason": null,
+          "players": [
+            {
+              "player_id": 0,
+              "resources": {
+                "green": 0,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [3],
+              "hand_count": 0
+            },
+            {
+              "player_id": 1,
+              "resources": {
+                "green": 0,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [0],
+              "hand_count": 1
+            }
+          ],
+          "hand": [1],
+          "suspended_card_ids": [],
+          "draw_price": 13,
+          "traded_distributors": false,
+          "resource_limit": 10,
+          "trade_rate": 4,
+          "distributor_capacity": 3,
+          "draw_pile_count": 33,
+          "discard_count": 0,
+          "own_pending_decision": null
+        }
+      ]
+    },
+    {
+      "id": "S06-V001-MAXIMUM-TURN",
+      "contract_id": "S04-DERIVED-TURN-001",
+      "authority_class": "numeric_envelope_issue87",
+      "authority_record": "issue72",
+      "source_refs": [
+        {
+          "scenario_id": "S01-TURN-002",
+          "steps": [1],
+          "use": "bounded source comparison/projection; exclusions recorded in ledger"
+        }
+      ],
+      "projection": "Synthetic first post-prefix handoff anchors current round2147483647; this is not a full turn transcript. Counter convention is the recorded working assumption, not an additional PD-002 ruling.",
+      "random_source_kind": "seeded",
+      "facade": true,
+      "initial_state": {
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
+        "phase": "play",
+        "turn_number": 2147483647,
+        "active_player": 1,
+        "deck": [
+          1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+          21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 32, 33, 34, 35, 31
+        ],
+        "discard": [],
+        "players": [
+          {
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [],
+            "active_card_ids": [0],
+            "suspended_card_ids": [],
+            "draw_price": 1,
+            "traded_distributors": false
+          },
+          {
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [],
+            "active_card_ids": [3],
+            "suspended_card_ids": [],
+            "draw_price": 1,
+            "traded_distributors": false
+          }
+        ],
+        "random_source": {
+          "algorithm": "xorshift32_v1",
+          "cursor": "00000001"
+        },
+        "history": [
+          {
+            "event": "game_started",
+            "turn_number": 1,
+            "active_player": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 0,
+            "card_id": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 1,
+            "card_id": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 0,
+            "count": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 1,
+            "count": 3
+          },
+          {
+            "event": "income_collected",
+            "player_id": 0,
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            }
+          },
+          {
+            "event": "turn_changed",
+            "from_player": 0,
+            "to_player": 1,
+            "turn_number": 2147483647
+          },
+          {
+            "event": "income_collected",
+            "player_id": 1,
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            }
+          }
+        ],
+        "winner": null,
+        "win_reason": null,
+        "pending_decision": null
+      },
+      "steps": [
+        {
+          "command": {
+            "player_id": 1,
+            "command": "end_turn"
+          },
+          "expected_rejection": {
+            "code": "invalid_state",
+            "field": "turn_number"
+          },
+          "policy": false,
+          "expected_views": [
+            {
+              "player_id": 0,
+              "phase": "play",
+              "turn_number": 2147483647,
+              "active_player": 1,
+              "decision_owner": null,
+              "winner": null,
+              "win_reason": null,
+              "players": [
+                {
+                  "player_id": 0,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [0],
+                  "hand_count": 0
+                },
+                {
+                  "player_id": 1,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [3],
+                  "hand_count": 0
+                }
+              ],
+              "hand": [],
+              "suspended_card_ids": [],
+              "draw_price": 1,
+              "traded_distributors": false,
+              "resource_limit": 10,
+              "trade_rate": 4,
+              "distributor_capacity": 3,
+              "draw_pile_count": 34,
+              "discard_count": 0,
+              "own_pending_decision": null
+            },
+            {
+              "player_id": 1,
+              "phase": "play",
+              "turn_number": 2147483647,
+              "active_player": 1,
+              "decision_owner": null,
+              "winner": null,
+              "win_reason": null,
+              "players": [
+                {
+                  "player_id": 0,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [0],
+                  "hand_count": 0
+                },
+                {
+                  "player_id": 1,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [3],
+                  "hand_count": 0
+                }
+              ],
+              "hand": [],
+              "suspended_card_ids": [],
+              "draw_price": 1,
+              "traded_distributors": false,
+              "resource_limit": 10,
+              "trade_rate": 4,
+              "distributor_capacity": 3,
+              "draw_pile_count": 34,
+              "discard_count": 0,
+              "own_pending_decision": null
+            }
+          ]
+        }
+      ],
+      "initial_views": [
+        {
+          "player_id": 0,
+          "phase": "play",
+          "turn_number": 2147483647,
+          "active_player": 1,
+          "decision_owner": null,
+          "winner": null,
+          "win_reason": null,
+          "players": [
+            {
+              "player_id": 0,
+              "resources": {
+                "green": 0,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [0],
+              "hand_count": 0
+            },
+            {
+              "player_id": 1,
+              "resources": {
+                "green": 0,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [3],
+              "hand_count": 0
+            }
+          ],
+          "hand": [],
+          "suspended_card_ids": [],
+          "draw_price": 1,
+          "traded_distributors": false,
+          "resource_limit": 10,
+          "trade_rate": 4,
+          "distributor_capacity": 3,
+          "draw_pile_count": 34,
+          "discard_count": 0,
+          "own_pending_decision": null
+        },
+        {
+          "player_id": 1,
+          "phase": "play",
+          "turn_number": 2147483647,
+          "active_player": 1,
+          "decision_owner": null,
+          "winner": null,
+          "win_reason": null,
+          "players": [
+            {
+              "player_id": 0,
+              "resources": {
+                "green": 0,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [0],
+              "hand_count": 0
+            },
+            {
+              "player_id": 1,
+              "resources": {
+                "green": 0,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [3],
+              "hand_count": 0
+            }
+          ],
+          "hand": [],
+          "suspended_card_ids": [],
+          "draw_price": 1,
+          "traded_distributors": false,
+          "resource_limit": 10,
+          "trade_rate": 4,
+          "distributor_capacity": 3,
+          "draw_pile_count": 34,
+          "discard_count": 0,
+          "own_pending_decision": null
+        }
+      ]
+    },
+    {
+      "id": "S06-V001-INITIAL-DECK36",
+      "authority_class": "numeric_envelope_issue87",
+      "initial_state": {
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
+        "phase": "awaiting_opening",
+        "turn_number": 0,
+        "active_player": null,
+        "deck": [
+          0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+          20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35
+        ],
+        "discard": [],
+        "players": [
+          {
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [],
+            "active_card_ids": [],
+            "suspended_card_ids": [],
+            "draw_price": 1,
+            "traded_distributors": false
+          },
+          {
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [],
+            "active_card_ids": [],
+            "suspended_card_ids": [],
+            "draw_price": 1,
+            "traded_distributors": false
+          }
+        ],
+        "random_source": {
+          "algorithm": "xorshift32_v1",
+          "cursor": "00000001"
+        },
+        "history": [],
+        "winner": null,
+        "win_reason": null,
+        "pending_decision": null
+      },
+      "steps": [
+        {
+          "command": {
+            "player_id": 0,
+            "command": "collect_income"
+          },
+          "policy": false,
+          "expected_rejection": {
+            "code": "invalid_actor",
+            "field": "player_id"
+          },
+          "expected_views": [
+            {
+              "player_id": 0,
+              "phase": "awaiting_opening",
+              "turn_number": 0,
+              "active_player": null,
+              "decision_owner": null,
+              "winner": null,
+              "win_reason": null,
+              "players": [
+                {
+                  "player_id": 0,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [],
+                  "hand_count": 0
+                },
+                {
+                  "player_id": 1,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [],
+                  "hand_count": 0
+                }
+              ],
+              "hand": [],
+              "suspended_card_ids": [],
+              "draw_price": 1,
+              "traded_distributors": false,
+              "resource_limit": 10,
+              "trade_rate": 4,
+              "distributor_capacity": 3,
+              "draw_pile_count": 36,
+              "discard_count": 0,
+              "own_pending_decision": null
+            },
+            {
+              "player_id": 1,
+              "phase": "awaiting_opening",
+              "turn_number": 0,
+              "active_player": null,
+              "decision_owner": null,
+              "winner": null,
+              "win_reason": null,
+              "players": [
+                {
+                  "player_id": 0,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [],
+                  "hand_count": 0
+                },
+                {
+                  "player_id": 1,
+                  "resources": {
+                    "green": 0,
+                    "blue": 0,
+                    "black": 0,
+                    "white": 0,
+                    "yellow": 0,
+                    "purple": 0
+                  },
+                  "active_card_ids": [],
+                  "hand_count": 0
+                }
+              ],
+              "hand": [],
+              "suspended_card_ids": [],
+              "draw_price": 1,
+              "traded_distributors": false,
+              "resource_limit": 10,
+              "trade_rate": 4,
+              "distributor_capacity": 3,
+              "draw_pile_count": 36,
+              "discard_count": 0,
+              "own_pending_decision": null
+            }
+          ]
+        }
+      ],
+      "initial_views": [
+        {
+          "player_id": 0,
+          "phase": "awaiting_opening",
+          "turn_number": 0,
+          "active_player": null,
+          "decision_owner": null,
+          "winner": null,
+          "win_reason": null,
+          "players": [
+            {
+              "player_id": 0,
+              "resources": {
+                "green": 0,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [],
+              "hand_count": 0
+            },
+            {
+              "player_id": 1,
+              "resources": {
+                "green": 0,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [],
+              "hand_count": 0
+            }
+          ],
+          "hand": [],
+          "suspended_card_ids": [],
+          "draw_price": 1,
+          "traded_distributors": false,
+          "resource_limit": 10,
+          "trade_rate": 4,
+          "distributor_capacity": 3,
+          "draw_pile_count": 36,
+          "discard_count": 0,
+          "own_pending_decision": null
+        },
+        {
+          "player_id": 1,
+          "phase": "awaiting_opening",
+          "turn_number": 0,
+          "active_player": null,
+          "decision_owner": null,
+          "winner": null,
+          "win_reason": null,
+          "players": [
+            {
+              "player_id": 0,
+              "resources": {
+                "green": 0,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [],
+              "hand_count": 0
+            },
+            {
+              "player_id": 1,
+              "resources": {
+                "green": 0,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 0
+              },
+              "active_card_ids": [],
+              "hand_count": 0
+            }
+          ],
+          "hand": [],
+          "suspended_card_ids": [],
+          "draw_price": 1,
+          "traded_distributors": false,
+          "resource_limit": 10,
+          "trade_rate": 4,
+          "distributor_capacity": 3,
+          "draw_pile_count": 36,
           "discard_count": 0,
           "own_pending_decision": null
         }

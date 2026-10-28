@@ -51,6 +51,60 @@ type t = {
 
 type observation = { view : t; legal_commands : Command.t list }
 
+(* A coarse redacted-data envelope, not game-state admission. Bound components
+   before sums and sequence lengths before any policy count-derived arithmetic. *)
+let validate (view : t) =
+  let actor id = id = 0 || id = 1 in
+  let card id = id >= 0 && id < 36 && Option.is_some (Cards.find id) in
+  let sequence ids =
+    let rec bounded remaining = function
+      | [] -> true
+      | _ when remaining = 0 -> false
+      | id :: rest -> card id && bounded (remaining - 1) rest
+    in
+    bounded 36 ids
+  in
+  let optional predicate = function None -> true | Some x -> predicate x in
+  let range upper n = n >= 0 && n <= upper in
+  let public (p : public_player) =
+    Resource_bank.valid ~max_total:26 p.resources
+    && range 8 p.hand_count && sequence p.active_card_ids
+  in
+  let players =
+    match view.players with
+    | [ first; second ] ->
+        first.player_id = 0 && second.player_id = 1 && public first
+        && public second
+    | _ -> false
+  in
+  let pending = function
+    | Draw_choice ids -> sequence ids
+    | Cash_legit id -> card id
+    | Trim_bank | Post_action_trim -> true
+    | Interception { attacker_id; operator_id; target_ids } ->
+        actor attacker_id && card operator_id && sequence target_ids
+  in
+  if not (actor view.player_id) then
+    Error (Command.reject Invalid_actor "player_id")
+  else if
+    players
+    && optional actor view.active_player
+    && optional actor view.decision_owner
+    && optional actor view.winner
+    && range 2147483647 view.turn_number
+    && view.draw_price >= 1 && view.draw_price <= 13
+    && List.mem view.resource_limit [ 10; 12 ]
+    && List.mem view.trade_rate [ 2; 4 ]
+    && List.mem view.distributor_capacity [ 3; 6; 9; 12 ]
+    && range 36 view.draw_pile_count
+    && range 36 view.discard_count
+    && view.draw_pile_count + view.discard_count <= 36
+    && sequence view.hand
+    && sequence view.suspended_card_ids
+    && optional pending view.own_pending_decision
+  then Ok ()
+  else Error (Command.reject Malformed_command "policy_observation")
+
 let observe state ~player_id =
   if player_id <> 0 && player_id <> 1 then
     Error (Command.reject Invalid_actor "player_id")
@@ -374,5 +428,7 @@ let observation_of_value value =
             | _ -> raise (Decode_error "command"))
           (array (field "legal_commands" outer))
       in
-      Ok { view; legal_commands = commands }
+      match validate view with
+      | Error rejection -> Error rejection
+      | Ok () -> Ok { view; legal_commands = commands }
   with Decode_error _ -> malformed ()
