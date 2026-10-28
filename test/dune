@@ -39,6 +39,7 @@
   setup_parity.json
   economy_parity.json
   effects_parity.json
+  policy_parity.json
   simulation_replay.jsonl))
 
 (library
@@ -111,3 +112,34 @@
   (with-stdout-to
    %{targets}
    (run %{exe:simulation_test.exe}))))
+
+(library
+ (name policy_fixture)
+ (modules policy_fixture)
+ (libraries city_engine native_json economy_fixture yojson)
+ (modes native))
+
+(test
+ (name policy_test)
+ (modules policy_test)
+ (libraries city_engine native_json economy_fixture policy_fixture yojson)
+ (modes native)
+ (deps
+  ../tests/policy/scenarios.json
+  ../tests/characterization/scenarios.json))
+
+(executable
+ (name policy_parity)
+ (modules policy_parity)
+ (libraries policy_fixture yojson)
+ (modes native))
+
+(rule
+ (targets policy_parity.json)
+ (deps
+  ../tests/policy/scenarios.json
+  ../tests/characterization/scenarios.json)
+ (action
+  (with-stdout-to
+   %{targets}
+   (run %{exe:policy_parity.exe}))))

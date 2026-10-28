@@ -269,4 +269,59 @@ declare module "@city-of-vice/engine" {
   ): string;
   /** Validates this slice's modular snapshot only; no storage or legacy migration. */
   export function validate_state(state_json: string): string;
+
+  export type Policy_pending =
+    | { decision: "draw_discard"; card_ids: number[] }
+    | { decision: "legit_cash"; drawn_card_id: number }
+    | { decision: "trim" | "post_action_trim" }
+    | {
+        decision: "intercept";
+        attacker_id: number;
+        operator_id: number;
+        target_ids: number[];
+      };
+  export interface Player_view {
+    player_id: number;
+    phase: Engine_state["phase"];
+    turn_number: number;
+    active_player: number | null;
+    decision_owner: number | null;
+    winner: number | null;
+    win_reason: Win_reason | null;
+    players: {
+      player_id: number;
+      resources: Setup_player["resources"];
+      active_card_ids: number[];
+      hand_count: number;
+    }[];
+    hand: number[];
+    suspended_card_ids: number[];
+    draw_price: number;
+    traded_distributors: boolean;
+    resource_limit: number;
+    trade_rate: number;
+    distributor_capacity: number;
+    draw_pile_count: number;
+    discard_count: number;
+    own_pending_decision: Policy_pending | null;
+  }
+  export interface Player_observation {
+    view: Player_view;
+    legal_commands: Engine_command[];
+  }
+  export interface Policy_rejected {
+    status: "rejected";
+    rejection: { code: Rejection_code; field: string };
+  }
+  export type Player_observation_result =
+    { status: "accepted"; observation: Player_observation } | Policy_rejected;
+  export type Heuristic_proposal_result =
+    { status: "accepted"; command: Engine_command | null } | Policy_rejected;
+  /** Trusted projection; only the redacted observation is passed to policy. */
+  export function player_observation(
+    state_json: string,
+    player_json: string,
+  ): string;
+  /** One proposal only. Submit with the intended actor through perform_command. */
+  export function heuristic_proposal(observation_json: string): string;
 }

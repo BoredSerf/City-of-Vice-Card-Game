@@ -48,7 +48,10 @@ rule corrections remain provisional pending human acceptance. See
 [the effects guide](docs/S05_EFFECTS.md) for the new commands, defender decisions,
 terminal state and complete seeded-game checks, and
 [the economy guide](docs/S04_ECONOMY.md) for prior commands and provenance.
-AI, storage and a playable modular UI remain later work. See
+The pure heuristic now proposes one legal command from a redacted immutable
+player view; see [the policy guide](docs/S06_POLICY.md) for the neutral boundary,
+source priorities, provisional crew corrections and native/generated evidence.
+Storage and a playable modular UI remain later work. See
 [the setup guide](docs/S03_SETUP.md) for the API, native/scenario and generated
 fixtures, exact randomness contract, and scope limits. The web shell still shows
 the S02 probe; continue using root `index.html` to play.
