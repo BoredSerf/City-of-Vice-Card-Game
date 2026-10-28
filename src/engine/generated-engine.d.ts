@@ -257,7 +257,7 @@ declare module "@city-of-vice/engine" {
 
   /** Seed/cursor: exactly eight lowercase hex digits, excluding all-zero. */
   export function create_session(seed: string): string;
-  /** Command JSON adds player_id to Setup_command. Rejection preserves input bytes. */
+  /** Command JSON adds player_id to any Engine_command. Rejection preserves input bytes. */
   export function perform_command(
     state_json: string,
     command_json: string,
