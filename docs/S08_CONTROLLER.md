@@ -5,8 +5,8 @@ rival (1). The OCaml engine still owns rules, legal choices, pending owners,
 versions, admission, income and outcomes. The narrow `src/engine/index.ts`
 adapter decodes the existing six-operation JSON facade; it neither repairs saves
 nor implements a second state validator. UI animation, timing and dialog state
-belong outside domain state. The normal web entry still serves the S02 probe;
-root `index.html` remains the playable prototype. S09 supplies the modular UI.
+belong outside domain state. [S09's normal browser UI](S09_BROWSER.md) now consumes
+this controller; root `index.html` remains the separate playable prototype.
 
 ## Consumer API and trust
 

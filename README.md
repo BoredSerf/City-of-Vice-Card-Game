@@ -22,7 +22,7 @@ All game code, styling, and artwork are embedded in `index.html`. No installatio
 
 This is a playtesting prototype; balance and AI still need playtesting. Reloading returns to the main menu, where an unfinished saved game can be resumed. Starting a new game replaces that saved game, while earned achievements and the win streak remain stored in the browser. No open-source license is assigned by this package.
 
-## Modular development foundation
+## Modular browser application
 
 The prerequisite foundation has independent technical verification, including
 successful hosted bootstrap and aggregate checks. This combined S01/S02 source
@@ -33,7 +33,7 @@ The separate S02 foundation uses OCaml/Melange, TypeScript, Vite, and real-brows
 smoke tests. With Node 24.22.1 (bundled npm 11.19.1), opam 2.6.1, and the documented
 system prerequisites, run `npm run bootstrap`, explicitly install the test browser
 with `npm run browser:install`, then run `npm run verify`. After Melange compilation,
-`npm run dev` serves the foundation probe and `npm run build:web` produces its
+`npm run dev` serves the modular game and `npm run build:web` produces its
 backend-free static site in `dist/`.
 
 The aggregate includes S01's original/validator tests and explicit
@@ -58,12 +58,17 @@ The modular controller now routes human commands and single rival steps through
 that facade, with safe local save/resume and explicit rejected-save replacement.
 See [the controller guide](docs/S08_CONTROLLER.md) for its direct-return API,
 storage failure/recovery rules and real-browser reload method.
-A playable modular UI remains later work. See
+The framework-free modular UI now supports opening choices, the semantic board,
+all offered actions and required decisions, rival recap acknowledgement, session
+log, safe save warnings and actual victory/defeat. See
+[the playable browser guide](docs/S09_BROWSER.md) for controls, recovery and checks.
+Artwork, gallery/rules/rich presentation parity, the full accessibility matrix
+and standalone distribution remain later work. See
 [the setup guide](docs/S03_SETUP.md) for the API, native/scenario and generated
-fixtures, exact randomness contract, and scope limits. The web shell still shows
-the S02 probe; continue using root `index.html` to play.
+fixtures, exact randomness contract, and scope limits. Root `index.html` remains
+the separate playable prototype and is not imported by the modular client.
 
 See [the foundation guide](docs/S02_FOUNDATION.md) for prerequisites, architecture,
 locked dependencies, individual checks, and remaining CI/integration acceptance
-gates. The foundation does not implement gameplay; continue using root `index.html`
-for the current prototype. No open-source license has been assigned.
+gates. The original toolchain probe remains a contract diagnostic; the normal
+website uses the shared engine/controller/UI. No open-source license has been assigned.
