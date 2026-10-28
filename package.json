@@ -13,7 +13,7 @@
     "browser:install": "node scripts/install-browser.mjs",
     "dev": "vite --host 127.0.0.1",
     "format:ocaml": "node scripts/opam.mjs dune build -j 1 @fmt",
-    "format:web": "prettier --check package.json tsconfig.json '*config.ts' 'scripts/*.mjs' 'src/**/*.ts' 'web/**/*.{html,ts}' 'tests/contract/**/*.ts' 'tests/integration/**/*.ts' 'tests/browser/**/*.{html,ts}' 'tests/economy/*.json' 'tests/effects/*.json' 'tests/policy/*.json' docs/S02_FOUNDATION.md docs/S03_SETUP.md docs/S04_ECONOMY.md docs/S05_EFFECTS.md docs/S06_POLICY.md docs/S07_FACADE.md docs/S08_CONTROLLER.md .github/workflows/verify.yml",
+    "format:web": "prettier --check package.json tsconfig.json '*config.ts' 'scripts/*.mjs' 'src/**/*.{ts,css}' 'web/**/*.{html,ts}' 'tests/contract/**/*.ts' 'tests/integration/**/*.ts' 'tests/browser/**/*.{html,ts}' 'tests/economy/*.json' 'tests/effects/*.json' 'tests/policy/*.json' docs/S02_FOUNDATION.md docs/S03_SETUP.md docs/S04_ECONOMY.md docs/S05_EFFECTS.md docs/S06_POLICY.md docs/S07_FACADE.md docs/S08_CONTROLLER.md docs/S09_BROWSER.md .github/workflows/verify.yml",
     "format:check": "npm run format:ocaml && npm run format:web",
     "build:native": "node scripts/opam.mjs dune build -j 1 test/foundation_test.exe test/setup_test.exe test/setup_parity.exe test/economy_test.exe test/economy_parity.exe test/effects_test.exe test/effects_parity.exe test/policy_test.exe test/policy_parity.exe test/simulation_test.exe",
     "build:melange": "node scripts/opam.mjs dune build -j 1 @melange",

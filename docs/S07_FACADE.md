@@ -50,10 +50,11 @@ the same Vite defaults as the normal web build; review both configurations when
 those defaults or explicit choices change.
 
 This module is a verification artifact. The normal `dist/` build and development/
-built-static browser probe checks remain separate. S08's controller and storage
+built-static playable-browser checks remain separate. S08's controller and storage
 integration are described in [the controller guide](S08_CONTROLLER.md). Gameplay
-UI, deployment and runtime services remain outside this facade method. Use root
-`index.html` to play the existing prototype.
+UI verification is described in [the browser guide](S09_BROWSER.md); deployment
+and runtime services remain outside this facade method. Root `index.html` remains
+the separate prototype.
 
 ## Run the method
 

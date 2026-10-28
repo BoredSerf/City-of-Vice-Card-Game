@@ -1,5 +1,6 @@
-import { probe } from "@city-of-vice/engine";
+import { mount_game } from "../src/ui/app.ts";
+import "../src/ui/styles.css";
 
-const status = document.querySelector('[role="status"]');
-if (!status) throw new Error("Missing foundation status element");
-status.textContent = probe("S02");
+const root = document.querySelector<HTMLElement>("#game");
+if (!root) throw Error("Missing game root");
+mount_game(root);

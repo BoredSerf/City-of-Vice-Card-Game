@@ -1,0 +1,127 @@
+:root {
+  font-family: system-ui, sans-serif;
+  color: #efe9dd;
+  background: #182626;
+  color-scheme: dark;
+  line-height: 1.5;
+}
+body {
+  margin: 0;
+}
+.game_shell {
+  max-width: 76rem;
+  margin: auto;
+  padding: 1rem 1.5rem 3rem;
+}
+h1 {
+  color: #e0b970;
+  letter-spacing: 0.04em;
+}
+h2 {
+  padding-block: 0.4rem;
+  border-bottom: 1px solid #76928a;
+}
+section {
+  margin-block: 1rem;
+}
+button,
+select {
+  font: inherit;
+  min-height: 2.75rem;
+  margin: 0.25rem;
+  padding: 0.45rem 0.8rem;
+  border: 1px solid #96ada3;
+  border-radius: 0.3rem;
+  background: #304640;
+  color: #fff8e9;
+}
+button {
+  cursor: pointer;
+}
+button:hover {
+  background: #415e54;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+:focus-visible {
+  outline: 3px solid #ffd583;
+  outline-offset: 3px;
+}
+label {
+  display: block;
+  margin-block: 0.5rem;
+}
+select {
+  display: block;
+  max-width: 100%;
+}
+fieldset {
+  border: 1px solid #76928a;
+  margin-block: 1rem;
+}
+.board {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  gap: 1rem;
+}
+.board section,
+.notice,
+.live_status {
+  background: #223530;
+  padding: 0.75rem;
+  border-radius: 0.4rem;
+}
+.cards {
+  display: grid;
+  gap: 0.5rem;
+  padding-left: 1.5rem;
+}
+.cards li {
+  padding: 0.4rem;
+  border-bottom: 1px solid #52695d;
+}
+.resource_bank {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.resource {
+  padding: 0.3rem 0.5rem;
+  border: 1px solid #a3afa7;
+  border-radius: 0.25rem;
+}
+.resource dd {
+  margin: 0;
+  font-weight: bold;
+}
+.resource.green {
+  border-color: #8bd0a0;
+}
+.resource.blue {
+  border-color: #8ac4f3;
+}
+.resource.black {
+  border-color: #aaa;
+}
+.resource.white {
+  border-color: #fff;
+}
+.resource.yellow {
+  border-color: #f2d579;
+}
+.resource.purple {
+  border-color: #d3a2ed;
+}
+.live_status:empty {
+  display: none;
+}
+@media (max-width: 38rem) {
+  .game_shell {
+    padding-inline: 0.75rem;
+  }
+  button {
+    max-width: 100%;
+  }
+}

@@ -102,23 +102,26 @@ and locks. No generated JavaScript is copied or edited by hand.
 product-copy decision. It imports no browser, storage, timer, network, UI, or
 Melange APIs.
 
-`engine_js/adapter.ml` exports that operation through Melange. Dune emits actual ES
+`engine_js/adapter.ml` retains that diagnostic alongside the later game facade. Dune emits actual ES
 modules at `_build/default/engine_js/generated/engine_js/adapter.js`; Vite and
 Vitest aliases resolve to that output. The maintained declaration in
-`src/engine/generated-engine.d.ts` exposes only `probe(label: string): string`.
-The contract suite checks ordinary string values and supplied labels using
-the generated module.
+`src/engine/generated-engine.d.ts` now exposes the seven-function boundary described
+in [S07](S07_FACADE.md). The original probe contract still checks ordinary string
+values and supplied labels using the generated module.
 
-The framework-free `web/index.html` and `web/main.ts` display the result through
-TypeScript and the real DOM. Vite builds only that separate shell into `dist/`.
-Neither the playable prototype nor its artwork is imported. The output has no
-backend or runtime package download.
+The framework-free `web/index.html` and `web/main.ts` now mount the playable
+[S09 UI](S09_BROWSER.md), consuming the real engine through the S08 controller.
+Vite builds that application into `dist/`. Neither the playable prototype nor its
+artwork is imported. The output has no backend or runtime package download.
 
 The browser smoke uses Vitest's Node runner and Playwright against the actual
 development entry and production static build, sequentially with fresh contexts.
-Both must display the OCaml result without uncaught page errors or non-local
-requests. Non-local requests are recorded and blocked. There is no second
-component-test application or simulated DOM.
+Both now exercise real opening/actions/rival work, reload/Resume and actual
+finishing transitions without uncaught page errors or non-local requests. This
+replaces probe-only product assertions while retaining engine-to-DOM proof.
+Non-local requests are recorded and blocked. Additional test-only capability
+composition covers UI faults/owners; it does not replace normal built-entry proof.
+S08's controller/storage browser test remains separate. No simulated DOM is used.
 
 ## Verification entry points
 
@@ -142,8 +145,8 @@ requires the production build first.
 | Static production build                                              | `npm run build:web`             |
 | Development and built-static browser smoke                           | `npm run test:browser`          |
 
-After `npm run build:melange`, `npm run dev` serves the foundation shell on
-loopback. Continue opening root `index.html` to play the current prototype.
+After `npm run build:melange`, `npm run dev` serves the modular game on loopback.
+Root `index.html` still opens the separate prototype.
 
 The prototype command retains Node's `tests/*.test.cjs` entry point and now runs
 the 16 original tests plus 22 S01 validator tests. The separate
