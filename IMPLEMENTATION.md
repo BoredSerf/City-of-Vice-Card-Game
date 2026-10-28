@@ -127,8 +127,8 @@ must not silently broaden the accepted MVP.
 | S05 | Implement card effects, operators, invariants, and victory | S04 | P0 | review |
 | S06 | Put the heuristic rival behind the neutral player boundary | S05 | P0 | review |
 | S07 | Stabilize and verify the Melange-to-TypeScript facade | S02, S06 | P0 | review |
-| S08 | Add the application controller and safe local persistence | S07 | P0 | in_progress |
-| S09 | Deliver the complete playable browser flow | S08 | P0 | planned |
+| S08 | Add the application controller and safe local persistence | S07 | P0 | review |
+| S09 | Deliver the complete playable browser flow | S08 | P0 | in_progress |
 | S10 | Reach user-facing parity with the prototype | S09 | P0 | planned |
 | S11 | Verify browser accessibility, responsiveness, and resume flows | S10 | P0 | planned |
 | S12 | Produce equivalent static-site and standalone artifacts | S11 | P0 | planned |
