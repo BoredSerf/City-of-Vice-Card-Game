@@ -17,5 +17,7 @@
   card_action
   state
   setup
-  engine)
+  engine
+  player_view
+  player_policy)
  (modes byte native melange))

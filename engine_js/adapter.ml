@@ -120,3 +120,63 @@ let legal_commands state_json player_json =
                         (Engine.legal_commands state ~player_id)) );
                ])
       | _ -> rejected Null (Command.reject Invalid_actor "player_id"))
+
+(* These two results are policy-facing. Never reuse the trusted full-state
+   accepted/rejected envelopes here. *)
+let policy_rejected rejection =
+  encode
+    (Object
+       [
+         ("status", String "rejected");
+         ("rejection", Command.rejection_to_value rejection);
+       ])
+
+let player_observation state_json player_json =
+  match decode_state state_json with
+  | Error rejection -> policy_rejected rejection
+  | Ok state -> (
+      let actor =
+        match parse player_json with
+        | Ok value -> (
+            try Some (Wire_value.int value)
+            with Wire_value.Decode_error _ -> None)
+        | Error () -> None
+      in
+      match actor with
+      | None -> policy_rejected (Command.reject Invalid_actor "player_id")
+      | Some player_id -> (
+          match Player_view.observe state ~player_id with
+          | Error rejection -> policy_rejected rejection
+          | Ok observation ->
+              encode
+                (Object
+                   [
+                     ("status", String "accepted");
+                     ( "observation",
+                       Player_view.observation_to_value observation );
+                   ])))
+
+let heuristic_proposal observation_json =
+  let observation =
+    match parse observation_json with
+    | Error () -> Error (Command.reject Malformed_command "policy_observation")
+    | Ok value -> Player_view.observation_of_value value
+  in
+  match observation with
+  | Error rejection -> policy_rejected rejection
+  | Ok observation -> (
+      match
+        Player_policy.propose observation.view
+          ~legal_commands:observation.legal_commands
+      with
+      | Error rejection -> policy_rejected rejection
+      | Ok command ->
+          encode
+            (Object
+               [
+                 ("status", String "accepted");
+                 ( "command",
+                   match command with
+                   | None -> Null
+                   | Some command -> Command.to_value command );
+               ]))
