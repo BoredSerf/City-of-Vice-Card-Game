@@ -125,8 +125,8 @@ must not silently broaden the accepted MVP.
 | S03 | Implement deterministic domain state and game setup | S01, S02 | P0 | review |
 | S04 | Implement turn economy, payments, drawing, and resource limits | S03 | P0 | review |
 | S05 | Implement card effects, operators, invariants, and victory | S04 | P0 | review |
-| S06 | Put the heuristic rival behind the neutral player boundary | S05 | P0 | in_progress |
-| S07 | Stabilize and verify the Melange-to-TypeScript facade | S02, S06 | P0 | planned |
+| S06 | Put the heuristic rival behind the neutral player boundary | S05 | P0 | review |
+| S07 | Stabilize and verify the Melange-to-TypeScript facade | S02, S06 | P0 | in_progress |
 | S08 | Add the application controller and safe local persistence | S07 | P0 | planned |
 | S09 | Deliver the complete playable browser flow | S08 | P0 | planned |
 | S10 | Reach user-facing parity with the prototype | S09 | P0 | planned |
