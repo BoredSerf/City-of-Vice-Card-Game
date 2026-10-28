@@ -10,7 +10,7 @@ export default defineConfig({
     },
   },
   test: {
-    include: ["tests/contract/**/*.test.ts"],
+    include: ["tests/contract/**/*.test.ts", "tests/integration/**/*.test.ts"],
     environment: "node",
     fileParallelism: false,
     maxWorkers: 1,

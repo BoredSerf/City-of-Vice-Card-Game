@@ -37,8 +37,9 @@ Development contracts import the actual generated adapter at
 `_build/default/engine_js/generated/engine_js/adapter.js` through
 `vitest.config.ts`. Production contracts import only the Vite-emitted
 `.cache/facade-production/adapter.mjs` through `vitest.production.config.ts`.
-Both configs run the same `tests/contract/**/*.test.ts`, serially, with no-empty
-and no-`.only` protections. There is no target fallback or mocked engine.
+Both configs run the same six `tests/contract/**/*.test.ts` suites and the S08
+`tests/integration/**/*.test.ts` suites, serially, with no-empty and no-`.only`
+protections. There is no target fallback or mocked engine.
 
 `vite.facade.config.ts` builds the generated entry in installed Vite ES library
 mode. It emits one deterministic `adapter.mjs`, bundles its dependencies, rejects
@@ -49,9 +50,10 @@ the same Vite defaults as the normal web build; review both configurations when
 those defaults or explicit choices change.
 
 This module is a verification artifact. The normal `dist/` build and development/
-built-static browser probe checks remain separate. This slice adds no controller,
-storage, gameplay UI, deployment or runtime service. Use root `index.html` to play
-the existing prototype.
+built-static browser probe checks remain separate. S08's controller and storage
+integration are described in [the controller guide](S08_CONTROLLER.md). Gameplay
+UI, deployment and runtime services remain outside this facade method. Use root
+`index.html` to play the existing prototype.
 
 ## Run the method
 

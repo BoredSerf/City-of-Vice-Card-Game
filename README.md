@@ -54,7 +54,11 @@ source priorities, provisional crew corrections and native/generated evidence.
 The complete string facade is checked against both generated development output
 and a fresh self-contained production module. See [the facade guide](docs/S07_FACADE.md)
 for both targets, structured type examples, malformed-input checks and loading controls.
-Storage and a playable modular UI remain later work. See
+The modular controller now routes human commands and single rival steps through
+that facade, with safe local save/resume and explicit rejected-save replacement.
+See [the controller guide](docs/S08_CONTROLLER.md) for its direct-return API,
+storage failure/recovery rules and real-browser reload method.
+A playable modular UI remains later work. See
 [the setup guide](docs/S03_SETUP.md) for the API, native/scenario and generated
 fixtures, exact randomness contract, and scope limits. The web shell still shows
 the S02 probe; continue using root `index.html` to play.
