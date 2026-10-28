@@ -51,6 +51,9 @@ terminal state and complete seeded-game checks, and
 The pure heuristic now proposes one legal command from a redacted immutable
 player view; see [the policy guide](docs/S06_POLICY.md) for the neutral boundary,
 source priorities, provisional crew corrections and native/generated evidence.
+The complete string facade is checked against both generated development output
+and a fresh self-contained production module. See [the facade guide](docs/S07_FACADE.md)
+for both targets, structured type examples, malformed-input checks and loading controls.
 Storage and a playable modular UI remain later work. See
 [the setup guide](docs/S03_SETUP.md) for the API, native/scenario and generated
 fixtures, exact randomness contract, and scope limits. The web shell still shows

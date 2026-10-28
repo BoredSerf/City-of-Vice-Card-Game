@@ -12,7 +12,7 @@ jobs:
   integration:
     name: integration
     runs-on: macos-15-intel
-    timeout-minutes: 60
+    timeout-minutes: 90
     env:
       OPAMJOBS: "1"
       DUNEJOBS: "1"
