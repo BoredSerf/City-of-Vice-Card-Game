@@ -120,16 +120,16 @@ must not silently broaden the accepted MVP.
 
 | Slice | Outcome | Depends on | Priority | Status |
 | --- | --- | --- | --- | --- |
-| S01 | Freeze the behavioral baseline and resolve rule discrepancies | — | P0 | review |
+| S01 | Freeze the behavioral baseline and resolve rule discrepancies | — | P0 | done |
 | S02 | Establish reproducible OCaml, TypeScript, browser, and CI foundations | — | P0 | blocked |
-| S03 | Implement deterministic domain state and game setup | S01, S02 | P0 | planned |
-| S04 | Implement turn economy, payments, drawing, and resource limits | S03 | P0 | planned |
-| S05 | Implement card effects, operators, invariants, and victory | S04 | P0 | planned |
-| S06 | Put the heuristic rival behind the neutral player boundary | S05 | P0 | planned |
-| S07 | Stabilize and verify the Melange-to-TypeScript facade | S02, S06 | P0 | planned |
-| S08 | Add the application controller and safe local persistence | S07 | P0 | planned |
-| S09 | Deliver the complete playable browser flow | S08 | P0 | planned |
-| S10 | Reach user-facing parity with the prototype | S09 | P0 | planned |
+| S03 | Implement deterministic domain state and game setup | S01, S02 | P0 | review |
+| S04 | Implement turn economy, payments, drawing, and resource limits | S03 | P0 | review |
+| S05 | Implement card effects, operators, invariants, and victory | S04 | P0 | review |
+| S06 | Put the heuristic rival behind the neutral player boundary | S05 | P0 | review |
+| S07 | Stabilize and verify the Melange-to-TypeScript facade | S02, S06 | P0 | review |
+| S08 | Add the application controller and safe local persistence | S07 | P0 | review |
+| S09 | Deliver the complete playable browser flow | S08 | P0 | review |
+| S10 | Reach user-facing parity with the prototype | S09 | P0 | review |
 | S11 | Verify browser accessibility, responsiveness, and resume flows | S10 | P0 | planned |
 | S12 | Produce equivalent static-site and standalone artifacts | S11 | P0 | planned |
 | S13 | Deploy verified artifacts to Cloudflare Pages | S12 | P0 | planned |
