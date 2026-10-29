@@ -184,6 +184,31 @@ async function resume(page: Page, state: Engine_state) {
     .getByRole("button", { name: "Resume saved game", exact: true })
     .click();
 }
+// A second explicit adoption in the same mounted UI/controller, without reset.
+async function resume_in_same_mount(
+  page: Page,
+  state: Engine_state,
+  terminal: boolean,
+) {
+  await page.getByRole("button", { name: "Main menu", exact: true }).click();
+  await page.evaluate(
+    ({ key, state }) => localStorage.setItem(key, JSON.stringify(state)),
+    { key, state },
+  );
+  await page
+    .getByRole("button", {
+      name: terminal ? "View current result" : "Continue current game",
+      exact: true,
+    })
+    .click();
+  await page.getByRole("button", { name: "Main menu", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Resume saved game", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "Resume saved game instead", exact: true })
+    .click();
+}
 async function command(page: Page, value: Engine_command) {
   await page
     .getByRole("button", {
@@ -1201,4 +1226,191 @@ test("S10-P01 own-hand, own-active, rival-active and crew inspection remain fact
     }
     expect(await page.evaluate(() => window.ui_test.stats())).toEqual(before);
     expect(await stored(page)).toBe(bytes);
+  }));
+
+test("S10-R02 retained result OK and information close cannot affect another same-mount adopted game; current acknowledgements stay UI-only", async () =>
+  with_page(async (page) => {
+    const first = fixture("S06-REUSE/S01-WIN-002"),
+      second = fixture("S06-REUSE/S05-PROV-FIXER-001/6-9");
+    await resume(page, first.initial_state);
+    await command(page, {
+      command: "use_operator",
+      operator_id: 30,
+      target_ids: [6],
+    });
+    expect(JSON.parse((await stored(page))!)).toEqual(
+      after(first.initial_state, first.steps[0]!),
+    );
+    const old_ok = await page
+      .getByRole("region", { name: "Completed results", exact: true })
+      .getByRole("button", { name: "OK", exact: true })
+      .elementHandle();
+    await page.getByRole("button", { name: "Rules", exact: true }).click();
+    const old_close = await page
+      .getByRole("button", { name: "Close information", exact: true })
+      .elementHandle();
+    if (!old_ok || !old_close)
+      throw Error("Required real acknowledgement controls missing");
+    try {
+      await resume_in_same_mount(page, second.initial_state, true);
+      await command(page, {
+        command: "use_operator",
+        operator_id: 35,
+        target_ids: [6, 9],
+      });
+      expect(JSON.parse((await stored(page))!)).toEqual(
+        after(second.initial_state, second.steps[0]!),
+      );
+      await page.getByRole("button", { name: "Rules", exact: true }).click();
+      const region = page.getByRole("region", {
+        name: "Completed results",
+        exact: true,
+      });
+      expect(await region.count()).toBe(1);
+      expect(await region.textContent()).toContain(
+        "Nero Lombardy · SUSPENDED HAND",
+      );
+      const html = await page
+          .locator("#game")
+          .evaluate((node) => node.outerHTML),
+        bytes = await stored(page),
+        stats = await page.evaluate(() => window.ui_test.stats());
+      expect(await old_ok.evaluate((node) => node.isConnected)).toBe(false);
+      await old_ok.evaluate((node) => (node as HTMLElement).click());
+      expect(await region.count()).toBe(1);
+      await old_close.evaluate((node) => (node as HTMLElement).click());
+      expect(
+        await page.locator("#game").evaluate((node) => node.outerHTML),
+      ).toBe(html);
+      expect(await stored(page)).toBe(bytes);
+      expect(await page.evaluate(() => window.ui_test.stats())).toEqual(stats);
+      expect(await measured_command(page)).toEqual([
+        first.steps[0]!.command,
+        second.steps[0]!.command,
+      ]);
+      await page
+        .getByRole("button", { name: "Close information", exact: true })
+        .click();
+      expect(
+        await page
+          .getByRole("region", { name: "Information", exact: true })
+          .count(),
+      ).toBe(0);
+      await region.getByRole("button", { name: "OK", exact: true }).click();
+      expect(await region.count()).toBe(0);
+      expect(await stored(page)).toBe(bytes);
+      expect(await page.evaluate(() => window.ui_test.stats())).toEqual(stats);
+    } finally {
+      await old_ok.dispose();
+      await old_close.dispose();
+    }
+  }));
+
+test("S10-R03 retained warning OK and recap Continue cannot acknowledge another same-mount adopted game", async () =>
+  with_page(async (page) => {
+    const entries = read<{ cases: Fixture[] }>(
+      "../presentation/rich_cases.json",
+    ).cases;
+    const first = entries.find((entry) => entry.id === "S10-WARNING-1-single")!,
+      second = entries.find((entry) => entry.id === "S10-WARNING-1-both")!;
+    expect(first).toBeDefined();
+    expect(second).toBeDefined();
+    await resume(page, first.initial_state);
+    await page.evaluate(() => window.ui_test.flush());
+    await page.evaluate(() => window.ui_test.flush());
+    const old_ok = await page
+      .getByRole("region", { name: "Business warning", exact: true })
+      .getByRole("button", { name: "OK", exact: true })
+      .elementHandle();
+    const old_continue = await page
+      .getByRole("button", { name: "Continue", exact: true })
+      .elementHandle();
+    if (!old_ok || !old_continue)
+      throw Error("Required actual warning/recap acknowledgements missing");
+    try {
+      await resume_in_same_mount(page, second.initial_state, false);
+      await page.evaluate(() => window.ui_test.flush());
+      await page.evaluate(() => window.ui_test.flush());
+      const warning = page.getByRole("region", {
+          name: "Business warning",
+          exact: true,
+        }),
+        recap = page.getByRole("region", {
+          name: "Rival actions",
+          exact: true,
+        });
+      expect(await warning.textContent()).toContain(
+        "Both empires are one business from victory",
+      );
+      expect(await recap.count()).toBe(1);
+      const html = await page
+          .locator("#game")
+          .evaluate((node) => node.outerHTML),
+        bytes = await stored(page),
+        stats = await page.evaluate(() => window.ui_test.stats());
+      expect(await old_ok.evaluate((node) => node.isConnected)).toBe(false);
+      expect(await old_continue.evaluate((node) => node.isConnected)).toBe(
+        false,
+      );
+      await old_ok.evaluate((node) => (node as HTMLElement).click());
+      await old_continue.evaluate((node) => (node as HTMLElement).click());
+      expect(
+        await page.locator("#game").evaluate((node) => node.outerHTML),
+      ).toBe(html);
+      expect(await stored(page)).toBe(bytes);
+      expect(await page.evaluate(() => window.ui_test.stats())).toEqual(stats);
+      expect(await measured_command(page)).toEqual([
+        {
+          command: "activate_card",
+          card_id: 8,
+          wildcard_payment: null,
+          player_id: 1,
+        },
+        { command: "end_turn", player_id: 1 },
+        {
+          command: "activate_card",
+          card_id: 8,
+          wildcard_payment: null,
+          player_id: 1,
+        },
+        { command: "end_turn", player_id: 1 },
+      ]);
+      await page.getByRole("button", { name: "Continue", exact: true }).click();
+      expect(await recap.count()).toBe(0);
+      await warning.getByRole("button", { name: "OK", exact: true }).click();
+      expect(await warning.count()).toBe(0);
+      expect(await stored(page)).toBe(bytes);
+      expect(await page.evaluate(() => window.ui_test.stats())).toEqual(stats);
+    } finally {
+      await old_ok.dispose();
+      await old_continue.dispose();
+    }
+  }));
+
+test("S10-R04 a retained confirmation cancellation from disposed UI performs no calls or presentation mutation", async () =>
+  with_page(async (page) => {
+    await resume(page, fixture("S01-AI-FUND-001/mirror").initial_state);
+    await page.getByRole("button", { name: "Main menu", exact: true }).click();
+    await page.getByRole("button", { name: "New game", exact: true }).click();
+    const old_cancel = await page
+      .getByRole("button", { name: "Cancel", exact: true })
+      .elementHandle();
+    if (!old_cancel) throw Error("Required confirmation cancellation missing");
+    try {
+      await page.evaluate(() => window.ui_test.reset());
+      const html = await page
+          .locator("#game")
+          .evaluate((node) => node.outerHTML),
+        bytes = await stored(page),
+        stats = await page.evaluate(() => window.ui_test.stats());
+      expect(await old_cancel.evaluate((node) => node.isConnected)).toBe(false);
+      await old_cancel.evaluate((node) => (node as HTMLElement).click());
+      expect(
+        await page.locator("#game").evaluate((node) => node.outerHTML),
+      ).toBe(html);
+      expect(await stored(page)).toBe(bytes);
+      expect(await page.evaluate(() => window.ui_test.stats())).toEqual(stats);
+    } finally {
+      await old_cancel.dispose();
+    }
   }));

@@ -142,6 +142,23 @@ export function mount_game(root: HTMLElement, options: Ui_options = {}) {
     node.addEventListener("click", action);
     return node;
   }
+  function acknowledgement(
+    label: string,
+    action: () => void,
+    parent: HTMLElement = content,
+  ) {
+    // Presentation belongs to this rendered epoch. Gameplay candidates still use
+    // current engine validation through the ordinary button path.
+    const rendered_epoch = epoch;
+    return button(
+      label,
+      () => {
+        if (disposed || epoch !== rendered_epoch) return;
+        action();
+      },
+      parent,
+    );
+  }
   function invalidate() {
     epoch++;
     cancel_task?.();
@@ -523,7 +540,7 @@ export function mount_game(root: HTMLElement, options: Ui_options = {}) {
         },
         panel,
       );
-    button(
+    acknowledgement(
       "Cancel",
       () => {
         controller.cancel();
@@ -638,7 +655,7 @@ export function mount_game(root: HTMLElement, options: Ui_options = {}) {
     const panel = element("section");
     panel.className = "information_panel";
     panel.setAttribute("aria-label", "Information");
-    button(
+    acknowledgement(
       current.human?.view.decision_owner === 0
         ? "Return to required choice"
         : "Close information",
@@ -754,7 +771,7 @@ export function mount_game(root: HTMLElement, options: Ui_options = {}) {
         "11 / 12 businesses. The engine still determines the outcome.",
         panel,
       );
-      button(
+      acknowledgement(
         "OK",
         () => {
           warning = null;
@@ -784,7 +801,7 @@ export function mount_game(root: HTMLElement, options: Ui_options = {}) {
       }
       for (const fact of result.facts) element("p", fact, panel);
     }
-    button(
+    acknowledgement(
       "OK",
       () => {
         results = [];
@@ -952,7 +969,7 @@ export function mount_game(root: HTMLElement, options: Ui_options = {}) {
       view.phase === "over" ||
       (view.decision_owner === null && view.active_player === 0);
     if (can_ack)
-      button(
+      acknowledgement(
         "Continue",
         () => {
           needs_ack = false;

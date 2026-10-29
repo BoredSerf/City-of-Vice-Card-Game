@@ -66,15 +66,16 @@ cross-tab ownership, legacy migration or atomic game/achievement transaction.
 
 ## Working differences requiring owner acceptance
 
-| Feature               | Supported behavior / comparison limit                                                                                                                                                                              |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Rules/economy         | PD-002 automatic incoming income and verified owner/whole-action/crew corrections replace obsolete reference lifecycle wording. Individual rule acceptance remains pending.                                        |
-| Art/inspection        | Seven exact payloads, normalized atlas geometry and card34 override; semantic layout rather than pixel identity. All36 public card identities remain available.                                                    |
-| Locations/choice aids | Authorized known locations, printed facts, complete selected values and actual completed destinations; hidden legit/discard membership and exact forecast/disabled-reason solver are omitted under provisional100. |
-| Results/recap         | Mandatory owners and authoritative outcomes take priority. Immediate usable OK and scoped reduced-motion CSS replace legacy delays. Provisional94 covers interrupt/ack details.                                    |
-| Restored log          | Newest30 contextual safe facts, grouping/wording may differ from legacy45 stored prose. No second history key; provisional95.                                                                                      |
-| Achievements          | New isolated schema, no legacy import, current-batch guard and honest pending/unknown failures. No durable replay deduplication; provisional99.                                                                    |
-| Final cutoff          | Working4ccb only. Final reference/ledger/deltas and human parity acceptance remain required; AC12 unsatisfied.                                                                                                     |
+| Feature                  | Supported behavior / comparison limit                                                                                                                                                                                                                                                                                                                                                                |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Rules/economy            | PD-002 automatic incoming income and verified owner/whole-action/crew corrections replace obsolete reference lifecycle wording. Individual rule acceptance remains pending.                                                                                                                                                                                                                          |
+| Art/inspection           | Seven exact payloads, normalized atlas geometry and card34 override; semantic layout rather than pixel identity. All36 public card identities remain available.                                                                                                                                                                                                                                      |
+| Opening income placement | Working4ccb index1090 shows each opening's inline `+1 <resource alias> per turn`; the current opening grid shows portrait/name and crew benefit. Resource/color and income facts remain reachable before commitment through Rules and Card gallery/inspection ([B01](../tests/browser/playable.test.ts)/[P01](../tests/browser/ui.test.ts)). This placement difference awaits AC12 owner acceptance. |
+| Locations/choice aids    | Authorized known locations, printed facts, complete selected values and actual completed destinations; hidden legit/discard membership and exact forecast/disabled-reason solver are omitted under provisional100.                                                                                                                                                                                   |
+| Results/recap            | Mandatory owners and authoritative outcomes take priority. Immediate usable OK and scoped reduced-motion CSS replace legacy delays. Provisional94 covers interrupt/ack details.                                                                                                                                                                                                                      |
+| Restored log             | Newest30 contextual safe facts, grouping/wording may differ from legacy45 stored prose. No second history key; provisional95.                                                                                                                                                                                                                                                                        |
+| Achievements             | New isolated schema, no legacy import, current-batch guard and honest pending/unknown failures. No durable replay deduplication; provisional99.                                                                                                                                                                                                                                                      |
+| Final cutoff             | Working4ccb only. Final reference/ledger/deltas and human parity acceptance remain required; AC12 unsatisfied.                                                                                                                                                                                                                                                                                       |
 
 ## Finite executable and visual method
 
@@ -104,6 +105,25 @@ UI-only OK; E03 checks actual either/both11. J04 checks current setter and missi
 final-view recovery without replay and invalidation on new adoption.
 E04 follows one actual same-game rival entry, protected return and re-entry into11;
 P01 checks factual own-hand/own-active/rival-active/crew inspection without mutation.
+R02–R04 retain detached acknowledgement nodes across real same-mount adoptions or
+disposal. The old result OK, warning OK, recap Continue, information close and
+confirmation Cancel cannot mutate new presentation or call the game/storage/awards;
+current OK/Continue/close still work. R02 uses protected WIN002 Hitman30→6 then
+Fixer35→6,9 through actual menu/Resume, without remounting or fabricated success.
+It fails on the pre-repair callback and passes with the existing epoch/disposal
+guard. Ordinary gameplay candidates still reach current engine validation (B07).
+
+Run this focused same-mount regression with the existing generated inputs/browser:
+
+```sh
+npm exec -- vitest run --config vitest.browser.config.ts tests/browser/ui.test.ts -t 'S10-R02|S10-R03|S10-R04'
+```
+
+It must preserve the new presentation's complete DOM, exact saved bytes and
+engine/game-storage/award call counts after detached old acknowledgements, while
+current acknowledgements clear their own panels. A missing fixture/control or
+unavailable browser fails the measurement; it is not a passing rejection. Existing
+S07–S09 prerequisite controls and awaited browser cleanup remain applicable.
 J05 checks unsaved current-win eligibility and explicitly admitted passive terminal
 history/render without reawarding or creating new effects.
 
