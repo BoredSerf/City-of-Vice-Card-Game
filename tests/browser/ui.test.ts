@@ -73,6 +73,15 @@ beforeAll(async () => {
   });
   await server.listen();
   origin = new URL(server.resolvedUrls!.local[0]!).origin;
+  console.info(
+    JSON.stringify({
+      browser_server: "S10-instrumented-ui",
+      stage: "listening",
+      origin,
+      node_pid: process.pid,
+      cwd: process.cwd(),
+    }),
+  );
   try {
     browser = await chromium.launch({
       headless: true,
@@ -83,6 +92,13 @@ beforeAll(async () => {
     });
   } catch (error) {
     await server.close();
+    console.info(
+      JSON.stringify({
+        browser_server: "S10-instrumented-ui",
+        stage: "closed after launch failure",
+        node_pid: process.pid,
+      }),
+    );
     throw error;
   }
 });
@@ -91,6 +107,13 @@ afterAll(async () => {
     await browser?.close();
   } finally {
     await server?.close();
+    console.info(
+      JSON.stringify({
+        browser_server: "S10-instrumented-ui",
+        stage: "closed",
+        node_pid: process.pid,
+      }),
+    );
   }
 });
 async function with_page(run: (page: Page) => Promise<void>) {

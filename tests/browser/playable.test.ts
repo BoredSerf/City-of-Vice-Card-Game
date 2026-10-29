@@ -78,6 +78,16 @@ test.each(["development", "built static"] as const)(
     try {
       if ("listen" in server) await server.listen();
       const origin = new URL(server.resolvedUrls!.local[0]!).origin;
+      console.info(
+        JSON.stringify({
+          browser_server: "S10-normal",
+          mode,
+          stage: "listening",
+          origin,
+          node_pid: process.pid,
+          cwd: process.cwd(),
+        }),
+      );
       context = await browser.newContext({
         viewport: { width: 1280, height: 900 },
       });
@@ -508,6 +518,14 @@ test.each(["development", "built static"] as const)(
         await context?.close();
       } finally {
         await server.close();
+        console.info(
+          JSON.stringify({
+            browser_server: "S10-normal",
+            mode,
+            stage: "closed",
+            node_pid: process.pid,
+          }),
+        );
       }
     }
   },

@@ -105,6 +105,15 @@ test("S10-R01 source-bound reference renderer compares ordinary menu/rules/openi
   try {
     await server.listen();
     const origin = new URL(server.resolvedUrls!.local[0]!).origin;
+    console.info(
+      JSON.stringify({
+        browser_server: "S10-reference",
+        stage: "listening",
+        origin,
+        node_pid: process.pid,
+        cwd: process.cwd(),
+      }),
+    );
     browser = await chromium.launch({
       headless: true,
       chromiumSandbox: true,
@@ -158,11 +167,9 @@ test("S10-R01 source-bound reference renderer compares ordinary menu/rules/openi
         expect(await page.locator(".v-catalog-card").count()).toBe(12);
         await shot(`gallery-${n}`);
         if (process.env.CITY_UI_EVIDENCE_DIR)
-          await page
-            .locator("#v-catalog")
-            .screenshot({
-              path: `${process.env.CITY_UI_EVIDENCE_DIR}/s10-reference-crops-${n}.png`,
-            });
+          await page.locator("#v-catalog").screenshot({
+            path: `${process.env.CITY_UI_EVIDENCE_DIR}/s10-reference-crops-${n}.png`,
+          });
         if (n < 3) await page.locator("#v-next-page").click();
       }
       await page.locator('.v-catalog-card[data-id="34"]').click();
@@ -211,6 +218,13 @@ test("S10-R01 source-bound reference renderer compares ordinary menu/rules/openi
       await browser?.close();
     } finally {
       await server.close();
+      console.info(
+        JSON.stringify({
+          browser_server: "S10-reference",
+          stage: "closed",
+          node_pid: process.pid,
+        }),
+      );
     }
   }
 });
