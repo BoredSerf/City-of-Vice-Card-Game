@@ -4,7 +4,9 @@ After the [locked setup](S02_FOUNDATION.md), run `npm run dev` to play one human
 against the actual OCaml heuristic rival. `npm run build:web` produces the same
 application in `dist/`. The normal entry is `web/index.html`/`web/main.ts`; it uses
 the [S08 controller](S08_CONTROLLER.md), not the root prototype script.
-Full artwork/gallery/rules/dialog/animation parity is S10 work. S11 owns the full
+[S10](S10_PARITY.md) adds original artwork, rules/gallery/inspection, current
+results/warnings, safe restored history and isolated achievements; final reference
+acceptance remains pending. S11 owns the full
 responsive/keyboard/reduced-motion matrix; S12 owns standalone distribution.
 Root `index.html` remains a separate playable prototype. No license is assigned.
 
@@ -83,11 +85,12 @@ Acknowledgement changes UI state only: no command, policy, income, save or repla
 Actual winner/reason immediately displays victory/defeat, with recap still available.
 The UI never infers the outcome from business counts.
 
-The log is explicitly **this UI session's action log**. New game resets it; menu
-and live return retain it. Resume starts with **Game resumed**, without replaying
-stored history. S10 must reconcile persisted-log parity with the human-selected
-reference; S09 makes no history-read API or second log persistence system.
-These recap/log directions under issues94/95 remain provisional.
+The **Recent game history** display replaces S09's session-only log. It reads
+at most30 sanitized contextual facts from the currently adopted game. Resume adds
+a local **Game resumed** marker and restores facts without announcing/replaying
+them or creating recap, effects or awards. New accepted facts refresh that same
+readout once. Menu/return keeps the live lineage; another adoption resets effects.
+Issues94/95 and final parity acceptance remain provisional.
 
 Only explicit visible facts are retained. Own draws may show own card names;
 rival draws show count/source/reported price, with no identities in text,
@@ -116,16 +119,16 @@ checks. No empty/fallback/mocked-success path is allowed. Missing fixture/import
 unexpected exception or unavailable launch fails rather than becoming a passing
 rejection. Native cache reuse proves no fresh native action/120-game execution.
 
-| IDs     | Method / scope                                                                                                                                                                                                                          |
-| ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| U01–U02 | Named complete alternatives and every actual offered path at the existing literal phase/owner boundaries, both real facade targets. No independent legality search.                                                                     |
-| U03     | Literal visible expectations for all24 event tags, operator destination variants, own/rival draw boundary and unknown-tag refusal.                                                                                                      |
-| B01     | Normal development and actual built-static menu/new/opening/income/action/end/rival/ack/reload/Resume, actual human WIN001 activation8 and actual rival mirrored WIN001 finishing transition. Replaces the S02 probe-only product test. |
-| B02     | Actual meaningful DOM selections submit independently specified commands/states across human families, all5 pending forms, wildcard/Docks, hand8 and ordered targets. B01 supplies normal opening.                                      |
-| B03     | All5 rival pending forms, both inactive-owner directions, interruption/ack, one-step calls and cancellation on menu/new/resume.                                                                                                         |
-| B04     | Admitted hidden draw twins compare complete DOM/attributes/announcements/recap only while authorized visible facts agree.                                                                                                               |
-| B05/B08 | Save intentions, rejected/unknown/terminal eligibility, cancel/memory-only, consumed replacement, owned failure, recovery and unsaved live abandonment/Resume.                                                                          |
-| B06–B07 | Real forwarded-result fault timing/no replay, retained old DOM candidates/current rejection and refreshed offered controls.                                                                                                             |
+| IDs     | Method / scope                                                                                                                                                                                                                                                        |
+| ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| U01–U02 | Named complete alternatives and every actual offered path at the existing literal phase/owner boundaries, both real facade targets. No independent legality search.                                                                                                   |
+| U03     | Literal visible expectations for all24 event tags, operator destination variants, own/rival draw boundary and unknown-tag refusal.                                                                                                                                    |
+| B01     | Normal development and actual built-static menu/new/opening/income/action/end/rival/ack/reload/Resume, actual human/rival WIN001 expansion and WIN002 elimination transitions, plus S10 rich screens/assets/history/awards. Replaces the S02 probe-only product test. |
+| B02     | Actual meaningful DOM selections submit independently specified commands/states across human families, all5 pending forms, wildcard/Docks, hand8 and ordered targets. B01 supplies normal opening.                                                                    |
+| B03     | All5 rival pending forms, both inactive-owner directions, interruption/ack, one-step calls and cancellation on menu/new/resume.                                                                                                                                       |
+| B04     | Admitted hidden draw twins compare complete DOM/attributes/announcements/recap only while authorized visible facts agree.                                                                                                                                             |
+| B05/B08 | Save intentions, rejected/unknown/terminal eligibility, cancel/memory-only, consumed replacement, owned failure, recovery and unsaved live abandonment/Resume.                                                                                                        |
+| B06–B07 | Real forwarded-result fault timing/no replay, retained old DOM candidates/current rejection and refreshed offered controls.                                                                                                                                           |
 
 `tests/browser/ui.html`/`ui.ts` compose the same UI/controller with test-only seed,
 storage failures, real forwarding instrumentation and queued task delivery.

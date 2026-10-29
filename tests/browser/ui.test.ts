@@ -10,6 +10,7 @@ import type {
 } from "@city-of-vice/engine";
 import { generated_adapter } from "../../vite.config.ts";
 import { action_names, command_fields } from "../../src/ui/choices.ts";
+import { card_name } from "../../src/ui/catalog.ts";
 
 process.env.PLAYWRIGHT_BROWSERS_PATH = fileURLToPath(
   new URL("../../.cache/ms-playwright", import.meta.url),
@@ -72,6 +73,15 @@ beforeAll(async () => {
   });
   await server.listen();
   origin = new URL(server.resolvedUrls!.local[0]!).origin;
+  console.info(
+    JSON.stringify({
+      browser_server: "S10-instrumented-ui",
+      stage: "listening",
+      origin,
+      node_pid: process.pid,
+      cwd: process.cwd(),
+    }),
+  );
   try {
     browser = await chromium.launch({
       headless: true,
@@ -82,6 +92,13 @@ beforeAll(async () => {
     });
   } catch (error) {
     await server.close();
+    console.info(
+      JSON.stringify({
+        browser_server: "S10-instrumented-ui",
+        stage: "closed after launch failure",
+        node_pid: process.pid,
+      }),
+    );
     throw error;
   }
 });
@@ -90,6 +107,13 @@ afterAll(async () => {
     await browser?.close();
   } finally {
     await server?.close();
+    console.info(
+      JSON.stringify({
+        browser_server: "S10-instrumented-ui",
+        stage: "closed",
+        node_pid: process.pid,
+      }),
+    );
   }
 });
 async function with_page(run: (page: Page) => Promise<void>) {
@@ -138,6 +162,9 @@ async function install(page: Page, state: Engine_state | string | null) {
         write: false,
         command_decode: false,
         publication_after_command: false,
+        award_acquire: false,
+        award_read: false,
+        award_write: false,
       });
       window.ui_test.reset();
     },
@@ -155,6 +182,31 @@ async function resume(page: Page, state: Engine_state) {
   await install(page, state);
   await page
     .getByRole("button", { name: "Resume saved game", exact: true })
+    .click();
+}
+// A second explicit adoption in the same mounted UI/controller, without reset.
+async function resume_in_same_mount(
+  page: Page,
+  state: Engine_state,
+  terminal: boolean,
+) {
+  await page.getByRole("button", { name: "Main menu", exact: true }).click();
+  await page.evaluate(
+    ({ key, state }) => localStorage.setItem(key, JSON.stringify(state)),
+    { key, state },
+  );
+  await page
+    .getByRole("button", {
+      name: terminal ? "View current result" : "Continue current game",
+      exact: true,
+    })
+    .click();
+  await page.getByRole("button", { name: "Main menu", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Resume saved game", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "Resume saved game instead", exact: true })
     .click();
 }
 async function command(page: Page, value: Engine_command) {
@@ -594,10 +646,18 @@ test("S09-B06 pre-adoption and applied-publication faults stop scheduling withou
     expect(await page.evaluate(() => window.ui_test.queued())).toBe(0);
     expect(
       await page
-        .getByRole("region", { name: "This session's action log", exact: true })
+        .getByRole("region", { name: "Recent game history", exact: true })
         .getByRole("listitem")
         .allTextContents(),
-    ).toEqual(["Game resumed.", "You cashed Ellis Voss for 1 Blue."]);
+    ).toContain("Turn 1 · You cashed Ellis Voss for 1 Blue.");
+    const restored = await page
+      .getByRole("region", { name: "Recent game history", exact: true })
+      .getByRole("listitem")
+      .allTextContents();
+    expect(restored).toHaveLength(initial.history.length + 2);
+    expect(
+      restored.filter((fact) => fact.includes("You cashed Ellis Voss")),
+    ).toHaveLength(1);
     const before = await page.evaluate(() => window.ui_test.stats());
     await page.evaluate(() => window.ui_test.flush(true));
     expect(await page.evaluate(() => window.ui_test.stats())).toEqual(before);
@@ -712,10 +772,10 @@ test("S09-B08 acquisition failure is not absence; terminal eligibility and unsav
       .click();
     expect(
       await page
-        .getByRole("region", { name: "This session's action log", exact: true })
+        .getByRole("region", { name: "Recent game history", exact: true })
         .getByRole("listitem")
         .allTextContents(),
-    ).toEqual(["Game resumed."]);
+    ).toHaveLength(old.history.length + 1);
     const win = fixture("S06-REUSE/S01-WIN-001"),
       terminal = after(win.initial_state, win.steps[0]!);
     await install(page, terminal);
@@ -742,4 +802,615 @@ test("S09-B08 acquisition failure is not absence; terminal eligibility and unsav
     expect(JSON.parse((await stored(page))!)).toEqual(
       after(elimination.initial_state, elimination.steps[0]!),
     );
+  }));
+
+test("S10-E02 actual operator destinations, current-only results and reduced motion keep mandatory choices reachable; OK is UI-only", async () =>
+  with_page(async (page) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    const selected = [
+      ["S06-REUSE/S01-WIN-002", 0],
+      ["S06-REUSE/S05-PROV-FIXER-001/6-9", 0],
+      ["S06-REUSE/S05-PROV-FIXER-001/9-6", 0],
+      ["S06-REUSE/S05-PROV-PIPELINE-001/0-accept", 2],
+      ["S06-REUSE/S05-PROV-PIPELINE-001/1-accept", 2],
+      ["S06-REUSE/S05-PROV-PIPELINE-001/1-decline", 2],
+      ["S06-REUSE/S05-PROV-NIGHT-001", 0],
+      ["S06-REUSE/S05-PROV-NIGHT-001/mirrored", 0],
+      ["S01-RUFFIAN-001", 0],
+    ].map(([id, index]) => ({
+      entry: fixture(String(id)),
+      index: Number(index),
+    }));
+    const destinations = new Set<string>();
+    for (const { entry, index } of selected) {
+      const state = boundary(entry, index),
+        step = entry.steps[index]!;
+      await resume(page, state);
+      if (step.command.player_id === 1)
+        await page.evaluate(() => window.ui_test.flush());
+      else {
+        const { player_id: _, ...value } = step.command;
+        await command(page, value);
+      }
+      expect(JSON.parse((await stored(page))!)).toEqual(after(state, step));
+      const result = page.getByRole("region", {
+        name: "Completed results",
+        exact: true,
+      });
+      await result.waitFor();
+      expect(
+        await result.evaluate((node) => getComputedStyle(node).animationName),
+      ).toBe("none");
+      for (const event of step.expected_events ?? [])
+        if (event.event === "operator_result")
+          for (const affected of event.affected) {
+            const destination = affected.destination;
+            const stamp =
+              destination.zone === "discard"
+                ? "DISCARDED"
+                : destination.zone === "active"
+                  ? "ACTIVE"
+                  : destination.suspended
+                    ? "SUSPENDED HAND"
+                    : "RETURNED TO HAND";
+            destinations.add(stamp);
+            expect(await result.textContent()).toContain(
+              `${card_name(affected.card_id)} · ${stamp}`,
+            );
+          }
+      const bytes = await stored(page),
+        stats = await page.evaluate(() => window.ui_test.stats());
+      await result.getByRole("button", { name: "OK", exact: true }).click();
+      expect(await stored(page)).toBe(bytes);
+      expect(await page.evaluate(() => window.ui_test.stats())).toEqual(stats);
+      await page.getByRole("button", { name: "Rules", exact: true }).click();
+      expect(await page.evaluate(() => window.ui_test.stats())).toEqual(stats);
+      if (JSON.parse(bytes!).pending_decision?.player_id === 0)
+        expect(
+          await page
+            .getByRole("region", { name: "Available actions", exact: true })
+            .getByRole("button")
+            .count(),
+        ).toBeGreaterThan(0);
+    }
+    expect([...destinations].sort()).toEqual([
+      "ACTIVE",
+      "DISCARDED",
+      "RETURNED TO HAND",
+      "SUSPENDED HAND",
+    ]);
+  }));
+
+test("S10-J04 real current win setter failure retries without replay; missing final view waits for same game and new adoption discards held context", async () =>
+  with_page(async (page) => {
+    const entry = fixture("S06-REUSE/S01-WIN-002"),
+      { player_id: _, ...finish } = entry.steps[0]!.command,
+      award_key = "city-of-vice-modular-achievements-v1";
+    await resume(page, entry.initial_state);
+    await page.evaluate(() => {
+      window.ui_test.faults.award_write = true;
+    });
+    await command(page, finish);
+    expect(
+      await page.evaluate((key) => localStorage.getItem(key), award_key),
+    ).toBeNull();
+    const bytes = await stored(page);
+    await page
+      .getByRole("button", { name: "Achievements", exact: true })
+      .click();
+    expect(
+      await page
+        .getByRole("region", { name: "Achievements", exact: true })
+        .textContent(),
+    ).toContain("pending");
+    await page.evaluate(() => {
+      window.ui_test.faults.award_write = false;
+    });
+    const stats = await page.evaluate(() => window.ui_test.stats());
+    await page
+      .getByRole("button", { name: "Retry achievements", exact: true })
+      .click();
+    const recovered = await page.evaluate(
+      (key) => JSON.parse(localStorage.getItem(key)!),
+      award_key,
+    );
+    expect(recovered).toEqual({
+      schema_version: 1,
+      earned_ids: ["brutal"],
+      win_streak: 1,
+    });
+    expect(await stored(page)).toBe(bytes);
+    expect((await page.evaluate(() => window.ui_test.stats())).engine).toEqual(
+      stats.engine,
+    );
+    expect((await page.evaluate(() => window.ui_test.stats())).storage).toEqual(
+      stats.storage,
+    );
+    await page
+      .getByRole("button", { name: "Close information", exact: true })
+      .click();
+    const result = page.getByRole("region", {
+      name: "Completed results",
+      exact: true,
+    });
+    await result.getByRole("button", { name: "OK", exact: true }).click();
+    expect(
+      await page.evaluate(
+        (key) => JSON.parse(localStorage.getItem(key)!),
+        award_key,
+      ),
+    ).toEqual(recovered);
+
+    await resume(page, entry.initial_state);
+    await page.evaluate(() => {
+      window.ui_test.faults.publication_after_command = true;
+    });
+    await command(page, finish);
+    expect(await measured_command(page)).toHaveLength(1);
+    expect(
+      await page
+        .getByRole("heading", {
+          name: "Victory · You won by elimination.",
+          exact: true,
+        })
+        .count(),
+    ).toBe(1);
+    expect(
+      await page.evaluate(
+        (key) => JSON.parse(localStorage.getItem(key)!),
+        award_key,
+      ),
+    ).toEqual(recovered);
+    await page.getByRole("button", { name: "Main menu", exact: true }).click();
+    await page.evaluate(() => {
+      window.ui_test.restore_publication();
+    });
+    // Clearing the test publication fault requires a fresh same-controller snapshot, never re-adoption/replay.
+    await page
+      .getByRole("button", { name: "Continue current game", exact: true })
+      .click();
+    expect(await measured_command(page)).toHaveLength(1);
+    expect(
+      await page.evaluate(
+        (key) => JSON.parse(localStorage.getItem(key)!),
+        award_key,
+      ),
+    ).toEqual({ schema_version: 1, earned_ids: ["brutal"], win_streak: 2 });
+    await resume(page, entry.initial_state);
+    await page.evaluate(() => {
+      window.ui_test.faults.publication_after_command = true;
+    });
+    await command(page, finish);
+    await page.getByRole("button", { name: "Main menu", exact: true }).click();
+    await page.evaluate(() => window.ui_test.restore_publication());
+    await page.getByRole("button", { name: "New game", exact: true }).click();
+    await page
+      .getByRole("button", { name: "Play only in memory", exact: true })
+      .click();
+    expect(
+      await page.evaluate(
+        (key) => JSON.parse(localStorage.getItem(key)!),
+        award_key,
+      ),
+    ).toEqual({ schema_version: 1, earned_ids: ["brutal"], win_streak: 2 });
+    await page
+      .getByRole("button", { name: "Achievements", exact: true })
+      .click();
+    expect(
+      await page
+        .getByRole("region", { name: "Achievements", exact: true })
+        .textContent(),
+    ).not.toContain("awaits a matching");
+  }));
+
+test("S10-E03 actual entering11 warnings for either/both players are nonblocking and OK never writes", async () =>
+  with_page(async (page) => {
+    const warnings = read<{
+      cases: (Fixture & {
+        steps: {
+          command: Step["command"];
+          expected_business_counts: number[];
+        }[];
+      })[];
+    }>("../presentation/rich_cases.json").cases.filter((entry) =>
+      /^S10-WARNING-[01]-/.test(entry.id),
+    );
+    expect(warnings.map((entry) => entry.id)).toEqual([
+      "S10-WARNING-0-single",
+      "S10-WARNING-1-single",
+      "S10-WARNING-0-both",
+      "S10-WARNING-1-both",
+    ]);
+    for (const entry of warnings) {
+      await resume(page, entry.initial_state);
+      expect(
+        await page
+          .getByRole("region", { name: "Business warning", exact: true })
+          .count(),
+      ).toBe(0);
+      const actor = entry.steps[0]!.command.player_id;
+      if (actor === 1) await page.evaluate(() => window.ui_test.flush());
+      else
+        await command(page, {
+          command: "activate_card",
+          card_id: 8,
+          wildcard_payment: null,
+        });
+      expect(await measured_command(page)).toEqual([entry.steps[0]!.command]);
+      const state = JSON.parse((await stored(page))!) as Engine_state;
+      expect(
+        state.players.map((player) => player.active_card_ids.length),
+      ).toEqual(entry.steps[0]!.expected_business_counts);
+      expect(state.phase).toBe("play");
+      expect(state.winner).toBeNull();
+      const panel = page.getByRole("region", {
+        name: "Business warning",
+        exact: true,
+      });
+      expect(await panel.textContent()).toContain(
+        entry.id.endsWith("both")
+          ? "Both empires"
+          : actor === 0
+            ? "You are"
+            : "The rival is",
+      );
+      const stats = await page.evaluate(() => window.ui_test.stats()),
+        bytes = await stored(page);
+      await panel.getByRole("button", { name: "OK", exact: true }).click();
+      expect(await page.evaluate(() => window.ui_test.stats())).toEqual(stats);
+      expect(await stored(page)).toBe(bytes);
+    }
+  }));
+
+test("S10-J05 unsaved current finish remains eligible; explicit passive terminal admission/history/render never reawards", async () =>
+  with_page(async (page) => {
+    const entry = fixture("S06-REUSE/S01-WIN-002"),
+      { player_id: _, ...finish } = entry.steps[0]!.command,
+      award_key = "city-of-vice-modular-achievements-v1";
+    await resume(page, entry.initial_state);
+    await page.evaluate(() => {
+      window.ui_test.faults.write = true;
+    });
+    await command(page, finish);
+    expect(JSON.parse((await stored(page))!)).toEqual(entry.initial_state);
+    expect(
+      await page
+        .getByRole("region", { name: "Save status", exact: true })
+        .textContent(),
+    ).toContain("unsaved");
+    const award = await page.evaluate(
+      (key) => localStorage.getItem(key),
+      award_key,
+    );
+    expect(JSON.parse(award!)).toEqual({
+      schema_version: 1,
+      earned_ids: ["brutal"],
+      win_streak: 1,
+    });
+    await install(page, after(entry.initial_state, entry.steps[0]!));
+    await page.evaluate(() => window.ui_test.reset(true));
+    const stats = await page.evaluate(() => window.ui_test.stats());
+    await page
+      .getByRole("button", { name: "View current result", exact: true })
+      .click();
+    expect(
+      await page
+        .getByRole("heading", {
+          name: "Victory · You won by elimination.",
+          exact: true,
+        })
+        .count(),
+    ).toBe(1);
+    expect(
+      await page
+        .getByRole("region", { name: "Recent game history", exact: true })
+        .textContent(),
+    ).toContain("Victory · You won by elimination.");
+    expect(await page.locator(".current_effect,.current_outcome").count()).toBe(
+      0,
+    );
+    expect(
+      await page
+        .getByRole("region", { name: "Completed results", exact: true })
+        .count(),
+    ).toBe(0);
+    expect(
+      await page.evaluate((key) => localStorage.getItem(key), award_key),
+    ).toBe(award);
+    const after_read = await page.evaluate(() => window.ui_test.stats());
+    expect(after_read.storage).toEqual(stats.storage);
+    expect(after_read.awards).toEqual(stats.awards);
+    expect(
+      after_read.engine.filter(
+        (call) => call === "perform_command" || call === "heuristic_proposal",
+      ),
+    ).toEqual([]);
+    await page.getByRole("button", { name: "Rules", exact: true }).click();
+    await page
+      .getByRole("button", { name: "Close information", exact: true })
+      .click();
+    expect(await page.evaluate(() => window.ui_test.stats())).toEqual(
+      after_read,
+    );
+  }));
+
+test("S10-E04 actual same-game rival entry, protected return and re-entry warn twice with no replay", async () =>
+  with_page(async (page) => {
+    const entry = read<{ cases: Fixture[] }>(
+      "../presentation/rich_cases.json",
+    ).cases.find((entry) => entry.id === "S10-WARNING-REENTRY")!;
+    expect(entry).toBeDefined();
+    await resume(page, entry.initial_state);
+    await page.evaluate(() => window.ui_test.flush());
+    const warning = () =>
+      page.getByRole("region", { name: "Business warning", exact: true });
+    expect(await warning().textContent()).toContain(
+      "The rival is one business from victory",
+    );
+    await warning().getByRole("button", { name: "OK", exact: true }).click();
+    await page.evaluate(() => window.ui_test.flush());
+    expect(
+      (JSON.parse((await stored(page))!) as Engine_state).active_player,
+    ).toBe(0);
+    await page.getByRole("button", { name: "Continue", exact: true }).click();
+    await command(page, {
+      command: "use_operator",
+      operator_id: 30,
+      target_ids: [8],
+    });
+    const returned = JSON.parse((await stored(page))!) as Engine_state;
+    expect(returned.players[1]!.active_card_ids).toHaveLength(10);
+    expect(returned.players[1]!.hand).toEqual([8]);
+    expect(await warning().count()).toBe(0);
+    expect(
+      await page
+        .getByRole("region", { name: "Completed results", exact: true })
+        .textContent(),
+    ).toContain("Clover Gaines · RETURNED TO HAND");
+    await command(page, { command: "end_turn" });
+    await page.evaluate(() => window.ui_test.flush());
+    expect(await warning().textContent()).toContain(
+      "The rival is one business from victory",
+    );
+    expect(
+      (JSON.parse((await stored(page))!) as Engine_state).players[1]!
+        .active_card_ids,
+    ).toHaveLength(11);
+    expect(await measured_command(page)).toEqual(
+      entry.steps.map((step) => step.command),
+    );
+  }));
+
+test("S10-P01 own-hand, own-active, rival-active and crew inspection remain factual and perform no game/storage calls", async () =>
+  with_page(async (page) => {
+    await resume(page, fixture("S01-AI-FUND-001/mirror").initial_state);
+    const before = await page.evaluate(() => window.ui_test.stats()),
+      bytes = await stored(page);
+    for (const [name, location] of [
+      ["Ellis Voss", "Your hand"],
+      ["Ishmael Kelp", "Your active area"],
+      ["Fizzy Sparks", "Rival active area"],
+    ]) {
+      await page
+        .getByRole("button", { name: "Inspect " + name, exact: true })
+        .click();
+      expect(
+        await page
+          .getByRole("region", { name: "Card inspection", exact: true })
+          .textContent(),
+      ).toContain(location);
+      if (name === "Ishmael Kelp") {
+        await page
+          .getByRole("region", { name: "Card inspection", exact: true })
+          .getByRole("button", { name: "Inspect The Docks crew", exact: true })
+          .click();
+        const crew = page.getByRole("region", {
+          name: "Crew inspection",
+          exact: true,
+        });
+        expect(await crew.textContent()).toContain(
+          "Public active members: you 1 of 3; rival 0 of 3.",
+        );
+        expect(
+          await crew.getByRole("button", { name: /^Inspect / }).count(),
+        ).toBe(3);
+        expect(await crew.textContent()).toContain("Location not shown");
+        if (process.env.CITY_UI_EVIDENCE_DIR)
+          await crew.screenshot({
+            path: `${process.env.CITY_UI_EVIDENCE_DIR}/s10-modular-crew-inspection.png`,
+          });
+      }
+      await page
+        .getByRole("button", { name: "Close information", exact: true })
+        .click();
+    }
+    expect(await page.evaluate(() => window.ui_test.stats())).toEqual(before);
+    expect(await stored(page)).toBe(bytes);
+  }));
+
+test("S10-R02 retained result OK and information close cannot affect another same-mount adopted game; current acknowledgements stay UI-only", async () =>
+  with_page(async (page) => {
+    const first = fixture("S06-REUSE/S01-WIN-002"),
+      second = fixture("S06-REUSE/S05-PROV-FIXER-001/6-9");
+    await resume(page, first.initial_state);
+    await command(page, {
+      command: "use_operator",
+      operator_id: 30,
+      target_ids: [6],
+    });
+    expect(JSON.parse((await stored(page))!)).toEqual(
+      after(first.initial_state, first.steps[0]!),
+    );
+    const old_ok = await page
+      .getByRole("region", { name: "Completed results", exact: true })
+      .getByRole("button", { name: "OK", exact: true })
+      .elementHandle();
+    await page.getByRole("button", { name: "Rules", exact: true }).click();
+    const old_close = await page
+      .getByRole("button", { name: "Close information", exact: true })
+      .elementHandle();
+    if (!old_ok || !old_close)
+      throw Error("Required real acknowledgement controls missing");
+    try {
+      await resume_in_same_mount(page, second.initial_state, true);
+      await command(page, {
+        command: "use_operator",
+        operator_id: 35,
+        target_ids: [6, 9],
+      });
+      expect(JSON.parse((await stored(page))!)).toEqual(
+        after(second.initial_state, second.steps[0]!),
+      );
+      await page.getByRole("button", { name: "Rules", exact: true }).click();
+      const region = page.getByRole("region", {
+        name: "Completed results",
+        exact: true,
+      });
+      expect(await region.count()).toBe(1);
+      expect(await region.textContent()).toContain(
+        "Nero Lombardy · SUSPENDED HAND",
+      );
+      const html = await page
+          .locator("#game")
+          .evaluate((node) => node.outerHTML),
+        bytes = await stored(page),
+        stats = await page.evaluate(() => window.ui_test.stats());
+      expect(await old_ok.evaluate((node) => node.isConnected)).toBe(false);
+      await old_ok.evaluate((node) => (node as HTMLElement).click());
+      expect(await region.count()).toBe(1);
+      await old_close.evaluate((node) => (node as HTMLElement).click());
+      expect(
+        await page.locator("#game").evaluate((node) => node.outerHTML),
+      ).toBe(html);
+      expect(await stored(page)).toBe(bytes);
+      expect(await page.evaluate(() => window.ui_test.stats())).toEqual(stats);
+      expect(await measured_command(page)).toEqual([
+        first.steps[0]!.command,
+        second.steps[0]!.command,
+      ]);
+      await page
+        .getByRole("button", { name: "Close information", exact: true })
+        .click();
+      expect(
+        await page
+          .getByRole("region", { name: "Information", exact: true })
+          .count(),
+      ).toBe(0);
+      await region.getByRole("button", { name: "OK", exact: true }).click();
+      expect(await region.count()).toBe(0);
+      expect(await stored(page)).toBe(bytes);
+      expect(await page.evaluate(() => window.ui_test.stats())).toEqual(stats);
+    } finally {
+      await old_ok.dispose();
+      await old_close.dispose();
+    }
+  }));
+
+test("S10-R03 retained warning OK and recap Continue cannot acknowledge another same-mount adopted game", async () =>
+  with_page(async (page) => {
+    const entries = read<{ cases: Fixture[] }>(
+      "../presentation/rich_cases.json",
+    ).cases;
+    const first = entries.find((entry) => entry.id === "S10-WARNING-1-single")!,
+      second = entries.find((entry) => entry.id === "S10-WARNING-1-both")!;
+    expect(first).toBeDefined();
+    expect(second).toBeDefined();
+    await resume(page, first.initial_state);
+    await page.evaluate(() => window.ui_test.flush());
+    await page.evaluate(() => window.ui_test.flush());
+    const old_ok = await page
+      .getByRole("region", { name: "Business warning", exact: true })
+      .getByRole("button", { name: "OK", exact: true })
+      .elementHandle();
+    const old_continue = await page
+      .getByRole("button", { name: "Continue", exact: true })
+      .elementHandle();
+    if (!old_ok || !old_continue)
+      throw Error("Required actual warning/recap acknowledgements missing");
+    try {
+      await resume_in_same_mount(page, second.initial_state, false);
+      await page.evaluate(() => window.ui_test.flush());
+      await page.evaluate(() => window.ui_test.flush());
+      const warning = page.getByRole("region", {
+          name: "Business warning",
+          exact: true,
+        }),
+        recap = page.getByRole("region", {
+          name: "Rival actions",
+          exact: true,
+        });
+      expect(await warning.textContent()).toContain(
+        "Both empires are one business from victory",
+      );
+      expect(await recap.count()).toBe(1);
+      const html = await page
+          .locator("#game")
+          .evaluate((node) => node.outerHTML),
+        bytes = await stored(page),
+        stats = await page.evaluate(() => window.ui_test.stats());
+      expect(await old_ok.evaluate((node) => node.isConnected)).toBe(false);
+      expect(await old_continue.evaluate((node) => node.isConnected)).toBe(
+        false,
+      );
+      await old_ok.evaluate((node) => (node as HTMLElement).click());
+      await old_continue.evaluate((node) => (node as HTMLElement).click());
+      expect(
+        await page.locator("#game").evaluate((node) => node.outerHTML),
+      ).toBe(html);
+      expect(await stored(page)).toBe(bytes);
+      expect(await page.evaluate(() => window.ui_test.stats())).toEqual(stats);
+      expect(await measured_command(page)).toEqual([
+        {
+          command: "activate_card",
+          card_id: 8,
+          wildcard_payment: null,
+          player_id: 1,
+        },
+        { command: "end_turn", player_id: 1 },
+        {
+          command: "activate_card",
+          card_id: 8,
+          wildcard_payment: null,
+          player_id: 1,
+        },
+        { command: "end_turn", player_id: 1 },
+      ]);
+      await page.getByRole("button", { name: "Continue", exact: true }).click();
+      expect(await recap.count()).toBe(0);
+      await warning.getByRole("button", { name: "OK", exact: true }).click();
+      expect(await warning.count()).toBe(0);
+      expect(await stored(page)).toBe(bytes);
+      expect(await page.evaluate(() => window.ui_test.stats())).toEqual(stats);
+    } finally {
+      await old_ok.dispose();
+      await old_continue.dispose();
+    }
+  }));
+
+test("S10-R04 a retained confirmation cancellation from disposed UI performs no calls or presentation mutation", async () =>
+  with_page(async (page) => {
+    await resume(page, fixture("S01-AI-FUND-001/mirror").initial_state);
+    await page.getByRole("button", { name: "Main menu", exact: true }).click();
+    await page.getByRole("button", { name: "New game", exact: true }).click();
+    const old_cancel = await page
+      .getByRole("button", { name: "Cancel", exact: true })
+      .elementHandle();
+    if (!old_cancel) throw Error("Required confirmation cancellation missing");
+    try {
+      await page.evaluate(() => window.ui_test.reset());
+      const html = await page
+          .locator("#game")
+          .evaluate((node) => node.outerHTML),
+        bytes = await stored(page),
+        stats = await page.evaluate(() => window.ui_test.stats());
+      expect(await old_cancel.evaluate((node) => node.isConnected)).toBe(false);
+      await old_cancel.evaluate((node) => (node as HTMLElement).click());
+      expect(
+        await page.locator("#game").evaluate((node) => node.outerHTML),
+      ).toBe(html);
+      expect(await stored(page)).toBe(bytes);
+      expect(await page.evaluate(() => window.ui_test.stats())).toEqual(stats);
+    } finally {
+      await old_cancel.dispose();
+    }
   }));
