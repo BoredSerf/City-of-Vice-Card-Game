@@ -59,11 +59,14 @@ that facade, with safe local save/resume and explicit rejected-save replacement.
 See [the controller guide](docs/S08_CONTROLLER.md) for its direct-return API,
 storage failure/recovery rules and real-browser reload method.
 The framework-free modular UI now supports opening choices, the semantic board,
-all offered actions and required decisions, rival recap acknowledgement, session
-log, safe save warnings and actual victory/defeat. See
+all offered actions and required decisions, rival recap acknowledgement, restored
+safe history, save warnings and actual victory/defeat. See
 [the playable browser guide](docs/S09_BROWSER.md) for controls, recovery and checks.
-Artwork, gallery/rules/rich presentation parity, the full accessibility matrix
-and standalone distribution remain later work. See
+The rich browser adds the original artwork, rules/gallery/inspection, completed
+operator results, business warnings and isolated current-win achievements. See
+[the working reference comparison](docs/S10_PARITY.md), including its pending human
+reference/intentional-difference acceptance. The full accessibility matrix and
+standalone distribution remain later work. See
 [the setup guide](docs/S03_SETUP.md) for the API, native/scenario and generated
 fixtures, exact randomness contract, and scope limits. Root `index.html` remains
 the separate playable prototype and is not imported by the modular client.

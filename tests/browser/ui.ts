@@ -1,5 +1,6 @@
 import { mount_game } from "../../src/ui/app.ts";
 import { create_controller } from "../../src/app/controller.ts";
+import { create_achievements } from "../../src/app/achievements.ts";
 import * as real from "@city-of-vice/engine";
 import type { Engine_facade } from "../../src/engine/index.ts";
 import "../../src/ui/styles.css";
@@ -14,8 +15,12 @@ const faults = {
   write: false,
   command_decode: false,
   publication_after_command: false,
+  award_acquire: false,
+  award_read: false,
+  award_write: false,
 };
 const storage_calls: string[] = [];
+const award_calls: string[] = [];
 let publication_fault = false;
 const facade = Object.fromEntries(
   (Object.keys(real) as (keyof typeof real)[])
@@ -57,15 +62,39 @@ const acquire = () => {
 };
 const api = {
   faults,
-  reset() {
+  restore_publication() {
+    publication_fault = false;
+    faults.publication_after_command = false;
+  },
+  reset(adopt_saved = false) {
     ui?.dispose();
     tasks = [];
     calls.length = 0;
     storage_calls.length = 0;
+    award_calls.length = 0;
     publication_fault = false;
     const controller = create_controller({ storage: acquire, facade });
+    if (adopt_saved) controller.resume(); // Explicit actual admission for passive-terminal presentation proof.
     ui = mount_game(document.querySelector<HTMLElement>("#game")!, {
       controller,
+      achievements: create_achievements(() => {
+        award_calls.push("acquire");
+        if (faults.award_acquire)
+          throw Error("Test-only award acquisition failure");
+        return {
+          getItem(key) {
+            award_calls.push("read");
+            if (faults.award_read) throw Error("Test-only award read failure");
+            return localStorage.getItem(key);
+          },
+          setItem(key, value) {
+            award_calls.push("write");
+            if (faults.award_write)
+              throw Error("Test-only award write failure");
+            localStorage.setItem(key, value);
+          },
+        };
+      }),
       seed_source: () => "00000001",
       schedule(task) {
         const entry = { run: task, cancelled: false };
@@ -89,6 +118,7 @@ const api = {
     return {
       engine: calls.map((call) => call.operation),
       storage: [...storage_calls],
+      awards: [...award_calls],
     };
   },
   forwarded() {

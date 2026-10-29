@@ -3,6 +3,7 @@ import type {
   Engine_event,
   Player_observation,
   Rejected,
+  Engine_state,
 } from "@city-of-vice/engine";
 import { engine_boundary, type Engine_facade } from "../engine/index.ts";
 import {
@@ -10,6 +11,10 @@ import {
   type Storage_port,
   type Storage_failure,
 } from "./persistence.ts";
+import {
+  project_visible_history,
+  type Visible_history_result,
+} from "../presentation/history.ts";
 
 type Rejection = Rejected["rejection"];
 type Slot =
@@ -186,6 +191,18 @@ export function create_controller(
   }
   return {
     snapshot,
+    read_visible_history(): Visible_history_result {
+      if (canonical === null) return { status: "no_game", entries: [] };
+      try {
+        const state = JSON.parse(canonical) as Engine_state;
+        return {
+          status: "available",
+          entries: structuredClone(project_visible_history(state.history)),
+        };
+      } catch {
+        return { status: "integration_fault", entries: [] };
+      }
+    },
     inspect_save(): Controller_update {
       try {
         const result = read_slot();

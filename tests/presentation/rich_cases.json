@@ -1,0 +1,587 @@
+{
+  "cases": [
+    {
+      "id": "S10-MIRROR-WIN002",
+      "provenance": "New independently mirrored literal of S06-REUSE/S01-WIN-002 from protected policy/scenarios.json. Players swapped, active actor1; explicit synthetic turn/income context as existing supported mirrored WIN001. Command, destinations and terminal expectations authored before execution; not a pre-existing named inherited fixture and not engine output.",
+      "initial_state": {
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
+        "phase": "play",
+        "turn_number": 1,
+        "active_player": 1,
+        "deck": [
+          1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+          21, 22, 23, 25, 26, 27, 28, 29, 31, 32, 33, 34, 35
+        ],
+        "discard": [],
+        "players": [
+          {
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [],
+            "active_card_ids": [6, 24],
+            "suspended_card_ids": [],
+            "draw_price": 1,
+            "traded_distributors": false
+          },
+          {
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 1
+            },
+            "hand": [],
+            "active_card_ids": [0, 30],
+            "suspended_card_ids": [],
+            "draw_price": 1,
+            "traded_distributors": false
+          }
+        ],
+        "random_source": {
+          "algorithm": "xorshift32_v1",
+          "cursor": "00000001"
+        },
+        "history": [
+          {
+            "event": "game_started",
+            "turn_number": 1,
+            "active_player": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 0,
+            "card_id": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 1,
+            "card_id": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 0,
+            "count": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 1,
+            "count": 3
+          },
+          {
+            "event": "turn_changed",
+            "from_player": 0,
+            "to_player": 1,
+            "turn_number": 1
+          },
+          {
+            "event": "income_collected",
+            "player_id": 1,
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            }
+          }
+        ],
+        "winner": null,
+        "win_reason": null,
+        "pending_decision": null
+      },
+      "steps": [
+        {
+          "command": {
+            "player_id": 1,
+            "command": "use_operator",
+            "operator_id": 30,
+            "target_ids": [6]
+          },
+          "expected_changes": {
+            "players.1.active_card_ids": [0],
+            "players.1.resources.purple": 0,
+            "players.0.active_card_ids": [24],
+            "discard": [6, 30],
+            "phase": "over",
+            "winner": 1,
+            "win_reason": "elimination"
+          },
+          "expected_events": [
+            {
+              "event": "payment_made",
+              "player_id": 1,
+              "resources": {
+                "green": 0,
+                "blue": 0,
+                "black": 0,
+                "white": 0,
+                "yellow": 0,
+                "purple": 1
+              }
+            },
+            {
+              "event": "operator_result",
+              "player_id": 1,
+              "operator_id": 30,
+              "target_ids": [6],
+              "affected": [
+                {
+                  "card_id": 6,
+                  "destination": {
+                    "zone": "discard"
+                  }
+                }
+              ]
+            },
+            {
+              "event": "operator_disposed",
+              "player_id": 1,
+              "operator_id": 30
+            },
+            {
+              "event": "game_finished",
+              "winner": 1,
+              "reason": "elimination"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S10-WARNING-0-single",
+      "provenance": "Independent admitted variant of protected S06-REUSE/S01-WIN-001: move active7 to deck (10 businesses), retain activation8; optional opponent11 uses8 illegal+3legit distinct IDs; mirrored actors use explicit supported context. Expected transition10\u219211 authored before run, no engine-learned output.",
+      "initial_state": {
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
+        "phase": "play",
+        "turn_number": 1,
+        "active_player": 0,
+        "deck": [
+          10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 27, 28, 29,
+          30, 31, 32, 33, 34, 35, 7
+        ],
+        "discard": [],
+        "players": [
+          {
+            "resources": {
+              "green": 1,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [8],
+            "active_card_ids": [0, 1, 2, 3, 4, 5, 6, 24, 25, 26],
+            "suspended_card_ids": [],
+            "draw_price": 1,
+            "traded_distributors": false
+          },
+          {
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [],
+            "active_card_ids": [9],
+            "suspended_card_ids": [],
+            "draw_price": 1,
+            "traded_distributors": false
+          }
+        ],
+        "random_source": {
+          "algorithm": "xorshift32_v1",
+          "cursor": "00000001"
+        },
+        "history": [
+          {
+            "event": "game_started",
+            "turn_number": 1,
+            "active_player": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 0,
+            "card_id": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 1,
+            "card_id": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 0,
+            "count": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 1,
+            "count": 3
+          },
+          {
+            "event": "income_collected",
+            "player_id": 0,
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            }
+          }
+        ],
+        "winner": null,
+        "win_reason": null,
+        "pending_decision": null
+      },
+      "steps": [
+        {
+          "command": {
+            "player_id": 0,
+            "command": "activate_card",
+            "card_id": 8,
+            "wildcard_payment": null
+          },
+          "expected_business_counts": [11, 1]
+        }
+      ]
+    },
+    {
+      "id": "S10-WARNING-1-single",
+      "provenance": "Independent admitted variant of protected S06-REUSE/S01-WIN-001: move active7 to deck (10 businesses), retain activation8; optional opponent11 uses8 illegal+3legit distinct IDs; mirrored actors use explicit supported context. Expected transition10\u219211 authored before run, no engine-learned output.",
+      "initial_state": {
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
+        "phase": "play",
+        "turn_number": 1,
+        "active_player": 1,
+        "deck": [
+          10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 27, 28, 29,
+          30, 31, 32, 33, 34, 35, 7
+        ],
+        "discard": [],
+        "players": [
+          {
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [],
+            "active_card_ids": [9],
+            "suspended_card_ids": [],
+            "draw_price": 1,
+            "traded_distributors": false
+          },
+          {
+            "resources": {
+              "green": 1,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [8],
+            "active_card_ids": [0, 1, 2, 3, 4, 5, 6, 24, 25, 26],
+            "suspended_card_ids": [],
+            "draw_price": 1,
+            "traded_distributors": false
+          }
+        ],
+        "random_source": {
+          "algorithm": "xorshift32_v1",
+          "cursor": "00000001"
+        },
+        "history": [
+          {
+            "event": "game_started",
+            "turn_number": 1,
+            "active_player": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 0,
+            "card_id": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 1,
+            "card_id": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 0,
+            "count": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 1,
+            "count": 3
+          },
+          {
+            "event": "turn_changed",
+            "from_player": 0,
+            "to_player": 1,
+            "turn_number": 1
+          },
+          {
+            "event": "income_collected",
+            "player_id": 1,
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            }
+          }
+        ],
+        "winner": null,
+        "win_reason": null,
+        "pending_decision": null
+      },
+      "steps": [
+        {
+          "command": {
+            "player_id": 1,
+            "command": "activate_card",
+            "card_id": 8,
+            "wildcard_payment": null
+          },
+          "expected_business_counts": [1, 11]
+        }
+      ]
+    },
+    {
+      "id": "S10-WARNING-0-both",
+      "provenance": "Independent admitted variant of protected S06-REUSE/S01-WIN-001: move active7 to deck (10 businesses), retain activation8; optional opponent11 uses8 illegal+3legit distinct IDs; mirrored actors use explicit supported context. Expected transition10\u219211 authored before run, no engine-learned output.",
+      "initial_state": {
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
+        "phase": "play",
+        "turn_number": 1,
+        "active_player": 0,
+        "deck": [17, 18, 19, 20, 21, 22, 23, 30, 31, 32, 33, 34, 35, 7],
+        "discard": [],
+        "players": [
+          {
+            "resources": {
+              "green": 1,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [8],
+            "active_card_ids": [0, 1, 2, 3, 4, 5, 6, 24, 25, 26],
+            "suspended_card_ids": [],
+            "draw_price": 1,
+            "traded_distributors": false
+          },
+          {
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [],
+            "active_card_ids": [9, 10, 11, 12, 13, 14, 15, 16, 27, 28, 29],
+            "suspended_card_ids": [],
+            "draw_price": 1,
+            "traded_distributors": false
+          }
+        ],
+        "random_source": {
+          "algorithm": "xorshift32_v1",
+          "cursor": "00000001"
+        },
+        "history": [
+          {
+            "event": "game_started",
+            "turn_number": 1,
+            "active_player": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 0,
+            "card_id": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 1,
+            "card_id": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 0,
+            "count": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 1,
+            "count": 3
+          },
+          {
+            "event": "income_collected",
+            "player_id": 0,
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            }
+          }
+        ],
+        "winner": null,
+        "win_reason": null,
+        "pending_decision": null
+      },
+      "steps": [
+        {
+          "command": {
+            "player_id": 0,
+            "command": "activate_card",
+            "card_id": 8,
+            "wildcard_payment": null
+          },
+          "expected_business_counts": [11, 11]
+        }
+      ]
+    },
+    {
+      "id": "S10-WARNING-1-both",
+      "provenance": "Independent admitted variant of protected S06-REUSE/S01-WIN-001: move active7 to deck (10 businesses), retain activation8; optional opponent11 uses8 illegal+3legit distinct IDs; mirrored actors use explicit supported context. Expected transition10\u219211 authored before run, no engine-learned output.",
+      "initial_state": {
+        "schema_version": 2,
+        "rules_version": "prototype_4ccb197_pd002_s05_working",
+        "phase": "play",
+        "turn_number": 1,
+        "active_player": 1,
+        "deck": [17, 18, 19, 20, 21, 22, 23, 30, 31, 32, 33, 34, 35, 7],
+        "discard": [],
+        "players": [
+          {
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [],
+            "active_card_ids": [9, 10, 11, 12, 13, 14, 15, 16, 27, 28, 29],
+            "suspended_card_ids": [],
+            "draw_price": 1,
+            "traded_distributors": false
+          },
+          {
+            "resources": {
+              "green": 1,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            },
+            "hand": [8],
+            "active_card_ids": [0, 1, 2, 3, 4, 5, 6, 24, 25, 26],
+            "suspended_card_ids": [],
+            "draw_price": 1,
+            "traded_distributors": false
+          }
+        ],
+        "random_source": {
+          "algorithm": "xorshift32_v1",
+          "cursor": "00000001"
+        },
+        "history": [
+          {
+            "event": "game_started",
+            "turn_number": 1,
+            "active_player": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 0,
+            "card_id": 0
+          },
+          {
+            "event": "opening_distributor_chosen",
+            "player_id": 1,
+            "card_id": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 0,
+            "count": 3
+          },
+          {
+            "event": "initial_hand_dealt",
+            "player_id": 1,
+            "count": 3
+          },
+          {
+            "event": "turn_changed",
+            "from_player": 0,
+            "to_player": 1,
+            "turn_number": 1
+          },
+          {
+            "event": "income_collected",
+            "player_id": 1,
+            "resources": {
+              "green": 0,
+              "blue": 0,
+              "black": 0,
+              "white": 0,
+              "yellow": 0,
+              "purple": 0
+            }
+          }
+        ],
+        "winner": null,
+        "win_reason": null,
+        "pending_decision": null
+      },
+      "steps": [
+        {
+          "command": {
+            "player_id": 1,
+            "command": "activate_card",
+            "card_id": 8,
+            "wildcard_payment": null
+          },
+          "expected_business_counts": [11, 11]
+        }
+      ]
+    }
+  ]
+}

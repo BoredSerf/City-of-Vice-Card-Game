@@ -1,0 +1,663 @@
+{
+  "purpose": "Static reference inventory only; not asset extraction, selected final reference or parity verification",
+  "reference_commit": "4ccb19703d4af1a1c202d922b514a58a17d0e537",
+  "index_git_blob": "2285bc94c58eae4918602c3d5c980b3fc64d77ef",
+  "index_bytes": 1025437,
+  "index_sha256": "f01755c9c82c3f871fafc7f8b5b1b078ad05ddb6421a15425a0e824ebc6fac15",
+  "embedded_base64_occurrences": 7,
+  "all_data_uri_occurrences": 7,
+  "unique_asset_count": 7,
+  "total_unique_decoded_bytes": 674544,
+  "assets": [
+    {
+      "occurrence": 0,
+      "binding": "vice-art-0",
+      "source_line": 223,
+      "mime": "image/webp",
+      "base64_characters": 201456,
+      "decoded_bytes": 151092,
+      "sha256": "a9fe61da48c6568d5a2319b6916fbb0e2d1656c366ee7532c8cb5b814af97cfd",
+      "width": 900,
+      "height": 1350,
+      "alpha_header_flag": false,
+      "animated_header_flag": false,
+      "chunks": [
+        {
+          "fourcc": "VP8 ",
+          "bytes": 151072
+        }
+      ]
+    },
+    {
+      "occurrence": 1,
+      "binding": "vice-art-1",
+      "source_line": 224,
+      "mime": "image/webp",
+      "base64_characters": 224440,
+      "decoded_bytes": 168330,
+      "sha256": "c877a35e3513c2365d406553daf757d4f337c09a076e720b33b4177bc51ecb55",
+      "width": 900,
+      "height": 1350,
+      "alpha_header_flag": false,
+      "animated_header_flag": false,
+      "chunks": [
+        {
+          "fourcc": "VP8 ",
+          "bytes": 168310
+        }
+      ]
+    },
+    {
+      "occurrence": 2,
+      "binding": "vice-art-2",
+      "source_line": 225,
+      "mime": "image/webp",
+      "base64_characters": 178724,
+      "decoded_bytes": 134042,
+      "sha256": "73c6e89c0fe4c7601c2e0ab4dc99339380a01f3ab90cf66db86d96be732df531",
+      "width": 900,
+      "height": 1350,
+      "alpha_header_flag": false,
+      "animated_header_flag": false,
+      "chunks": [
+        {
+          "fourcc": "VP8 ",
+          "bytes": 134022
+        }
+      ]
+    },
+    {
+      "occurrence": 3,
+      "binding": "vice-leon",
+      "source_line": 226,
+      "mime": "image/webp",
+      "base64_characters": 20776,
+      "decoded_bytes": 15582,
+      "sha256": "4780324a8b293811d16e1bf106e13c76d0403e455cdf7a8b8756dbba4e641751",
+      "width": 360,
+      "height": 450,
+      "alpha_header_flag": false,
+      "animated_header_flag": false,
+      "chunks": [
+        {
+          "fourcc": "VP8 ",
+          "bytes": 15562
+        }
+      ]
+    },
+    {
+      "occurrence": 4,
+      "binding": "menu",
+      "source_line": 1009,
+      "mime": "image/webp",
+      "base64_characters": 100376,
+      "decoded_bytes": 75282,
+      "sha256": "905c445bcd65b85ca12420bd3a2471cef320e14336e82eab0f209acf81320d16",
+      "width": 959,
+      "height": 540,
+      "alpha_header_flag": false,
+      "animated_header_flag": false,
+      "chunks": [
+        {
+          "fourcc": "VP8 ",
+          "bytes": 75262
+        }
+      ]
+    },
+    {
+      "occurrence": 5,
+      "binding": "win",
+      "source_line": 1009,
+      "mime": "image/webp",
+      "base64_characters": 93008,
+      "decoded_bytes": 69756,
+      "sha256": "f435ec9d542ee7c3ed0b3263a7fa4f64eca21422999068fd393fffbb9ba41daa",
+      "width": 1000,
+      "height": 563,
+      "alpha_header_flag": false,
+      "animated_header_flag": false,
+      "chunks": [
+        {
+          "fourcc": "VP8 ",
+          "bytes": 69736
+        }
+      ]
+    },
+    {
+      "occurrence": 6,
+      "binding": "lose",
+      "source_line": 1009,
+      "mime": "image/webp",
+      "base64_characters": 80616,
+      "decoded_bytes": 60460,
+      "sha256": "4f2fc9b85e902968b0584552c08b98e409ed6a0e4cdde3c65e8d684fc0aa217c",
+      "width": 1000,
+      "height": 563,
+      "alpha_header_flag": false,
+      "animated_header_flag": false,
+      "chunks": [
+        {
+          "fourcc": "VP8 ",
+          "bytes": 60440
+        }
+      ]
+    }
+  ],
+  "portrait_source_lines": [687, 694],
+  "atlas_virtual_css_dimensions": [1024, 1536],
+  "crop_coordinate_space": "Every card_mapping crop and atlas boundary uses the reference portrait function's virtual 1024x1536 CSS coordinate space, not decoded bitmap pixels. Actual atlas headers are 900x1350. Preserve its percentage background geometry; a later physical crop would require explicit scaling in both axes.",
+  "atlas_x_boundaries": [
+    [0, 344, 685, 1024],
+    [0, 343, 685, 1024],
+    [0, 342, 686, 1024]
+  ],
+  "atlas_y_boundaries": [
+    [0, 367, 727, 1166, 1536],
+    [0, 364, 733, 1102, 1536],
+    [0, 376, 754, 1138, 1536]
+  ],
+  "gutter_pixels": 5,
+  "card_mapping": [
+    {
+      "card_id": 0,
+      "name": "Ishmael Kelp",
+      "binding": "vice-art-0",
+      "atlas_tile": 0,
+      "column": 0,
+      "row": 0,
+      "crop": {
+        "x": 0,
+        "y": 0,
+        "width": 339,
+        "height": 362
+      }
+    },
+    {
+      "card_id": 1,
+      "name": "Slick Panzer",
+      "binding": "vice-art-0",
+      "atlas_tile": 1,
+      "column": 1,
+      "row": 0,
+      "crop": {
+        "x": 344,
+        "y": 0,
+        "width": 336,
+        "height": 362
+      }
+    },
+    {
+      "card_id": 2,
+      "name": "Ivory Crane",
+      "binding": "vice-art-0",
+      "atlas_tile": 2,
+      "column": 2,
+      "row": 0,
+      "crop": {
+        "x": 685,
+        "y": 0,
+        "width": 339,
+        "height": 362
+      }
+    },
+    {
+      "card_id": 3,
+      "name": "Fizzy Sparks",
+      "binding": "vice-art-0",
+      "atlas_tile": 3,
+      "column": 0,
+      "row": 1,
+      "crop": {
+        "x": 0,
+        "y": 367,
+        "width": 339,
+        "height": 355
+      }
+    },
+    {
+      "card_id": 4,
+      "name": "Colby Dunn",
+      "binding": "vice-art-0",
+      "atlas_tile": 4,
+      "column": 1,
+      "row": 1,
+      "crop": {
+        "x": 344,
+        "y": 367,
+        "width": 336,
+        "height": 355
+      }
+    },
+    {
+      "card_id": 5,
+      "name": "Bianca Starr",
+      "binding": "vice-art-0",
+      "atlas_tile": 5,
+      "column": 2,
+      "row": 1,
+      "crop": {
+        "x": 685,
+        "y": 367,
+        "width": 339,
+        "height": 355
+      }
+    },
+    {
+      "card_id": 6,
+      "name": "Velvet Zizek",
+      "binding": "vice-art-0",
+      "atlas_tile": 6,
+      "column": 0,
+      "row": 2,
+      "crop": {
+        "x": 0,
+        "y": 727,
+        "width": 339,
+        "height": 434
+      }
+    },
+    {
+      "card_id": 7,
+      "name": "Skeeter Rash",
+      "binding": "vice-art-0",
+      "atlas_tile": 7,
+      "column": 1,
+      "row": 2,
+      "crop": {
+        "x": 344,
+        "y": 727,
+        "width": 336,
+        "height": 434
+      }
+    },
+    {
+      "card_id": 8,
+      "name": "Clover Gaines",
+      "binding": "vice-art-0",
+      "atlas_tile": 8,
+      "column": 2,
+      "row": 2,
+      "crop": {
+        "x": 685,
+        "y": 727,
+        "width": 339,
+        "height": 434
+      }
+    },
+    {
+      "card_id": 9,
+      "name": "Nero Lombardy",
+      "binding": "vice-art-0",
+      "atlas_tile": 9,
+      "column": 0,
+      "row": 3,
+      "crop": {
+        "x": 0,
+        "y": 1166,
+        "width": 339,
+        "height": 370
+      }
+    },
+    {
+      "card_id": 10,
+      "name": "Mavis Marlow",
+      "binding": "vice-art-0",
+      "atlas_tile": 10,
+      "column": 1,
+      "row": 3,
+      "crop": {
+        "x": 344,
+        "y": 1166,
+        "width": 336,
+        "height": 370
+      }
+    },
+    {
+      "card_id": 11,
+      "name": "Whitney Whitlock",
+      "binding": "vice-art-0",
+      "atlas_tile": 11,
+      "column": 2,
+      "row": 3,
+      "crop": {
+        "x": 685,
+        "y": 1166,
+        "width": 339,
+        "height": 370
+      }
+    },
+    {
+      "card_id": 12,
+      "name": "Cinder Briggs",
+      "binding": "vice-art-1",
+      "atlas_tile": 0,
+      "column": 0,
+      "row": 0,
+      "crop": {
+        "x": 0,
+        "y": 0,
+        "width": 338,
+        "height": 359
+      }
+    },
+    {
+      "card_id": 13,
+      "name": "Dwight Waters",
+      "binding": "vice-art-1",
+      "atlas_tile": 1,
+      "column": 1,
+      "row": 0,
+      "crop": {
+        "x": 343,
+        "y": 0,
+        "width": 337,
+        "height": 359
+      }
+    },
+    {
+      "card_id": 14,
+      "name": "Dizzy Diesel",
+      "binding": "vice-art-1",
+      "atlas_tile": 2,
+      "column": 2,
+      "row": 0,
+      "crop": {
+        "x": 685,
+        "y": 0,
+        "width": 339,
+        "height": 359
+      }
+    },
+    {
+      "card_id": 15,
+      "name": "Vera Veil",
+      "binding": "vice-art-1",
+      "atlas_tile": 3,
+      "column": 0,
+      "row": 1,
+      "crop": {
+        "x": 0,
+        "y": 364,
+        "width": 338,
+        "height": 364
+      }
+    },
+    {
+      "card_id": 16,
+      "name": "Iggy Static",
+      "binding": "vice-art-1",
+      "atlas_tile": 4,
+      "column": 1,
+      "row": 1,
+      "crop": {
+        "x": 343,
+        "y": 364,
+        "width": 337,
+        "height": 364
+      }
+    },
+    {
+      "card_id": 17,
+      "name": "Gigi Watts",
+      "binding": "vice-art-1",
+      "atlas_tile": 5,
+      "column": 2,
+      "row": 1,
+      "crop": {
+        "x": 685,
+        "y": 364,
+        "width": 339,
+        "height": 364
+      }
+    },
+    {
+      "card_id": 18,
+      "name": "Lyla Plum",
+      "binding": "vice-art-1",
+      "atlas_tile": 6,
+      "column": 0,
+      "row": 2,
+      "crop": {
+        "x": 0,
+        "y": 733,
+        "width": 338,
+        "height": 364
+      }
+    },
+    {
+      "card_id": 19,
+      "name": "Drew Moss",
+      "binding": "vice-art-1",
+      "atlas_tile": 7,
+      "column": 1,
+      "row": 2,
+      "crop": {
+        "x": 343,
+        "y": 733,
+        "width": 337,
+        "height": 364
+      }
+    },
+    {
+      "card_id": 20,
+      "name": "Sterling Starch",
+      "binding": "vice-art-1",
+      "atlas_tile": 8,
+      "column": 2,
+      "row": 2,
+      "crop": {
+        "x": 685,
+        "y": 733,
+        "width": 339,
+        "height": 364
+      }
+    },
+    {
+      "card_id": 21,
+      "name": "Sunny Rattle",
+      "binding": "vice-art-1",
+      "atlas_tile": 9,
+      "column": 0,
+      "row": 3,
+      "crop": {
+        "x": 0,
+        "y": 1102,
+        "width": 338,
+        "height": 434
+      }
+    },
+    {
+      "card_id": 22,
+      "name": "Flint Wheeler",
+      "binding": "vice-art-1",
+      "atlas_tile": 10,
+      "column": 1,
+      "row": 3,
+      "crop": {
+        "x": 343,
+        "y": 1102,
+        "width": 337,
+        "height": 434
+      }
+    },
+    {
+      "card_id": 23,
+      "name": "Bud Bramble",
+      "binding": "vice-art-1",
+      "atlas_tile": 11,
+      "column": 2,
+      "row": 3,
+      "crop": {
+        "x": 685,
+        "y": 1102,
+        "width": 339,
+        "height": 434
+      }
+    },
+    {
+      "card_id": 24,
+      "name": "Records & Games",
+      "binding": "vice-art-2",
+      "atlas_tile": 0,
+      "column": 0,
+      "row": 0,
+      "crop": {
+        "x": 0,
+        "y": 0,
+        "width": 337,
+        "height": 371
+      }
+    },
+    {
+      "card_id": 25,
+      "name": "Auto Shop",
+      "binding": "vice-art-2",
+      "atlas_tile": 1,
+      "column": 1,
+      "row": 0,
+      "crop": {
+        "x": 342,
+        "y": 0,
+        "width": 339,
+        "height": 371
+      }
+    },
+    {
+      "card_id": 26,
+      "name": "Budget Motel",
+      "binding": "vice-art-2",
+      "atlas_tile": 2,
+      "column": 2,
+      "row": 0,
+      "crop": {
+        "x": 686,
+        "y": 0,
+        "width": 338,
+        "height": 371
+      }
+    },
+    {
+      "card_id": 27,
+      "name": "Cocktail Bar",
+      "binding": "vice-art-2",
+      "atlas_tile": 3,
+      "column": 0,
+      "row": 1,
+      "crop": {
+        "x": 0,
+        "y": 376,
+        "width": 337,
+        "height": 373
+      }
+    },
+    {
+      "card_id": 28,
+      "name": "Festival Grounds",
+      "binding": "vice-art-2",
+      "atlas_tile": 4,
+      "column": 1,
+      "row": 1,
+      "crop": {
+        "x": 342,
+        "y": 376,
+        "width": 339,
+        "height": 373
+      }
+    },
+    {
+      "card_id": 29,
+      "name": "Clinic",
+      "binding": "vice-art-2",
+      "atlas_tile": 5,
+      "column": 2,
+      "row": 1,
+      "crop": {
+        "x": 686,
+        "y": 376,
+        "width": 338,
+        "height": 373
+      }
+    },
+    {
+      "card_id": 30,
+      "name": "Wade Haskett",
+      "binding": "vice-art-2",
+      "atlas_tile": 6,
+      "column": 0,
+      "row": 2,
+      "crop": {
+        "x": 0,
+        "y": 754,
+        "width": 337,
+        "height": 379
+      }
+    },
+    {
+      "card_id": 31,
+      "name": "Ellis Voss",
+      "binding": "vice-art-2",
+      "atlas_tile": 7,
+      "column": 1,
+      "row": 2,
+      "crop": {
+        "x": 342,
+        "y": 754,
+        "width": 339,
+        "height": 379
+      }
+    },
+    {
+      "card_id": 32,
+      "name": "Eddie Pruitt",
+      "binding": "vice-art-2",
+      "atlas_tile": 8,
+      "column": 2,
+      "row": 2,
+      "crop": {
+        "x": 686,
+        "y": 754,
+        "width": 338,
+        "height": 379
+      }
+    },
+    {
+      "card_id": 33,
+      "name": "Dottie Bellini",
+      "binding": "vice-art-2",
+      "atlas_tile": 9,
+      "column": 0,
+      "row": 3,
+      "crop": {
+        "x": 0,
+        "y": 1138,
+        "width": 337,
+        "height": 398
+      }
+    },
+    {
+      "card_id": 34,
+      "name": "Leonard Huff",
+      "binding": "vice-leon",
+      "presentation": "cover, center",
+      "unused_atlas_tile": {
+        "binding": "vice-art-2",
+        "tile": 10
+      }
+    },
+    {
+      "card_id": 35,
+      "name": "Simone Mercer",
+      "binding": "vice-art-2",
+      "atlas_tile": 11,
+      "column": 2,
+      "row": 3,
+      "crop": {
+        "x": 686,
+        "y": 1138,
+        "width": 338,
+        "height": 398
+      }
+    }
+  ],
+  "limits": "Strict base64 decoding and RIFF/WEBP/chunk/dimension header inspection in memory; no pixel decoding, browser/rendering, extracted image files or application execution"
+}

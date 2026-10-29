@@ -21,12 +21,20 @@ game.submit_human({ command: "start_game", opening_distributor: 0 });
 game.submit_human({ command: "collect_income" });
 game.step_rival(); // One fresh observation/proposal and at most one command.
 game.retry_save(); // Save current progress; no command or event replay.
+game.read_visible_history(); // At most30 detached safe contextual facts; read only.
 ```
 
 Each operation directly returns a detached update with `status`, minimal
 `rejection`, `snapshot` and `trusted_events`. `snapshot()` returns a detached
 human observation plus save metadata. Canonical state, stored raw bytes, recovery
-baseline, rival observation, RNG and history have no public getter or callback.
+baseline, rival observation, RNG and raw history have no public getter or callback.
+S10 adds `read_visible_history()`: only the current adopted canonical history is
+projected through the shared24-tag visibility mapper. It returns `available` and
+at most30 chronological `{turn_number,actor,text}` entries, or minimal `no_game`/
+`integration_fault` with empty entries. Turn context starts null and changes only
+on explicit setup/turn events; context labels do not infer ownership. Reading
+makes no engine/policy/storage call and produces no current event or mutation.
+See [the S10 guide](S10_PARITY.md) for restored display and achievement limits.
 The caller cannot override the intended actor. Both human and rival commands pass
 the current state to the same `perform_command` path. An old command is accepted
 if it is still legal; rejected commands produce no save or new events.

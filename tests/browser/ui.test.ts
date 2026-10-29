@@ -10,6 +10,7 @@ import type {
 } from "@city-of-vice/engine";
 import { generated_adapter } from "../../vite.config.ts";
 import { action_names, command_fields } from "../../src/ui/choices.ts";
+import { card_name } from "../../src/ui/catalog.ts";
 
 process.env.PLAYWRIGHT_BROWSERS_PATH = fileURLToPath(
   new URL("../../.cache/ms-playwright", import.meta.url),
@@ -138,6 +139,9 @@ async function install(page: Page, state: Engine_state | string | null) {
         write: false,
         command_decode: false,
         publication_after_command: false,
+        award_acquire: false,
+        award_read: false,
+        award_write: false,
       });
       window.ui_test.reset();
     },
@@ -594,10 +598,18 @@ test("S09-B06 pre-adoption and applied-publication faults stop scheduling withou
     expect(await page.evaluate(() => window.ui_test.queued())).toBe(0);
     expect(
       await page
-        .getByRole("region", { name: "This session's action log", exact: true })
+        .getByRole("region", { name: "Recent game history", exact: true })
         .getByRole("listitem")
         .allTextContents(),
-    ).toEqual(["Game resumed.", "You cashed Ellis Voss for 1 Blue."]);
+    ).toContain("Turn 1 · You cashed Ellis Voss for 1 Blue.");
+    const restored = await page
+      .getByRole("region", { name: "Recent game history", exact: true })
+      .getByRole("listitem")
+      .allTextContents();
+    expect(restored).toHaveLength(initial.history.length + 2);
+    expect(
+      restored.filter((fact) => fact.includes("You cashed Ellis Voss")),
+    ).toHaveLength(1);
     const before = await page.evaluate(() => window.ui_test.stats());
     await page.evaluate(() => window.ui_test.flush(true));
     expect(await page.evaluate(() => window.ui_test.stats())).toEqual(before);
@@ -712,10 +724,10 @@ test("S09-B08 acquisition failure is not absence; terminal eligibility and unsav
       .click();
     expect(
       await page
-        .getByRole("region", { name: "This session's action log", exact: true })
+        .getByRole("region", { name: "Recent game history", exact: true })
         .getByRole("listitem")
         .allTextContents(),
-    ).toEqual(["Game resumed."]);
+    ).toHaveLength(old.history.length + 1);
     const win = fixture("S06-REUSE/S01-WIN-001"),
       terminal = after(win.initial_state, win.steps[0]!);
     await install(page, terminal);
@@ -741,5 +753,335 @@ test("S09-B08 acquisition failure is not absence; terminal eligibility and unsav
       .waitFor();
     expect(JSON.parse((await stored(page))!)).toEqual(
       after(elimination.initial_state, elimination.steps[0]!),
+    );
+  }));
+
+test("S10-E02 actual operator destinations, current-only results and reduced motion keep mandatory choices reachable; OK is UI-only", async () =>
+  with_page(async (page) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    const selected = [
+      ["S06-REUSE/S01-WIN-002", 0],
+      ["S06-REUSE/S05-PROV-FIXER-001/6-9", 0],
+      ["S06-REUSE/S05-PROV-FIXER-001/9-6", 0],
+      ["S06-REUSE/S05-PROV-PIPELINE-001/0-accept", 2],
+      ["S06-REUSE/S05-PROV-PIPELINE-001/1-accept", 2],
+      ["S06-REUSE/S05-PROV-PIPELINE-001/1-decline", 2],
+      ["S06-REUSE/S05-PROV-NIGHT-001", 0],
+      ["S06-REUSE/S05-PROV-NIGHT-001/mirrored", 0],
+      ["S01-RUFFIAN-001", 0],
+    ].map(([id, index]) => ({
+      entry: fixture(String(id)),
+      index: Number(index),
+    }));
+    const destinations = new Set<string>();
+    for (const { entry, index } of selected) {
+      const state = boundary(entry, index),
+        step = entry.steps[index]!;
+      await resume(page, state);
+      if (step.command.player_id === 1)
+        await page.evaluate(() => window.ui_test.flush());
+      else {
+        const { player_id: _, ...value } = step.command;
+        await command(page, value);
+      }
+      expect(JSON.parse((await stored(page))!)).toEqual(after(state, step));
+      const result = page.getByRole("region", {
+        name: "Completed results",
+        exact: true,
+      });
+      await result.waitFor();
+      expect(
+        await result.evaluate((node) => getComputedStyle(node).animationName),
+      ).toBe("none");
+      for (const event of step.expected_events ?? [])
+        if (event.event === "operator_result")
+          for (const affected of event.affected) {
+            const destination = affected.destination;
+            const stamp =
+              destination.zone === "discard"
+                ? "DISCARDED"
+                : destination.zone === "active"
+                  ? "ACTIVE"
+                  : destination.suspended
+                    ? "SUSPENDED HAND"
+                    : "RETURNED TO HAND";
+            destinations.add(stamp);
+            expect(await result.textContent()).toContain(
+              `${card_name(affected.card_id)} · ${stamp}`,
+            );
+          }
+      const bytes = await stored(page),
+        stats = await page.evaluate(() => window.ui_test.stats());
+      await result.getByRole("button", { name: "OK", exact: true }).click();
+      expect(await stored(page)).toBe(bytes);
+      expect(await page.evaluate(() => window.ui_test.stats())).toEqual(stats);
+      await page.getByRole("button", { name: "Rules", exact: true }).click();
+      expect(await page.evaluate(() => window.ui_test.stats())).toEqual(stats);
+      if (JSON.parse(bytes!).pending_decision?.player_id === 0)
+        expect(
+          await page
+            .getByRole("region", { name: "Available actions", exact: true })
+            .getByRole("button")
+            .count(),
+        ).toBeGreaterThan(0);
+    }
+    expect([...destinations].sort()).toEqual([
+      "ACTIVE",
+      "DISCARDED",
+      "RETURNED TO HAND",
+      "SUSPENDED HAND",
+    ]);
+  }));
+
+test("S10-J04 real current win setter failure retries without replay; missing final view waits for same game and new adoption discards held context", async () =>
+  with_page(async (page) => {
+    const entry = fixture("S06-REUSE/S01-WIN-002"),
+      { player_id: _, ...finish } = entry.steps[0]!.command,
+      award_key = "city-of-vice-modular-achievements-v1";
+    await resume(page, entry.initial_state);
+    await page.evaluate(() => {
+      window.ui_test.faults.award_write = true;
+    });
+    await command(page, finish);
+    expect(
+      await page.evaluate((key) => localStorage.getItem(key), award_key),
+    ).toBeNull();
+    const bytes = await stored(page);
+    await page
+      .getByRole("button", { name: "Achievements", exact: true })
+      .click();
+    expect(
+      await page
+        .getByRole("region", { name: "Achievements", exact: true })
+        .textContent(),
+    ).toContain("pending");
+    await page.evaluate(() => {
+      window.ui_test.faults.award_write = false;
+    });
+    const stats = await page.evaluate(() => window.ui_test.stats());
+    await page
+      .getByRole("button", { name: "Retry achievements", exact: true })
+      .click();
+    const recovered = await page.evaluate(
+      (key) => JSON.parse(localStorage.getItem(key)!),
+      award_key,
+    );
+    expect(recovered).toEqual({
+      schema_version: 1,
+      earned_ids: ["brutal"],
+      win_streak: 1,
+    });
+    expect(await stored(page)).toBe(bytes);
+    expect((await page.evaluate(() => window.ui_test.stats())).engine).toEqual(
+      stats.engine,
+    );
+    expect((await page.evaluate(() => window.ui_test.stats())).storage).toEqual(
+      stats.storage,
+    );
+    await page
+      .getByRole("button", { name: "Close information", exact: true })
+      .click();
+    const result = page.getByRole("region", {
+      name: "Completed results",
+      exact: true,
+    });
+    await result.getByRole("button", { name: "OK", exact: true }).click();
+    expect(
+      await page.evaluate(
+        (key) => JSON.parse(localStorage.getItem(key)!),
+        award_key,
+      ),
+    ).toEqual(recovered);
+
+    await resume(page, entry.initial_state);
+    await page.evaluate(() => {
+      window.ui_test.faults.publication_after_command = true;
+    });
+    await command(page, finish);
+    expect(await measured_command(page)).toHaveLength(1);
+    expect(
+      await page
+        .getByRole("heading", {
+          name: "Victory · You won by elimination.",
+          exact: true,
+        })
+        .count(),
+    ).toBe(1);
+    expect(
+      await page.evaluate(
+        (key) => JSON.parse(localStorage.getItem(key)!),
+        award_key,
+      ),
+    ).toEqual(recovered);
+    await page.getByRole("button", { name: "Main menu", exact: true }).click();
+    await page.evaluate(() => {
+      window.ui_test.restore_publication();
+    });
+    // Clearing the test publication fault requires a fresh same-controller snapshot, never re-adoption/replay.
+    await page
+      .getByRole("button", { name: "Continue current game", exact: true })
+      .click();
+    expect(await measured_command(page)).toHaveLength(1);
+    expect(
+      await page.evaluate(
+        (key) => JSON.parse(localStorage.getItem(key)!),
+        award_key,
+      ),
+    ).toEqual({ schema_version: 1, earned_ids: ["brutal"], win_streak: 2 });
+    await resume(page, entry.initial_state);
+    await page.evaluate(() => {
+      window.ui_test.faults.publication_after_command = true;
+    });
+    await command(page, finish);
+    await page.getByRole("button", { name: "Main menu", exact: true }).click();
+    await page.evaluate(() => window.ui_test.restore_publication());
+    await page.getByRole("button", { name: "New game", exact: true }).click();
+    await page
+      .getByRole("button", { name: "Play only in memory", exact: true })
+      .click();
+    expect(
+      await page.evaluate(
+        (key) => JSON.parse(localStorage.getItem(key)!),
+        award_key,
+      ),
+    ).toEqual({ schema_version: 1, earned_ids: ["brutal"], win_streak: 2 });
+    await page
+      .getByRole("button", { name: "Achievements", exact: true })
+      .click();
+    expect(
+      await page
+        .getByRole("region", { name: "Achievements", exact: true })
+        .textContent(),
+    ).not.toContain("awaits a matching");
+  }));
+
+test("S10-E03 actual entering11 warnings for either/both players are nonblocking and OK never writes", async () =>
+  with_page(async (page) => {
+    const warnings = read<{
+      cases: (Fixture & {
+        steps: {
+          command: Step["command"];
+          expected_business_counts: number[];
+        }[];
+      })[];
+    }>("../presentation/rich_cases.json").cases.filter((entry) =>
+      entry.id.startsWith("S10-WARNING-"),
+    );
+    expect(warnings.map((entry) => entry.id)).toEqual([
+      "S10-WARNING-0-single",
+      "S10-WARNING-1-single",
+      "S10-WARNING-0-both",
+      "S10-WARNING-1-both",
+    ]);
+    for (const entry of warnings) {
+      await resume(page, entry.initial_state);
+      expect(
+        await page
+          .getByRole("region", { name: "Business warning", exact: true })
+          .count(),
+      ).toBe(0);
+      const actor = entry.steps[0]!.command.player_id;
+      if (actor === 1) await page.evaluate(() => window.ui_test.flush());
+      else
+        await command(page, {
+          command: "activate_card",
+          card_id: 8,
+          wildcard_payment: null,
+        });
+      expect(await measured_command(page)).toEqual([entry.steps[0]!.command]);
+      const state = JSON.parse((await stored(page))!) as Engine_state;
+      expect(
+        state.players.map((player) => player.active_card_ids.length),
+      ).toEqual(entry.steps[0]!.expected_business_counts);
+      expect(state.phase).toBe("play");
+      expect(state.winner).toBeNull();
+      const panel = page.getByRole("region", {
+        name: "Business warning",
+        exact: true,
+      });
+      expect(await panel.textContent()).toContain(
+        entry.id.endsWith("both")
+          ? "Both empires"
+          : actor === 0
+            ? "You are"
+            : "The rival is",
+      );
+      const stats = await page.evaluate(() => window.ui_test.stats()),
+        bytes = await stored(page);
+      await panel.getByRole("button", { name: "OK", exact: true }).click();
+      expect(await page.evaluate(() => window.ui_test.stats())).toEqual(stats);
+      expect(await stored(page)).toBe(bytes);
+    }
+  }));
+
+test("S10-J05 unsaved current finish remains eligible; explicit passive terminal admission/history/render never reawards", async () =>
+  with_page(async (page) => {
+    const entry = fixture("S06-REUSE/S01-WIN-002"),
+      { player_id: _, ...finish } = entry.steps[0]!.command,
+      award_key = "city-of-vice-modular-achievements-v1";
+    await resume(page, entry.initial_state);
+    await page.evaluate(() => {
+      window.ui_test.faults.write = true;
+    });
+    await command(page, finish);
+    expect(JSON.parse((await stored(page))!)).toEqual(entry.initial_state);
+    expect(
+      await page
+        .getByRole("region", { name: "Save status", exact: true })
+        .textContent(),
+    ).toContain("unsaved");
+    const award = await page.evaluate(
+      (key) => localStorage.getItem(key),
+      award_key,
+    );
+    expect(JSON.parse(award!)).toEqual({
+      schema_version: 1,
+      earned_ids: ["brutal"],
+      win_streak: 1,
+    });
+    await install(page, after(entry.initial_state, entry.steps[0]!));
+    await page.evaluate(() => window.ui_test.reset(true));
+    const stats = await page.evaluate(() => window.ui_test.stats());
+    await page
+      .getByRole("button", { name: "View current result", exact: true })
+      .click();
+    expect(
+      await page
+        .getByRole("heading", {
+          name: "Victory · You won by elimination.",
+          exact: true,
+        })
+        .count(),
+    ).toBe(1);
+    expect(
+      await page
+        .getByRole("region", { name: "Recent game history", exact: true })
+        .textContent(),
+    ).toContain("Victory · You won by elimination.");
+    expect(await page.locator(".current_effect,.current_outcome").count()).toBe(
+      0,
+    );
+    expect(
+      await page
+        .getByRole("region", { name: "Completed results", exact: true })
+        .count(),
+    ).toBe(0);
+    expect(
+      await page.evaluate((key) => localStorage.getItem(key), award_key),
+    ).toBe(award);
+    const after_read = await page.evaluate(() => window.ui_test.stats());
+    expect(after_read.storage).toEqual(stats.storage);
+    expect(after_read.awards).toEqual(stats.awards);
+    expect(
+      after_read.engine.filter(
+        (call) => call === "perform_command" || call === "heuristic_proposal",
+      ),
+    ).toEqual([]);
+    await page.getByRole("button", { name: "Rules", exact: true }).click();
+    await page
+      .getByRole("button", { name: "Close information", exact: true })
+      .click();
+    expect(await page.evaluate(() => window.ui_test.stats())).toEqual(
+      after_read,
     );
   }));

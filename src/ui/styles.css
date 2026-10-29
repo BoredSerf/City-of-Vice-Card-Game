@@ -117,6 +117,192 @@ fieldset {
 .live_status:empty {
   display: none;
 }
+
+.hero_image {
+  display: block;
+  width: 100%;
+  max-width: 1000px;
+  height: auto;
+  margin: 1rem auto;
+  border-radius: 0.8rem;
+  box-shadow: 0 8px 28px #0005;
+}
+.portrait {
+  display: block;
+  width: 100%;
+  aspect-ratio: 0.88;
+  background-repeat: no-repeat;
+  background-color: #d8cdb7;
+  flex-shrink: 0;
+  border-radius: 0.3rem;
+}
+.rich_card {
+  list-style: none;
+  background: #e8ddc5;
+  color: #1c2b27;
+  border-radius: 0.4rem;
+  padding: 0.75rem !important;
+}
+.rich_card .card_inspect {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: calc(100% - 0.5rem);
+  text-align: left;
+  background: #d1c7af;
+  color: #172721;
+}
+.rich_card .card_inspect .portrait {
+  width: 64px;
+  min-width: 64px;
+  aspect-ratio: 0.8;
+}
+.rich_card p {
+  margin-block: 0.5rem;
+}
+.gallery_grid,
+.achievement_grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  gap: 0.75rem;
+}
+.gallery_grid button {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.5rem;
+  text-align: left;
+}
+.gallery_grid .portrait {
+  min-height: 12rem;
+}
+.gallery_grid span:not(.portrait) {
+  display: block;
+}
+.inspection_art {
+  width: min(20rem, 100%);
+  float: left;
+  margin: 0 1.25rem 0.75rem 0;
+}
+.information_panel {
+  clear: both;
+  background: #253c35;
+  border: 2px solid #a98e56;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-top: 1.5rem;
+}
+.information_panel::after {
+  display: block;
+  content: "";
+  clear: both;
+}
+.information_panel section {
+  scroll-margin-top: 1rem;
+}
+.opening_grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  gap: 0.75rem;
+}
+.opening_crew {
+  background: #263b33;
+  padding: 0.7rem;
+  border-radius: 0.5rem;
+}
+.opening_members {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.opening_members button {
+  padding: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+}
+.opening_members .portrait {
+  border-radius: 0.25rem;
+}
+.selection_portrait {
+  display: inline-flex;
+  width: 6rem;
+  vertical-align: top;
+  flex-direction: column;
+  margin: 0.4rem;
+  font-size: 0.85rem;
+}
+.business_warning {
+  border: 2px solid #e4b65e;
+  background: #513f22;
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+.completed_results {
+  border: 2px solid #b29c75;
+  background: #e8ddc5;
+  color: #1e2d27;
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+.result_portraits {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: start;
+  gap: 0.75rem;
+}
+.result_portraits figure {
+  margin: 0;
+  width: 8rem;
+  font-weight: bold;
+}
+.result_portraits .portrait {
+  aspect-ratio: 3/4;
+}
+.award {
+  padding: 0.8rem;
+  border: 1px solid #7c9287;
+  border-radius: 0.4rem;
+  background: #1d302a;
+}
+.award.earned {
+  border: 2px solid #dcb665;
+  background: #3c4128;
+}
+.current_effect {
+  animation: completed-enter 0.55s ease-out both;
+}
+.current_outcome {
+  animation: outcome-enter 0.7s ease-out both;
+}
+@keyframes completed-enter {
+  from {
+    opacity: 0.3;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes outcome-enter {
+  from {
+    opacity: 0.3;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .current_effect,
+  .current_outcome {
+    animation: none;
+    transform: none;
+    opacity: 1;
+  }
+}
 @media (max-width: 38rem) {
   .game_shell {
     padding-inline: 0.75rem;
