@@ -102,6 +102,8 @@ shipping state hook. Existing B02/B03 retain complete alternatives and both owne
 E02 checks literal actual result destinations/order/boundaries, reduced motion and
 UI-only OK; E03 checks actual either/both11. J04 checks current setter and missing
 final-view recovery without replay and invalidation on new adoption.
+E04 follows one actual same-game rival entry, protected return and re-entry into11;
+P01 checks factual own-hand/own-active/rival-active/crew inspection without mutation.
 J05 checks unsaved current-win eligibility and explicitly admitted passive terminal
 history/render without reawarding or creating new effects.
 

@@ -988,7 +988,7 @@ test("S10-E03 actual entering11 warnings for either/both players are nonblocking
         }[];
       })[];
     }>("../presentation/rich_cases.json").cases.filter((entry) =>
-      entry.id.startsWith("S10-WARNING-"),
+      /^S10-WARNING-[01]-/.test(entry.id),
     );
     expect(warnings.map((entry) => entry.id)).toEqual([
       "S10-WARNING-0-single",
@@ -1107,4 +1107,98 @@ test("S10-J05 unsaved current finish remains eligible; explicit passive terminal
     expect(await page.evaluate(() => window.ui_test.stats())).toEqual(
       after_read,
     );
+  }));
+
+test("S10-E04 actual same-game rival entry, protected return and re-entry warn twice with no replay", async () =>
+  with_page(async (page) => {
+    const entry = read<{ cases: Fixture[] }>(
+      "../presentation/rich_cases.json",
+    ).cases.find((entry) => entry.id === "S10-WARNING-REENTRY")!;
+    expect(entry).toBeDefined();
+    await resume(page, entry.initial_state);
+    await page.evaluate(() => window.ui_test.flush());
+    const warning = () =>
+      page.getByRole("region", { name: "Business warning", exact: true });
+    expect(await warning().textContent()).toContain(
+      "The rival is one business from victory",
+    );
+    await warning().getByRole("button", { name: "OK", exact: true }).click();
+    await page.evaluate(() => window.ui_test.flush());
+    expect(
+      (JSON.parse((await stored(page))!) as Engine_state).active_player,
+    ).toBe(0);
+    await page.getByRole("button", { name: "Continue", exact: true }).click();
+    await command(page, {
+      command: "use_operator",
+      operator_id: 30,
+      target_ids: [8],
+    });
+    const returned = JSON.parse((await stored(page))!) as Engine_state;
+    expect(returned.players[1]!.active_card_ids).toHaveLength(10);
+    expect(returned.players[1]!.hand).toEqual([8]);
+    expect(await warning().count()).toBe(0);
+    expect(
+      await page
+        .getByRole("region", { name: "Completed results", exact: true })
+        .textContent(),
+    ).toContain("Clover Gaines · RETURNED TO HAND");
+    await command(page, { command: "end_turn" });
+    await page.evaluate(() => window.ui_test.flush());
+    expect(await warning().textContent()).toContain(
+      "The rival is one business from victory",
+    );
+    expect(
+      (JSON.parse((await stored(page))!) as Engine_state).players[1]!
+        .active_card_ids,
+    ).toHaveLength(11);
+    expect(await measured_command(page)).toEqual(
+      entry.steps.map((step) => step.command),
+    );
+  }));
+
+test("S10-P01 own-hand, own-active, rival-active and crew inspection remain factual and perform no game/storage calls", async () =>
+  with_page(async (page) => {
+    await resume(page, fixture("S01-AI-FUND-001/mirror").initial_state);
+    const before = await page.evaluate(() => window.ui_test.stats()),
+      bytes = await stored(page);
+    for (const [name, location] of [
+      ["Ellis Voss", "Your hand"],
+      ["Ishmael Kelp", "Your active area"],
+      ["Fizzy Sparks", "Rival active area"],
+    ]) {
+      await page
+        .getByRole("button", { name: "Inspect " + name, exact: true })
+        .click();
+      expect(
+        await page
+          .getByRole("region", { name: "Card inspection", exact: true })
+          .textContent(),
+      ).toContain(location);
+      if (name === "Ishmael Kelp") {
+        await page
+          .getByRole("region", { name: "Card inspection", exact: true })
+          .getByRole("button", { name: "Inspect The Docks crew", exact: true })
+          .click();
+        const crew = page.getByRole("region", {
+          name: "Crew inspection",
+          exact: true,
+        });
+        expect(await crew.textContent()).toContain(
+          "Public active members: you 1 of 3; rival 0 of 3.",
+        );
+        expect(
+          await crew.getByRole("button", { name: /^Inspect / }).count(),
+        ).toBe(3);
+        expect(await crew.textContent()).toContain("Location not shown");
+        if (process.env.CITY_UI_EVIDENCE_DIR)
+          await crew.screenshot({
+            path: `${process.env.CITY_UI_EVIDENCE_DIR}/s10-modular-crew-inspection.png`,
+          });
+      }
+      await page
+        .getByRole("button", { name: "Close information", exact: true })
+        .click();
+    }
+    expect(await page.evaluate(() => window.ui_test.stats())).toEqual(before);
+    expect(await stored(page)).toBe(bytes);
   }));
