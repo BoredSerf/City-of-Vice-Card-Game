@@ -129,7 +129,7 @@ must not silently broaden the accepted MVP.
 | S07 | Stabilize and verify the Melange-to-TypeScript facade | S02, S06 | P0 | review |
 | S08 | Add the application controller and safe local persistence | S07 | P0 | review |
 | S09 | Deliver the complete playable browser flow | S08 | P0 | review |
-| S10 | Reach user-facing parity with the prototype | S09 | P0 | in_progress |
+| S10 | Reach user-facing parity with the prototype | S09 | P0 | review |
 | S11 | Verify browser accessibility, responsiveness, and resume flows | S10 | P0 | planned |
 | S12 | Produce equivalent static-site and standalone artifacts | S11 | P0 | planned |
 | S13 | Deploy verified artifacts to Cloudflare Pages | S12 | P0 | planned |
